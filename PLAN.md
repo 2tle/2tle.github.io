@@ -1,32 +1,32 @@
-# Subtractive redesign
+# Restore the scroll experience
 
-## Brief and design read
-Existing Korean personal portfolio for peers and collaborators. The user wants substantially less text and fewer elements, not a new marketing narrative. Display name: stringju. Introduction: 양현준. Existing dark space identity and real photo remain; the reading path becomes short and direct. Proceed without another approval round.
+## Diagnosis
+The latest request explicitly preserves Apple-style scroll presentation. The prior revision incorrectly treated fewer words as a reason to remove the presentation itself.
 
-## Changes
-1. Rename visible identity, metadata and favicon before refining layout. Keep verified GitHub and email URLs unchanged.
-2. Merge hero and biography into one compact profile: username, real name, one interest line, photo.
-3. Replace three oversized project cards with repository links and one factual description each. Remove numbered labels, years, taglines, tech tags, illustrations and repeated repository CTA text.
-4. Keep the five verified experience entries as a compact list. Remove category labels, introductory prose and visible sourcing boilerplate. Use complete, unambiguous month ranges.
-5. Reduce contact to email / GitHub / Blog. Remove invitation copy, copy control, duplicate branding and motion toggle.
-6. Remove client JavaScript, scroll pinning, reveal observers and canvas stars. Keep only one static background moon. Preserve provenance in EVIDENCE.md.
-7. Simplify Markdown fields and the HTML generator together so a build cannot reintroduce deleted content. Refresh the Korean font subset to cover 양현준.
+Live `https://2tle.github.io/` and local source were inspected in Chromium at 1440px. Both load the same CSS hash `913f340bcffa`, use Noto Sans KR, display the h1 at 48px, and render a 1194px document. No failed stylesheet requests were observed. The user's reported broken appearance is not reproduced as a stylesheet 404 in this environment; the wrong compact layout is confirmed. Do not claim an unverified cache fault.
 
-## Visual and stack
-DESIGN.md is the contract. Retain colors.csv row 83 (Space Tech / Aerospace) and typography.csv row 23 (Korean Modern, Noto Sans KR), both verified in installed data. Dials: 4 / 1 / 3. Static HTML/CSS, existing Node content build, no new dependencies or routes.
+Evidence: `artifacts/scroll-repair/audit.json`, `before-live.png`, `before-local.png`.
 
-## Audit and research
-- Control: current rendered site, captured in artifacts/redesign/before-1440.png and before-375.png.
-- Before dimensions: 5820px at desktop 1440px; 5986px at mobile 375px. Visible non-whitespace text: 1175 / 1140 characters respectively.
-- Existing page delays real work behind a full-screen slogan, a pinned gap, a second introduction and a project introduction. Project cards repeat titles, taglines, descriptions, tags and CTA labels.
-- Existing Apple/NASA reference provenance remains in EVIDENCE.md. This revision uses the actual previous page as the pairwise control; no new reference claims.
-- search_tool_bm25, designmd, ui-layouts, 21st-dev and chrome-devtools are not exposed. No queries or browser-MCP research are claimed. Local Playwright is available for rendered audit and tests.
-- All installed design skills consulted: designer-master; AI-SLOP.md; PRODUCT.md (Brief Capture); tasteskill; DESIGN.md (Visual System Specification); ui-ux-pro-max; Reference Study; Copywriting; Scroll Choreography; Next.js Animations; Visual Critique; Design Review. Generic landing-page prescriptions that add imagery, copy, sections or motion are intentionally inapplicable to this reduction brief.
+## Implementation
+1. Keep the approved short content and stringju / 양현준 identity.
+2. Restore an immersive lunar hero: large name and image, one project link, desktop sticky zoom/fade scene driven by native scrolling. No old slogan, scroll instructions or English captions.
+3. Use one featured project and two supporting visual projects. Authentic existing logos identify the repositories. A simple native API connection mark represents the backend, not a fabricated UI. Each project retains just its name, short description and link.
+4. Keep a concise experience list and contact close. No extra sections.
+5. Add small progressive JS for scroll animation. Normal document flow works without it; mobile keeps subtle movement without pinning; reduced motion is static.
+6. Restore JS to the build and server allowlist. Version stylesheet/script URLs from their file hashes and validate URL query handling so deployments do not pair old CSS with new markup.
 
-## Verification and risks
-- Check root and dist builds match, content sync is idempotent, and missing markers/fields fail rather than silently leaving stale content.
-- Test at 320/375/640/768/1024/1440px, reduced motion, no JavaScript, failed imagery, keyboard navigation, links, 200% text enlargement and axe A/AA.
-- Capture desktop/mobile full pages and section crops, compare reading length and text to the control.
-- Keep factual qualification on Nether's early implementation. Do not imply current enrollment or invent changed contact accounts.
-- Ensure the Korean font includes the new real name; nothing is fetched at page-view time.
-- No commits, pushes, deployments, edits to archived directories or unrelated cleanup.
+## Research / tools
+- Existing design skills and their reduced-motion, factual-copy, screenshot-review and animation guidance were consulted.
+- Apple AirPods Pro reference fetched again: large isolated product visuals and concise headings establish focus; no Apple copy, claims or assets are reused.
+- Local/live screenshot comparison is the primary control for this repair.
+- No designmd, ui-layouts, 21st-dev, search_tool_bm25 or chrome-devtools tools are exposed. Use installed Playwright for real browser inspection rather than claim unavailable MCP research.
+- Existing NASA moon, GitHub photo and repository logos are the correct real assets. No new bitmap generation is needed.
+
+## Verification
+- Build checks script syntax, local assets and query-string versions; root/dist content remains identical and sync is idempotent.
+- Browser checks CSS HTTP status/MIME, nonzero CSS rules and computed type/layout on root and dist.
+- Capture hero at start/middle/end, work visual entry/settled states, full-page desktop/mobile, and compact no-JS fallback. Check actual transforms differ, not just presence of a class.
+- Test scrolling back, deep links, keyboard focus, 200% text enlargement, narrow/short viewports, reduced-motion changes, missing assets and no runtime external requests.
+- Keep short-copy regression coverage, but remove the incorrect test demanding all projects in the first viewport and a page shorter than 1600px.
+- Request a read-only code/accessibility review after the implementation. Parent remains the only writer.
+- No deployment, commit, push or archived-folder modifications.

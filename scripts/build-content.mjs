@@ -1,4 +1,4 @@
-// Generates compact project and experience lists inside index.html from content/*.md.
+// Generates concise project showcases and experience entries from content/*.md.
 // Run `npm run sync:content` after editing markdown; `npm run build` does this automatically.
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -46,10 +46,17 @@ function renderProject(project, index) {
   requireFields(project, file, position, ['name', 'link']);
   if (!body) throw new Error(`${file} block ${position}: missing description body`);
   if (!/^https:\/\//i.test(fields.link)) throw new Error(`${file} block ${position}: link must use HTTPS`);
+  if (fields.image && (!/^assets\/images\/[\w/-]+\.(?:svg|webp|png|jpg)$/i.test(fields.image) || fields.image.includes('..'))) {
+    throw new Error(`${file} block ${position}: image ${fields.image} must be a local assets/images file`);
+  }
+  const visual = fields.image ? `
+            <div class="project-visual" aria-hidden="true"><img class="project-object" src="./${escapeHtml(fields.image)}" alt="" width="320" height="320" loading="lazy"></div>` : '';
   return `<li class="project">
-          <a class="project-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.name)} 저장소 (새 탭)">
-            <div><h3>${escapeHtml(fields.name)}</h3><p>${escapeHtml(body)}</p></div>
-            <span class="project-arrow" aria-hidden="true">↗</span>
+          <a class="project-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.name)} 저장소 (새 탭)">${visual}
+            <div class="project-info">
+              <div><h3>${escapeHtml(fields.name)}</h3><p>${escapeHtml(body)}</p></div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
+            </div>
           </a>
         </li>`;
 }

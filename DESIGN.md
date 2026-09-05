@@ -1,46 +1,50 @@
 # stringju visual system
 
 ## Direction
-A compact personal page, not a promotional landing page. Profile, actual projects, dated experience, contact. Remove slogans, repeated introductions, ornamental labels, oversized cards and scroll scenes. Keep the existing dark space identity as one quiet, static moon.
+Apple-inspired scroll presentation with concise Korean copy. Large imagery, large type, one deliberate pinned camera move, then quietly animated project visuals. Not a compact directory and not a copy-heavy landing page.
 
-DESIGN_VARIANCE: 4 / MOTION_INTENSITY: 1 / VISUAL_DENSITY: 3.
+DESIGN_VARIANCE: 6 / MOTION_INTENSITY: 6 / VISUAL_DENSITY: 2.
 
-## Palette
-Retain colors.csv row 83, Space Tech / Aerospace, verified in the installed omp-designer data.
+## Source palette and type
+Retain colors.csv row 83 (Space Tech / Aerospace) and typography.csv row 23 (Korean Modern).
 - Background: #0B0B10; foreground / primary / ring: #F8FAFC.
-- Secondary / muted foreground: #94A3B8; on primary / on secondary: #0F172A.
+- Secondary / muted foreground: #94A3B8; on primary / secondary: #0F172A.
 - Accent: #3B82F6; on accent: #FFFFFF.
 - Card / card foreground: #1E1E23 / #F8FAFC; muted: #232328.
 - Border: #1E293B; destructive / on destructive: #EF4444 / #FFFFFF.
-- Hairlines: foreground at 12% opacity. No card surfaces, shadows or gradient text. Unused semantic colors remain reserved, not an excuse to add UI.
-- Imported profile and NASA moon retain original image colors. Their provenance remains in EVIDENCE.md.
+- Hairlines: foreground at 12% opacity. Scrims are alpha variants of background. Authentic photos and upstream logos retain their own asset colors.
+- Noto Sans KR, self-hosted variable WOFF2 with font-display swap. No remote font requests.
 
 ## Typography
-Retain typography.csv row 23, Korean Modern: self-hosted Noto Sans KR for headings and body, variable WOFF2, font-display swap.
-- H1: 48px desktop / 40px mobile; weight 650; line-height 1.15; tracking -.055em.
-- Real name: 18px; weight 400; line-height 1.6.
-- Section headings: 14px; weight 500; line-height 1.6.
-- Project names: 22px desktop / 20px mobile; weight 550; line-height 1.4.
-- Experience names and descriptions: 16px; line-height 1.6.
-- Interest line and project descriptions: 16px; line-height 1.7.
-- Dates / contact links: 14px; line-height 1.6. Dates use tabular numerals.
-- No uppercase eyebrows, marketing headlines, clamped prose or truncation.
+- Hero: clamp(80px, 12vw, 176px), 650, line-height 1.08, tracking -.06em. Mobile clamp(60px, 15vw, 88px).
+- Real name: 20px, 500, line-height 1.5; interests 16px, 400, line-height 1.7.
+- Section headings: clamp(40px, 5vw, 64px), 600, line-height 1.2, tracking -.05em.
+- Project names: 40px, featured 64px; mobile 32px. Weight 550, line-height 1.2.
+- Project descriptions: 18px desktop / 16px mobile, line-height 1.7. One factual sentence fragment each.
+- Timeline organization: 18px, 500; detail 16px; dates 14px tabular numerals, line-height 1.6.
+- Contact email: clamp(28px, 4vw, 48px); social links 14px.
+- Do not add eyebrows, slogans, feature tags, numbered project labels, invitation text or repeated repository-button labels.
 
-## Geometry
-- Base spacing: 4px; scale 4/8/12/16/24/32/40/48/56/64/80.
-- Content width: 800px maximum; 32px side insets, 24px at 640px and below, 20px at 360px and below.
-- Intro: 80px top, 56px bottom; 72px square portrait with 12px radius, 24px identity gap.
-- Content sections: 40px vertical padding; 112px heading rail + 40px gap + remaining content.
-- Project rows: 20px vertical padding and one 1px divider; no box or pill. Entire row is the repository link.
-- Experience rows: 24px gap, organization and role left, date right. No per-row borders or category tags.
-- Footer: 24px top, 48px bottom, one divider. Email, GitHub, Blog only.
-- Under 640px: intro starts at 48px; section heading above content with a 16px gap; dates below each experience; contact links wrap naturally.
-- Portrait radius 12px; focus outline radius 4px; all content rows square. No elevated surfaces.
+## Layout
+- Content width 1200px, side inset 64px desktop / 32px tablet / 24px mobile / 20px under 360px.
+- Hero: full initial viewport, moon large on the right and identity on the left. Name, small real portrait, real name, interests, one direct project anchor. No extra nav bar.
+- Desktop hero with motion: 180svh scroll runway, 100svh sticky stage. Stage overflow is clipped internally, never on the sticky ancestor. No empty spacer outside this scene.
+- Hero fallback: regular flow with min-height max(700px, 100svh); no fixed text-height constraint. Mobile identity at the top, moon lower-right.
+- Work: 96px vertical spacing; one full-width featured project followed by two equal support projects, gap 24px. Large authentic project logos, no fabricated screenshots. Featured link is a split composition; support links put the visual above copy. Mobile is one column.
+- Cards: 24px radius, flat surface, no shadows. Portrait 16px radius; project logos 24px radius; the arrow target is circular. These are documented roles, not random radii.
+- Experience: heading left and compact dated list right. 32px between rows, no per-row card boxes. Mobile heading and dates stack.
+- Contact: one hairline, email and social links. No repeated brand or invitation paragraph.
 
-## Imagery and motion
-Reuse the actual GitHub photo. A small, low-opacity lunar image sits in the upper-right background; no orbit lines, captions, canvas stars, parallax, sticky panels, entrance effects or motion controls. No new generated assets are needed for a subtractive redesign.
-- Motion: none, including scroll behavior. Hover and focus use an immediate underline / outline, not movement.
-- All content is visible immediately, regardless of JavaScript or reduced-motion settings.
+## Motion contract
+All animations are transforms and opacity. Never intercept wheel/touch, change scroll speed, or auto-scroll through scenes.
+- Hero desktop: normalized native scroll progress 0→1 over the sticky runway. Moon scales 1→1.72, travels left 14% and up 4%, rotates up to -6deg. Identity moves up 72px and fades as the moon takes focus. A focused hero link forces its copy visible.
+- Hero mobile: no pin. Moon scales only 1→1.12 with at most 24px translation; identity never fades. Large visual motion stays on desktop.
+- Project visual: scroll-linked scale .84→1 and translateY 48→0px as it enters. Mobile .94→1 and 20→0px. Copy and link targets always stay visible and static.
+- Hover: arrow translate(2px,-2px), 180ms ease-out; press 100ms scale(.98).
+- No entrance delay, reveal-observer hidden content, perpetual loop, blur animation, motion toggle or decorative counters.
+- requestAnimationFrame is scheduled only for scroll/resize/font/layout changes. Read geometry before writing styles; keep distant scenes at stable final states.
+- Reduced motion: remove pin and runway, clear inline transforms/opacity, disable hover movement. Same fallback for missing JS. Print removes decorative visuals and animation.
+- Disable pin when the viewport is short or enlarged text cannot fit. Re-evaluate after fonts, resize and content-size changes. Pause frame work when the document is hidden.
 
-## Accessibility and resilience
-Static semantic HTML with one h1, meaningful h2/h3 hierarchy, a keyboard skip link, visible focus, and correctly named external links. Every link has a 44px minimum target. Retain verified URLs; do not infer new accounts from the new display name. Profile has explicit dimensions and descriptive alt text; decorative moon has empty alt and no accessibility-tree presence. No runtime JavaScript, API, CDN or storage dependency. Support 320px layouts, 200% text enlargement, and print.
+## Accessibility and asset delivery
+Static semantic content, single h1, visible focus, 44px targets, real image alt text and empty alt on decoration. Main skip link and direct project navigation. Retain verified account/mail URLs. No runtime external API or CDN. Build verifies referenced paths including query strings, versions CSS/JS with content hashes to avoid stale cross-release assets, and emits matching root/dist HTML. Test CSS MIME and computed styles, not just screenshot dimensions.

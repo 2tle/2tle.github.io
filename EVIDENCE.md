@@ -21,7 +21,8 @@
 - `assets/images/profile.jpg`: https://avatars.githubusercontent.com/u/56637184?v=4&s=640, unmodified public avatar downloaded at user request.
 - `assets/images/moon-texture.jpg`: https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_2k.jpg. NASA Scientific Visualization Studio, CGI Moon Kit https://svs.gsfc.nasa.gov/4720/. Credit NASA/Goddard Space Flight Center Scientific Visualization Studio, LRO/LROC. Used to render a decorative shaded sphere, not a scientific visualization.
 - `assets/images/moon.webp`: locally projected and shaded from the NASA texture using scripts/render-moon.py.
-- Nether and Macmagotchi logos: retained source assets from the public repositories, no longer displayed in the simplified project list.
+- Nether and Macmagotchi logos: each public repository's own SVG, displayed in the project cards solely to identify linked projects, not as testimonials. Original colors are preserved.
+- `assets/images/api-mark.svg`: a simple hand-drawn geometric connection mark created for this site to represent the SurvirunAPI backend relationship; not a screenshot or a third-party logo.
 - Noto Sans KR: SIL Open Font License, downloaded from Google Fonts and self-hosted. License included with font assets.
 
 ## Research limitations (original implementation)

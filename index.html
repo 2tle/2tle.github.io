@@ -12,54 +12,70 @@
   <meta property="og:image" content="https://2tle.github.io/assets/images/profile.jpg">
   <title>stringju · 양현준</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/fonts/fonts.css">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./assets/fonts/fonts.css?v=2d86d68cb955">
+  <link rel="stylesheet" href="./styles.css?v=1c5be7a1b93f">
+  <link rel="preload" href="./assets/images/moon.webp" as="image" fetchpriority="high">
+  <script src="./main.js?v=bedd90fde5cd" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
-  <div class="sky" aria-hidden="true">
-    <img class="moon" src="./assets/images/moon.webp" alt="" width="1100" height="1100" fetchpriority="low">
-  </div>
-
-  <header class="intro container" id="home">
-    <div class="identity">
-      <img class="portrait" src="./assets/images/profile.jpg" alt="양현준의 프로필 사진" width="72" height="72" fetchpriority="high">
-      <div>
+  <header class="hero" id="home">
+    <div class="hero-stage">
+      <div class="moon-scene" aria-hidden="true">
+        <img class="moon" src="./assets/images/moon.webp" alt="" width="1100" height="1100" fetchpriority="high">
+      </div>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-copy container">
         <h1>stringju</h1>
-        <p class="name">양현준</p>
+        <div class="identity">
+          <img class="portrait" src="./assets/images/profile.jpg" alt="양현준의 프로필 사진" width="64" height="64">
+          <div>
+            <p class="name">양현준</p>
+            <p class="interests">백엔드 · 네이티브 앱 · 머신러닝</p>
+          </div>
+        </div>
+        <a class="hero-link" href="#work">프로젝트 <span aria-hidden="true">↓</span></a>
       </div>
     </div>
-    <p class="interests">백엔드 · 네이티브 앱 · 머신러닝</p>
   </header>
 
-  <main class="container" id="main" tabindex="-1">
-    <section class="content-section" id="work" aria-labelledby="work-title">
+  <main id="main" tabindex="-1">
+    <section class="work section container" id="work" aria-labelledby="work-title">
       <h2 id="work-title">프로젝트</h2>
       <ul class="projects">
         <!-- content:projects:start -->
         <li class="project">
           <a class="project-link" href="https://github.com/2tle/Nether" target="_blank" rel="noopener noreferrer" aria-label="Nether 저장소 (새 탭)">
-            <div><h3>Nether</h3><p>Rust 데스크톱 터미널 · 초기 개발</p></div>
-            <span class="project-arrow" aria-hidden="true">↗</span>
+            <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/nether-logo.svg" alt="" width="320" height="320" loading="lazy"></div>
+            <div class="project-info">
+              <div><h3>Nether</h3><p>Rust 데스크톱 터미널 · 초기 개발</p></div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
+            </div>
           </a>
         </li>
         <li class="project">
           <a class="project-link" href="https://github.com/2tle/macmagotchi" target="_blank" rel="noopener noreferrer" aria-label="Macmagotchi 저장소 (새 탭)">
-            <div><h3>Macmagotchi</h3><p>macOS 메뉴 막대 반려동물</p></div>
-            <span class="project-arrow" aria-hidden="true">↗</span>
+            <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/macmagotchi-logo.svg" alt="" width="320" height="320" loading="lazy"></div>
+            <div class="project-info">
+              <div><h3>Macmagotchi</h3><p>macOS 메뉴 막대 반려동물</p></div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
+            </div>
           </a>
         </li>
         <li class="project">
           <a class="project-link" href="https://github.com/2tle/SurvirunAPI" target="_blank" rel="noopener noreferrer" aria-label="SurvirunAPI 저장소 (새 탭)">
-            <div><h3>SurvirunAPI</h3><p>운동 앱 REST API</p></div>
-            <span class="project-arrow" aria-hidden="true">↗</span>
+            <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/api-mark.svg" alt="" width="320" height="320" loading="lazy"></div>
+            <div class="project-info">
+              <div><h3>SurvirunAPI</h3><p>운동 앱 REST API</p></div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
+            </div>
           </a>
         </li>
         <!-- content:projects:end -->
       </ul>
     </section>
 
-    <section class="content-section" id="journey" aria-labelledby="journey-title">
+    <section class="journey section container" id="journey" aria-labelledby="journey-title">
       <h2 id="journey-title">이력</h2>
       <ol class="timeline">
         <!-- content:timeline:start -->

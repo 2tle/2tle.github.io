@@ -26,7 +26,8 @@ test('content sync is idempotent and dist matches the checked-in page', async ()
     await sync();
     expect(await readFile(join(root, 'index.html'), 'utf8')).toBe(before);
     expect(await readFile('dist/index.html', 'utf8')).toBe(before);
-    expect(before).not.toMatch(/class="(?:tech-tags|project-meta|project-headline|reveal)|<script/);
+    expect(before).toMatch(/<script src="\.\/main\.js\?v=[0-9a-f]+" defer><\/script>/);
+    expect(before).not.toMatch(/class="(?:tech-tags|project-meta|project-headline|reveal)"/);
   });
 });
 
@@ -38,7 +39,8 @@ test('minimal project fields are enough and literal content is escaped', async (
     expect(html).toContain('A &amp; B &lt;tool&gt;');
     expect(html).toContain('https://example.com/?a=1&amp;b=2');
     expect(html).toContain('Literal $&amp; text &lt;script&gt;alert(1)&lt;/script&gt;');
-    expect(html).not.toContain('<script>');
+    expect(html).not.toContain('<script>alert');
+    expect(html).not.toContain('project-visual');
   });
 });
 
@@ -58,6 +60,8 @@ for (const [header, body, error] of [
   ['name: Test', 'Description', 'missing "link"'],
   ['name: Test\nlink: https://example.com', '', 'missing description body'],
   ['name: Test\nlink: javascript:alert(1)', 'Description', 'link must use HTTPS'],
+  ['name: Test\nlink: https://example.com\nimage: ../secrets/logo.png', 'Description', 'image ../secrets/logo.png must be a local assets/images file'],
+  ['name: Test\nlink: https://example.com\nimage: https://cdn.example.com/logo.png', 'Description', 'image https://cdn.example.com/logo.png must be a local assets/images file'],
 ]) {
   test(`invalid project: ${error}`, async () => {
     await fixture(async (root, sync) => {
