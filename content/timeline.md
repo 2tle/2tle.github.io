@@ -1,14 +1,11 @@
 ---
 date: 2024.02
-category: EDUCATION
 org: 성균관대학교
 ---
 컴퓨터공학과 입학
 
 ---
-date: 2023.02.06
-dateEnd: 2023.02.24
-category: EXPERIENCE
+date: 2023.02
 org: MIDAS IT
 ---
 동계 인턴십
@@ -16,7 +13,6 @@ org: MIDAS IT
 ---
 date: 2022.12
 dateEnd: 2024.12
-category: EXPERIENCE
 org: Team LogCat
 ---
 백엔드 개발
@@ -24,7 +20,6 @@ org: Team LogCat
 ---
 date: 2021.10
 dateEnd: 2022.12
-category: PROJECT
 org: Survirun
 ---
 Android 앱 · 백엔드 개발
@@ -32,7 +27,6 @@ Android 앱 · 백엔드 개발
 ---
 date: 2021.03
 dateEnd: 2024.02
-category: EDUCATION
 org: 선린인터넷고등학교
 ---
 소프트웨어과

@@ -1,31 +1,32 @@
-# Implementation plan
+# Subtractive redesign
 
-## Brand & voice
-2tle / Hyunjun Yang. A personal introduction for potential peers and collaborators. Calm, concrete Korean. No awards or performance statistics without evidence.
+## Brief and design read
+Existing Korean personal portfolio for peers and collaborators. The user wants substantially less text and fewer elements, not a new marketing narrative. Display name: stringju. Introduction: 양현준. Existing dark space identity and real photo remain; the reading path becomes short and direct. Proceed without another approval round.
 
-## Visual system
-colors.csv row 83 (Space Tech / Aerospace), typography.csv row 23 (Korean Modern). Exact contract in DESIGN.md. Native static HTML/CSS/JS chosen over React to retain branch-based GitHub Pages deployment and avoid unnecessary runtime dependencies.
+## Changes
+1. Rename visible identity, metadata and favicon before refining layout. Keep verified GitHub and email URLs unchanged.
+2. Merge hero and biography into one compact profile: username, real name, one interest line, photo.
+3. Replace three oversized project cards with repository links and one factual description each. Remove numbered labels, years, taglines, tech tags, illustrations and repeated repository CTA text.
+4. Keep the five verified experience entries as a compact list. Remove category labels, introductory prose and visible sourcing boilerplate. Use complete, unambiguous month ranges.
+5. Reduce contact to email / GitHub / Blog. Remove invitation copy, copy control, duplicate branding and motion toggle.
+6. Remove client JavaScript, scroll pinning, reveal observers and canvas stars. Keep only one static background moon. Preserve provenance in EVIDENCE.md.
+7. Simplify Markdown fields and the HTML generator together so a build cannot reintroduce deleted content. Refresh the Korean font subset to cover 양현준.
 
-## Route and sections
-`/`: lunar hero → portrait/about → Nether, Macmagotchi, SurvirunAPI → sourced education/experience → contact. Project links go to actual public repositories. No fabricated demos or résumé download.
+## Visual and stack
+DESIGN.md is the contract. Retain colors.csv row 83 (Space Tech / Aerospace) and typography.csv row 23 (Korean Modern, Noto Sans KR), both verified in installed data. Dials: 4 / 1 / 3. Static HTML/CSS, existing Node content build, no new dependencies or routes.
 
-## Animation inventory
-One sticky desktop hero scene, restrained opacity reveals, 180ms hover feedback, reading-progress indicator, motion toggle. Mobile and reduced-motion use normal document flow. No wheel interception.
+## Audit and research
+- Control: current rendered site, captured in artifacts/redesign/before-1440.png and before-375.png.
+- Before dimensions: 5820px at desktop 1440px; 5986px at mobile 375px. Visible non-whitespace text: 1175 / 1140 characters respectively.
+- Existing page delays real work behind a full-screen slogan, a pinned gap, a second introduction and a project introduction. Project cards repeat titles, taglines, descriptions, tags and CTA labels.
+- Existing Apple/NASA reference provenance remains in EVIDENCE.md. This revision uses the actual previous page as the pairwise control; no new reference claims.
+- search_tool_bm25, designmd, ui-layouts, 21st-dev and chrome-devtools are not exposed. No queries or browser-MCP research are claimed. Local Playwright is available for rendered audit and tests.
+- All installed design skills consulted: designer-master; AI-SLOP.md; PRODUCT.md (Brief Capture); tasteskill; DESIGN.md (Visual System Specification); ui-ux-pro-max; Reference Study; Copywriting; Scroll Choreography; Next.js Animations; Visual Critique; Design Review. Generic landing-page prescriptions that add imagery, copy, sections or motion are intentionally inapplicable to this reduction brief.
 
-## Reference study / MCP research log
-- Available tools inspected: no search_tool_bm25, designmd, ui-layouts, 21st-dev or chrome-devtools exposed. MCP slots unavailable; no fabricated queries/results.
-- https://www.apple.com/airpods-pro/ fetched: individual product imagery paired with focused text, distinct sections for different capabilities, direct calls to action. Apply one dominant idea per section; do not reproduce product claims or trade dress.
-- https://www.nasa.gov/ fetched: extraction limited. https://svs.gsfc.nasa.gov/4720/ fetched directly for factual imagery and provenance. Use real lunar surface texture, not random decorative blobs.
-- Image generation attempted and failed because no default model is configured. Fallback: local NASA texture projection plus genuine GitHub portrait and project assets.
-
-## Risks and mitigation
-- Incorrect personal claims: EVIDENCE.md records public README and API sources; omit unverifiable claims.
-- API failure: profile and project data are checked-in snapshots, no runtime fetch.
-- Heavy space animation: pre-rendered shaded moon, static canvas stars, scroll-driven transforms only.
-- Mobile pinning/overflow: no sticky scene on mobile, responsive type, one-column projects.
-- JS failure/reduced motion: all source HTML visible by default; enhancement opt-in.
-- GitHub Pages: static root index.html works without build, optional build produces dist with only public assets.
-- Existing work: do not read/reuse .old_donotuse contents or modify pre-existing deleted sunrinlife_build file.
-
-## Skills consulted
-AI-SLOP.md; PRODUCT.md ,  Brief Capture; tasteskill: Anti-Slop Frontend Skill; DESIGN.md ,  Visual System Specification; ui-ux-pro-max (Design Intelligence Database); Reference Study ,  Learn from Real Design; Copywriting ,  Sound Human; Scroll Choreography ,  Tell a Story with Scroll; Next.js Animations; Visual Critique ,  See What You Built; Design Review; Image generation; designer-master workflow.
+## Verification and risks
+- Check root and dist builds match, content sync is idempotent, and missing markers/fields fail rather than silently leaving stale content.
+- Test at 320/375/640/768/1024/1440px, reduced motion, no JavaScript, failed imagery, keyboard navigation, links, 200% text enlargement and axe A/AA.
+- Capture desktop/mobile full pages and section crops, compare reading length and text to the control.
+- Keep factual qualification on Nether's early implementation. Do not imply current enrollment or invent changed contact accounts.
+- Ensure the Korean font includes the new real name; nothing is fetched at page-view time.
+- No commits, pushes, deployments, edits to archived directories or unrelated cleanup.

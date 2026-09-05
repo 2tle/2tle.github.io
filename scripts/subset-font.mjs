@@ -3,7 +3,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
-const input = await readFile(resolve(root, 'index.html'), 'utf8') + await readFile(resolve(root, 'main.js'), 'utf8');
+const input = await readFile(resolve(root, 'index.html'), 'utf8');
 const text = [...new Set([...input].filter((char) => /[\uAC00-\uD7A3\u3131-\u3163\u2190-\u21FF\u2700-\u27BF]/.test(char)))].join('') + Array.from({ length: 95 }, (_, i) => String.fromCharCode(i + 32)).join('') + '©·–◌';
 const url = new URL('https://fonts.googleapis.com/css2');
 url.searchParams.set('family', 'Noto Sans KR:wght@100..900');

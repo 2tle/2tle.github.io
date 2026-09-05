@@ -15,7 +15,7 @@ const server = createServer(async (request, response) => {
     const path = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
     const relative = path === '/' ? 'index.html' : path.slice(1);
     const file = resolve(root, relative);
-    const publicFile = ['index.html', 'styles.css', 'main.js'].includes(relative) || relative.startsWith('assets/');
+    const publicFile = ['index.html', 'styles.css'].includes(relative) || relative.startsWith('assets/');
     if (!publicFile || !file.startsWith(root + sep) || relative.split('/').some((part) => part.startsWith('.'))) {
       response.writeHead(404); response.end('Not found'); return;
     }
@@ -26,4 +26,4 @@ const server = createServer(async (request, response) => {
     response.writeHead(error instanceof URIError ? 400 : 404); response.end('Not found');
   }
 });
-server.listen(port, host, () => console.log(`2tle portfolio: http://${host === '0.0.0.0' ? '127.0.0.1' : host}:${port} (${root})${host === '0.0.0.0' ? ' [LAN/forwarded access enabled]' : ''}`));
+server.listen(port, host, () => console.log(`stringju portfolio: http://${host === '0.0.0.0' ? '127.0.0.1' : host}:${port} (${root})${host === '0.0.0.0' ? ' [LAN/forwarded access enabled]' : ''}`));

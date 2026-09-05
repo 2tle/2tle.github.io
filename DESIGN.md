@@ -1,56 +1,46 @@
-# 2tle visual system
+# stringju visual system
 
 ## Direction
-A quiet personal observatory. A large lunar crescent beside Korean display typography introduces 2tle; scroll moves closer to the person and then their actual work. Apple-inspired focus and pacing, not Apple branding or a copy of its components.
+A compact personal page, not a promotional landing page. Profile, actual projects, dated experience, contact. Remove slogans, repeated introductions, ornamental labels, oversized cards and scroll scenes. Keep the existing dark space identity as one quiet, static moon.
 
-DESIGN_VARIANCE: 7 / MOTION_INTENSITY: 6 / VISUAL_DENSITY: 3.
+DESIGN_VARIANCE: 4 / MOTION_INTENSITY: 1 / VISUAL_DENSITY: 3.
 
 ## Palette
-Source: omp-designer/data/ui-ux-pro-max/colors.csv, row 83, Space Tech / Aerospace.
-- Primary/foreground/ring: #F8FAFC
-- On primary/on secondary: #0F172A
-- Secondary/muted foreground: #94A3B8
-- Accent: #3B82F6; on accent: #FFFFFF (reserved, no small white button text on blue)
-- Background: #0B0B10
-- Card/card foreground: #1E1E23 / #F8FAFC
-- Muted: #232328
-- Border: #1E293B
-- Destructive/on destructive: #EF4444 / #FFFFFF
-- Dark only, no alternative theme. Alpha variants of these exact tokens are allowed for scrims, hairlines, sphere lighting and stars.
-- Image internals (GitHub avatar, NASA texture, upstream project logos) are source assets and exempt from UI palette.
+Retain colors.csv row 83, Space Tech / Aerospace, verified in the installed omp-designer data.
+- Background: #0B0B10; foreground / primary / ring: #F8FAFC.
+- Secondary / muted foreground: #94A3B8; on primary / on secondary: #0F172A.
+- Accent: #3B82F6; on accent: #FFFFFF.
+- Card / card foreground: #1E1E23 / #F8FAFC; muted: #232328.
+- Border: #1E293B; destructive / on destructive: #EF4444 / #FFFFFF.
+- Hairlines: foreground at 12% opacity. No card surfaces, shadows or gradient text. Unused semantic colors remain reserved, not an excuse to add UI.
+- Imported profile and NASA moon retain original image colors. Their provenance remains in EVIDENCE.md.
 
 ## Typography
-Source: typography.csv row 23, Korean Modern. Heading and body: Noto Sans KR, self-hosted variable WOFF2, font-display swap. System sans-serif fallbacks.
-- H1: clamp(42px, 5.5vw, 80px), 700, line-height 1.22, tracking -0.065em.
-- H2: clamp(36px, 4.2vw, 60px), 650, line-height 1.25, tracking -0.055em.
-- H3: 28~ 40px, 600, line-height 1.3, tracking -0.04em.
-- Body: 16~ 20px, 400, line-height 1.8; width max 55ch.
-- Caption: 12~ 14px, 400~ 500; only two section eyebrows (hero and work).
-- 2tle wordmark: same typeface, 28px/700; large contact wordmark 120px capped responsively.
+Retain typography.csv row 23, Korean Modern: self-hosted Noto Sans KR for headings and body, variable WOFF2, font-display swap.
+- H1: 48px desktop / 40px mobile; weight 650; line-height 1.15; tracking -.055em.
+- Real name: 18px; weight 400; line-height 1.6.
+- Section headings: 14px; weight 500; line-height 1.6.
+- Project names: 22px desktop / 20px mobile; weight 550; line-height 1.4.
+- Experience names and descriptions: 16px; line-height 1.6.
+- Interest line and project descriptions: 16px; line-height 1.7.
+- Dates / contact links: 14px; line-height 1.6. Dates use tabular numerals.
+- No uppercase eyebrows, marketing headlines, clamped prose or truncation.
 
 ## Geometry
-Base 4px. Spacing: 4/8/12/16/24/32/48/64/96/128.
-Content max 1200px, desktop side inset 64px, mobile 24px (20px under 375px).
-Desktop nav 72px, mobile 64px. All links/buttons min-height 44px.
-Section padding desktop 128px, mobile 80px.
-Cards and portrait 24px radius; buttons 999px; metadata text unboxed.
-Hairlines: 1px foreground at 12% opacity. No card shadows; hero sphere ambient shadow uses background token.
+- Base spacing: 4px; scale 4/8/12/16/24/32/40/48/56/64/80.
+- Content width: 800px maximum; 32px side insets, 24px at 640px and below, 20px at 360px and below.
+- Intro: 80px top, 56px bottom; 72px square portrait with 12px radius, 24px identity gap.
+- Content sections: 40px vertical padding; 112px heading rail + 40px gap + remaining content.
+- Project rows: 20px vertical padding and one 1px divider; no box or pill. Entire row is the repository link.
+- Experience rows: 24px gap, organization and role left, date right. No per-row borders or category tags.
+- Footer: 24px top, 48px bottom, one divider. Email, GitHub, Blog only.
+- Under 640px: intro starts at 48px; section heading above content with a 16px gap; dates below each experience; contact links wrap naturally.
+- Portrait radius 12px; focus outline radius 4px; all content rows square. No elevated surfaces.
 
-## Sections
-1. Hero: left-aligned name/headline/intro/one project CTA; oversized right moon and sparse stars. One 155svh sticky scene on desktop. Scrolling scales moon 1→1.16, offsets up to 10%, fades hero text only to .25; unpins into About. Mobile unpinned, moon backdrop below text, no scale.
-2. About: real GitHub portrait left, identity and three interests right. No invented achievements. On mobile portrait compact and text stacked.
-3. Work: one full-width featured Nether project, then two unequal-width Macmagotchi/Survirun cards. Authentic project logos, repo status, useful descriptions. Mobile single-column. No pretend product screenshots. Survirun uses a native API relationship diagram explicitly labeled as a functional diagram.
-4. Journey: heading above a compact chronological experience list, dates and descriptions; no unsupported awards section. Mobile dates above entries.
-5. Contact: wide friendly close, mail link and copy-email button, GitHub and blog links, minimal footer credits.
-
-## Motion
-Native CSS and requestAnimationFrame, no framework needed for a static portfolio.
-- Scroll: only transform/opacity on the single hero scene; passive scroll listener schedules one frame, no perpetual animation loop.
-- Content: 320ms opacity-only reveal, once per element; never hide content without JS initialization.
-- Hover: 180ms ease-out transform, border-color; active: 100ms scale(.98).
-- Reduced motion: disable pinning, parallax, reveal, smooth scroll; all content immediately visible.
-- A visible motion toggle also disables animation; choice saved best-effort in localStorage.
-- Canvas star field drawn only on resize, no twinkle loop or flashing.
+## Imagery and motion
+Reuse the actual GitHub photo. A small, low-opacity lunar image sits in the upper-right background; no orbit lines, captions, canvas stars, parallax, sticky panels, entrance effects or motion controls. No new generated assets are needed for a subtractive redesign.
+- Motion: none, including scroll behavior. Hover and focus use an immediate underline / outline, not movement.
+- All content is visible immediately, regardless of JavaScript or reduced-motion settings.
 
 ## Accessibility and resilience
-Semantic static HTML, one h1, skip link, focus outline, descriptive alt text, real anchors, aria-live copy feedback, expandable mobile menu with Escape/outside-click handling. No API needed at visit time. Copy failure exposes selectable email and mailto remains usable. Image failure leaves a stable layout and real text. Site works without JS, with reduced motion, and at 200% text zoom.
+Static semantic HTML with one h1, meaningful h2/h3 hierarchy, a keyboard skip link, visible focus, and correctly named external links. Every link has a 44px minimum target. Retain verified URLs; do not infer new accounts from the new display name. Profile has explicit dimensions and descriptive alt text; decorative moon has empty alt and no accessibility-tree presence. No runtime JavaScript, API, CDN or storage dependency. Support 320px layouts, 200% text enlargement, and print.
