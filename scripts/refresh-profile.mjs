@@ -1,0 +1,21 @@
+// Explicit maintenance command; never runs automatically during page visits/builds.
+import { mkdir, writeFile, rename } from 'node:fs/promises';
+import { resolve } from 'node:path';
+const root = resolve(import.meta.dirname, '..');
+const response = await fetch('https://api.github.com/users/2tle', { signal: AbortSignal.timeout(15000), headers: { Accept: 'application/vnd.github+json' } });
+if (!response.ok) throw new Error(`GitHub API ${response.status}; existing profile retained.`);
+const profile = await response.json();
+const avatar = new URL(profile.avatar_url);
+if (avatar.protocol !== 'https:' || avatar.hostname !== 'avatars.githubusercontent.com') throw new Error('Unexpected GitHub avatar URL');
+avatar.searchParams.set('s', '640');
+const image = await fetch(avatar, { signal: AbortSignal.timeout(15000) });
+if (!image.ok || !image.headers.get('content-type')?.startsWith('image/jpeg')) throw new Error('Expected JPEG avatar; existing profile retained.');
+const bytes = Buffer.from(await image.arrayBuffer());
+if (bytes.length > 5_000_000 || bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Error('Invalid avatar image');
+const snapshot = { login: profile.login, name: profile.name, html_url: profile.html_url, avatar_url: avatar.href, retrieved_at: new Date().toISOString() };
+await mkdir(resolve(root, 'data'), { recursive: true });
+const destination = resolve(root, 'assets/images/profile.jpg');
+await writeFile(`${destination}.tmp`, bytes);
+await rename(`${destination}.tmp`, destination);
+await writeFile(resolve(root, 'data/github-profile.json'), JSON.stringify(snapshot, null, 2) + '\n');
+console.log('Updated local GitHub avatar and provenance snapshot. Biography remains editorially reviewed HTML.');

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Nether logo</title>
+  <desc id="desc">An original glowing volcanic gateway on a dark background.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d0a12"/>
+      <stop offset="1" stop-color="#1a0911"/>
+    </linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#413442"/>
+      <stop offset="0.55" stop-color="#251b2a"/>
+      <stop offset="1" stop-color="#130f18"/>
+    </linearGradient>
+    <radialGradient id="portal" cx="50%" cy="58%" r="58%">
+      <stop offset="0" stop-color="#ffb038"/>
+      <stop offset="0.34" stop-color="#ff3d62"/>
+      <stop offset="0.72" stop-color="#c01672"/>
+      <stop offset="1" stop-color="#511052"/>
+    </radialGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff7b87" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#ffcf6a" stop-opacity="0.7"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="13"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#background)"/>
+  <ellipse cx="256" cy="418" rx="154" ry="28" fill="#ff274f" opacity="0.16" filter="url(#glow)"/>
+
+  <path d="M256 54C153 54 96 137 96 245v176c0 18 15 33 33 33h254c18 0 33-15 33-33V245C416 137 359 54 256 54Z" fill="url(#stone)" stroke="#5d4057" stroke-width="8"/>
+  <path d="M256 105c-67 0-107 59-107 145v155h214V250c0-86-40-145-107-145Z" fill="#ff315d" opacity="0.28" filter="url(#glow)"/>
+  <path d="M256 105c-67 0-107 59-107 145v155h214V250c0-86-40-145-107-145Z" fill="url(#portal)"/>
+  <path d="M256 137c-47 0-76 47-76 119v118h152V256c0-72-29-119-76-119Z" fill="url(#core)" opacity="0.72"/>
+
+  <path d="M126 283 101 270M386 206l28-17M365 106l17-24M151 132l-23-23" stroke="#8b536e" stroke-width="9" stroke-linecap="round" opacity="0.55"/>
+  <g fill="#ff9a4d">
+    <circle cx="111" cy="349" r="5"/>
+    <circle cx="397" cy="323" r="7"/>
+    <circle cx="384" cy="373" r="4"/>
+    <circle cx="126" cy="205" r="4"/>
+  </g>
+  <g fill="#ff476d" opacity="0.8">
+    <circle cx="82" cy="304" r="3"/>
+    <circle cx="430" cy="280" r="3"/>
+    <circle cx="404" cy="147" r="4"/>
+  </g>
+
+  <path d="M84 425c45-18 91-23 134-15 25 5 51 5 76 0 46-9 91-3 134 15l-22 35H106Z" fill="#100c14"/>
+  <path d="M126 427c36-8 68-8 99-2 21 4 42 4 63 0 34-7 66-6 98 2" fill="none" stroke="#ff4b59" stroke-width="8" stroke-linecap="round" opacity="0.55"/>
+</svg>
