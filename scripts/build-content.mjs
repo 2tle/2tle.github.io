@@ -78,6 +78,7 @@ function renderSkill(skill, index) {
   requireFields(skill, file, position, ['name']);
   if (!lines.length) throw new Error(`${file} block ${position}: missing skill list`);
   return `<li class="stack-row reveal-stack">
+              <div class="stack-visual" aria-hidden="true"><span></span><span></span><span></span></div>
               <h3>${escapeHtml(fields.name)}</h3>
               <p>${escapeHtml(lines.join(' '))}</p>
             </li>`;
@@ -93,13 +94,17 @@ function renderProject(project, index) {
   if (fields.image && (!/^assets\/images\/[\w/-]+\.(?:svg|webp|png|jpg)$/i.test(fields.image) || fields.image.includes('..'))) {
     throw new Error(`${file} block ${position}: image ${fields.image} must be a local assets/images file`);
   }
-  const visual = fields.image ? `<div class="project-visual" aria-hidden="true"><img class="project-object" src="./${escapeHtml(fields.image)}" alt="" width="420" height="420" loading="lazy"></div>` : '';
+  const visual = fields.image ? `<div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./${escapeHtml(fields.image)}" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>` : '';
+  const category = fields.category ? `<p class="project-category"><span aria-hidden="true">${String(position).padStart(2, '0')}</span>${escapeHtml(fields.category)}</p>` : '';
+  const projectTools = fields.tools ? `<p class="project-tools">${escapeHtml(fields.tools)}</p>` : '';
   return `<li class="project">
               <article class="project-shell">
                 ${visual}
                 <div class="project-info reveal-project">
+                  ${category}
                   <h3>${escapeHtml(fields.name)}</h3>
                   <p>${escapeHtml(lines.join(' '))}</p>
+                  ${projectTools}
                   <a class="project-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.name)} 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
                 </div>
               </article>

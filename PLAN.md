@@ -1,5 +1,7 @@
 # Implementation plan - grounded resume experience
 
+This file records the initial implementation plan. The current visual specification, compact typography, pointer interactions, and responsive behavior are documented in `DESIGN.md`.
+
 ## 1. Brand and voice
 
 **Design read:** a Korean developer portfolio for recruiters and collaborators, using an Apple product-page-like cinematic language without turning a resume into a product advertisement.
@@ -71,4 +73,3 @@ The layout family changes with every consecutive section: pinned image stage, as
 - **Mobile readability**: all split layouts stack under 768px; desktop pinning is disabled under 900px or short heights.
 - **Performance**: local assets only, passive scroll listener, one animation frame per browser frame, geometry read before style writes.
 - **AI-slop risk**: no ungrounded slogans or metrics, no repeated cards, no template section order, and each section has a factual reading purpose.
-

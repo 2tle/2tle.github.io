@@ -63,12 +63,14 @@ for (const marker of ['experience', 'skills', 'projects', 'education', 'history'
 
 test('project content is escaped and can omit its local visual', async () => {
   await fixture(async (root, sync) => {
-    await writeFile(join(root, 'content/projects.md'), '---\nname: A & B <tool>\nlink: https://example.com/?a=1&b=2\n---\nLiteral $& text <script>alert(1)</script>\n');
+    await writeFile(join(root, 'content/projects.md'), '---\nname: A & B <tool>\ncategory: Desktop <script>\ntools: Rust & "Iced"\nlink: https://example.com/?a=1&b=2\n---\nLiteral $& text <script>alert(1)</script>\n');
     await sync();
     const html = await readFile(join(root, 'index.html'), 'utf8');
     expect(html).toContain('A &amp; B &lt;tool&gt;');
     expect(html).toContain('https://example.com/?a=1&amp;b=2');
     expect(html).toContain('Literal $&amp; text &lt;script&gt;alert(1)&lt;/script&gt;');
+    expect(html).toContain('Desktop &lt;script&gt;');
+    expect(html).toContain('Rust &amp; &quot;Iced&quot;');
     expect(html).not.toContain('<script>alert');
     expect(html).not.toContain('project-visual');
   });

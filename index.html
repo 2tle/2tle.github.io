@@ -13,16 +13,17 @@
   <title>stringju · 양현준</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./assets/fonts/fonts.css?v=0781db0d3ca8">
-  <link rel="stylesheet" href="./styles.css?v=967a7d3a0715">
+  <link rel="stylesheet" href="./styles.css?v=b0d861870bb5">
   <link rel="preload" href="./assets/images/moon.webp" as="image" fetchpriority="high">
-  <script src="./main.js?v=e10fdbe4285b" defer></script>
+  <script src="./main.js?v=0710d35ecd3c" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
 
-  <header class="hero" id="home" aria-labelledby="page-title">
+  <header class="hero" id="home" aria-labelledby="page-title" tabindex="-1">
     <div class="hero-runway">
       <div class="hero-stage">
+        <div class="hero-stars" aria-hidden="true"></div>
         <div class="moon-scene" aria-hidden="true">
           <img class="moon" src="./assets/images/moon.webp" alt="" width="1100" height="1100" fetchpriority="high">
         </div>
@@ -34,7 +35,7 @@
           <p class="hero-summary">백엔드 개발과 인프라를 함께 공부합니다.</p>
           <a class="hero-link" href="#about">기록 보기 <span aria-hidden="true">↓</span></a>
         </div>
-        <div class="hero-caption" aria-hidden="true"><span>BACKEND · INFRASTRUCTURE</span><span>SCROLL TO EXPLORE</span></div>
+        <div class="hero-caption" aria-hidden="true"><span>BACKEND · INFRASTRUCTURE</span><span><i class="hero-progress"></i>SCROLL TO EXPLORE</span></div>
       </div>
     </div>
   </header>
@@ -46,7 +47,7 @@
       </div>
       <div class="about-copy">
         <p class="section-kicker">About me</p>
-        <h2 id="about-title" class="reveal-left">새로운 도전을<br>좋아합니다.</h2>
+        <h2 id="about-title" class="reveal-left">새로운 도전을<br><span class="accent-text">좋아합니다.</span></h2>
         <div class="about-statements">
           <p class="reveal-right">백엔드 개발과 함께 인프라도 공부합니다.</p>
           <p class="reveal-right">협업의 맥락을 꼼꼼하게 챙깁니다.</p>
@@ -113,14 +114,17 @@
         <ul class="stack-list" aria-label="기술 목록">
           <!-- content:skills:start -->
             <li class="stack-row reveal-stack">
+              <div class="stack-visual" aria-hidden="true"><span></span><span></span><span></span></div>
               <h3>Backend &amp; Data</h3>
               <p>Java · Spring Boot · MySQL · MongoDB · Redis · Socket.IO</p>
             </li>
             <li class="stack-row reveal-stack">
+              <div class="stack-visual" aria-hidden="true"><span></span><span></span><span></span></div>
               <h3>Platform &amp; Delivery</h3>
               <p>AWS · Docker · GitHub Actions · CircleCI · Ubuntu · Rocky Linux</p>
             </li>
             <li class="stack-row reveal-stack">
+              <div class="stack-visual" aria-hidden="true"><span></span><span></span><span></span></div>
               <h3>Application</h3>
               <p>JavaScript · TypeScript · Express.js · Python · Kotlin</p>
             </li>
@@ -138,30 +142,36 @@
         <!-- content:projects:start -->
             <li class="project">
               <article class="project-shell">
-                <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/nether-logo.svg" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./assets/images/nether-logo.svg" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>
                 <div class="project-info reveal-project">
+                  <p class="project-category"><span aria-hidden="true">01</span>Desktop terminal</p>
                   <h3>Nether</h3>
                   <p>Rust와 Iced로 시작한 데스크톱 터미널 구현</p>
+                  <p class="project-tools">Rust · Iced</p>
                   <a class="project-link" href="https://github.com/2tle/Nether" target="_blank" rel="noopener noreferrer" aria-label="Nether 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
                 </div>
               </article>
             </li>
             <li class="project">
               <article class="project-shell">
-                <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/macmagotchi-logo.svg" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./assets/images/macmagotchi-logo.svg" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>
                 <div class="project-info reveal-project">
+                  <p class="project-category"><span aria-hidden="true">02</span>macOS companion</p>
                   <h3>Macmagotchi</h3>
                   <p>SwiftUI와 AppKit으로 만든 macOS 메뉴 막대 반려동물</p>
+                  <p class="project-tools">SwiftUI · AppKit</p>
                   <a class="project-link" href="https://github.com/2tle/macmagotchi" target="_blank" rel="noopener noreferrer" aria-label="Macmagotchi 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
                 </div>
               </article>
             </li>
             <li class="project">
               <article class="project-shell">
-                <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/api-mark.svg" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./assets/images/api-mark.svg" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>
                 <div class="project-info reveal-project">
+                  <p class="project-category"><span aria-hidden="true">03</span>Backend service</p>
                   <h3>SurvirunAPI</h3>
                   <p>운동, 친구, 목표 관리를 위한 REST API</p>
+                  <p class="project-tools">REST API</p>
                   <a class="project-link" href="https://github.com/2tle/SurvirunAPI" target="_blank" rel="noopener noreferrer" aria-label="SurvirunAPI 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
                 </div>
               </article>
@@ -210,14 +220,15 @@
 
   <footer class="contact" id="contact" aria-labelledby="contact-title">
     <div class="shell contact-inner">
+      <p class="section-kicker">Get in touch</p>
       <h2 id="contact-title" class="reveal-left">연락</h2>
-      <a class="email-link reveal-scale" href="mailto:iam@2tle.io">iam@2tle.io</a>
+      <a class="email-link reveal-scale" href="mailto:iam@2tle.io">iam@2tle.io<span class="email-arrow" aria-hidden="true">↗</span></a>
       <div class="contact-links reveal-right" aria-label="외부 연락처">
         <a href="https://github.com/2tle" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
         <a href="https://huggingface.co/2tle" target="_blank" rel="noopener noreferrer">Hugging Face <span aria-hidden="true">↗</span></a>
         <a href="https://stringju.tistory.com" target="_blank" rel="noopener noreferrer">Blog <span aria-hidden="true">↗</span></a>
       </div>
-      <p class="footer-mark">stringju</p>
+      <div class="footer-bottom"><p class="footer-mark">stringju</p><a class="back-to-top" href="#home" aria-label="Back to top"><span aria-hidden="true">↑</span></a></div>
     </div>
   </footer>
 </body>

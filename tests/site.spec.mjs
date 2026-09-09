@@ -60,11 +60,11 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
     expect(errors).toEqual([]);
     expect(externalRequests).toEqual([]);
 
-    if ([375, 1440].includes(width)) {
+    if ([375, 768, 1440].includes(width)) {
       await mkdir('artifacts/final', { recursive: true });
       await page.screenshot({ path: `artifacts/final/${width}-full.png`, fullPage: true });
       await writeFile(`artifacts/final/${width}-metrics.json`, JSON.stringify({ width, ...metrics }, null, 2));
-      for (const id of ['home', 'about', 'experience', 'work', 'contact']) {
+      for (const id of ['home', 'about', 'experience', 'stack', 'work', 'contact']) {
         await page.locator(`#${id}`).scrollIntoViewIfNeeded();
         await page.waitForTimeout(250);
         await page.screenshot({ path: `artifacts/final/${width}-${id}.png` });
@@ -144,6 +144,82 @@ test('timeline and project visual transforms respond to entry into the page', as
   expect(enteredProject).toContain('scale(');
 });
 
+test('project motion remains stable at a fixed scroll position', async ({ page }) => {
+  await page.goto('/');
+  const project = page.locator('.project').first();
+  await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; });
+  await project.evaluate((el) => scrollTo(0, el.offsetTop - innerHeight * .6));
+  await page.waitForTimeout(400);
+  const before = await project.locator('.project-object').getAttribute('style');
+  await page.evaluate(async () => {
+    for (let i = 0; i < 12; i++) {
+      dispatchEvent(new Event('scroll'));
+      await new Promise(requestAnimationFrame);
+    }
+  });
+  expect(await project.locator('.project-object').getAttribute('style')).toBe(before);
+});
+
+test('pointer lighting resets on leave and when reduced motion is enabled', async ({ page }) => {
+  await page.goto('/');
+  const project = page.locator('.project').first();
+  await project.scrollIntoViewIfNeeded();
+  const bounds = await project.boundingBox();
+  await page.mouse.move(bounds.x + bounds.width * .7, bounds.y + bounds.height * .3);
+  await expect(project).toHaveClass(/is-lit/);
+  const first = await project.evaluate((el) => el.style.getPropertyValue('--light-x'));
+  await page.mouse.move(bounds.x + bounds.width * .3, bounds.y + bounds.height * .7);
+  await expect.poll(() => project.evaluate((el) => el.style.getPropertyValue('--light-x'))).not.toBe(first);
+  await page.mouse.move(0, 0);
+  await expect(project).not.toHaveClass(/is-lit/);
+  expect(await project.evaluate((el) => el.style.getPropertyValue('--tilt-x'))).toBe('');
+  await page.mouse.move(bounds.x + bounds.width * .5, bounds.y + bounds.height * .5);
+  await expect(project).toHaveClass(/is-lit/);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(project).not.toHaveClass(/is-lit/);
+  await expect(project.locator('.project-visual')).toHaveCSS('transform', 'none');
+  await expect(project.locator('.surface-light')).toBeHidden();
+});
+
+test('touch input does not activate pointer effects and the footer returns to the opening', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
+  try {
+    const page = await context.newPage();
+    await page.goto('http://127.0.0.1:4173');
+    const project = page.locator('.project').first();
+    await project.scrollIntoViewIfNeeded();
+    await project.locator('.project-visual').tap();
+    await expect(project).not.toHaveClass(/is-lit/);
+    await page.getByRole('link', { name: 'Back to top' }).click();
+    await expect(page).toHaveURL(/#home$/);
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+    await expect(page.locator('h1')).toBeInViewport();
+  } finally {
+    await context.close();
+  }
+});
+
+test('back to top restores a useful keyboard starting point', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Back to top' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#home')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('.hero-link')).toBeFocused();
+});
+
+test('a short landscape viewport keeps the opening in normal document flow', async ({ page }) => {
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.goto('/');
+  await page.evaluate(() => document.fonts.ready);
+  await expect(page.locator('.hero')).not.toHaveClass(/is-pinned/);
+  await page.locator('.hero-link').scrollIntoViewIfNeeded();
+  await expect(page.locator('.hero-link')).toBeInViewport();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+  await mkdir('artifacts/final', { recursive: true });
+  await page.screenshot({ path: 'artifacts/final/844-landscape.png', animations: 'disabled' });
+});
+
 test('hero action works and all one-time reveals settle after a scroll pass', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
@@ -153,6 +229,10 @@ test('hero action works and all one-time reveals settle after a scroll pass', as
   await scrollThrough(page);
   await page.waitForTimeout(400);
   expect(await page.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => item.classList.contains('is-visible')))).toBeTruthy();
+  expect(await page.locator('.is-visible').evaluateAll((items) => items.every((item) => {
+    const transform = getComputedStyle(item).transform;
+    return transform === 'none' || new DOMMatrixReadOnly(transform).isIdentity;
+  }))).toBeTruthy();
 });
 
 test('an initial deep link lands on the requested chapter after hero setup', async ({ page }) => {
@@ -290,4 +370,18 @@ test('print keeps the resume readable without decorative imagery', async ({ page
   await expect(page.locator('h1')).toHaveCSS('color', 'rgb(15, 23, 42)');
   await expect(page.locator('.hero-summary')).toHaveCSS('color', 'rgb(15, 23, 42)');
   await expect(page.locator('.moon-scene')).toBeHidden();
+  for (const card of await page.locator('.stack-row').all()) {
+    await expect(card).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  }
+  await expect(page.locator('.stack-visual').first()).toBeHidden();
+});
+
+test('system high contrast retains the accented heading', async ({ page }) => {
+  await page.emulateMedia({ forcedColors: 'active' });
+  await page.goto('/');
+  const accent = page.locator('.accent-text');
+  await expect(accent).toHaveCSS('background-image', 'none');
+  const color = await accent.evaluate((el) => getComputedStyle(el).color);
+  await expect(accent).toHaveCSS('-webkit-text-fill-color', color);
+  await expect(page.locator('.surface-light').first()).toBeHidden();
 });

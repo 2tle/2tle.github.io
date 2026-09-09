@@ -26,6 +26,7 @@ Calm, precise, curious.
 ## User-provided facts
 - Source: user: build on the existing public Notion resume and fill the current website with that content.
 - Source: user: use an Apple product-page-like scroll experience.
+- Source: user: make the visual presentation richer while reducing oversized text, and keep the page without a top navigation bar.
 - Source: user: the desired emotional direction is 흥미.
 - Source: user-provided public Notion resume: 양현준 describes an interest in new challenges, backend development, infrastructure study, collaboration, and careful work.
 - Source: user-provided public Notion resume: CareerNote, 한봄고등학교, 성균관대학교 시스템컨설턴트그룹, MIDAS IT, education, and contact details listed in EVIDENCE.md.
@@ -39,6 +40,7 @@ Calm, precise, curious.
 ## Working assumptions
 - Retain the existing moon and profile photography because they are already user-approved local assets and give this portfolio a recognizable opening image.
 - Use only static HTML, CSS, JavaScript, and local assets so GitHub Pages remains compatible.
+- Keep the current type scale compact; future visual development should emphasize imagery, light, and motion instead of increasing heading sizes.
 - Build proceeds without another approval step because the user explicitly asked for autonomous implementation.
 
 ## Accessibility target
