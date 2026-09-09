@@ -29,7 +29,6 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
     await expect(page.locator('h1')).toHaveText('stringju');
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('.hero-name')).toHaveText('양현준');
-    await expect(page.locator('.nav')).toBeVisible();
     await expect(page.locator('.experience-item')).toHaveCount(4);
     await expect(page.locator('.stack-row')).toHaveCount(3);
     await expect(page.locator('.project')).toHaveCount(3);
@@ -143,12 +142,12 @@ test('timeline and project visual transforms respond to entry into the page', as
   expect(enteredProject).toContain('scale(');
 });
 
-test('navigation anchors work and all one-time reveals settle after a scroll pass', async ({ page }) => {
+test('hero action works and all one-time reveals settle after a scroll pass', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
-  await page.locator('.nav-links a[href="#experience"]').click();
-  await expect(page).toHaveURL(/#experience$/);
-  await expect(page.locator('#experience-title')).toBeInViewport();
+  await page.locator('.hero-link').click();
+  await expect(page).toHaveURL(/#about$/);
+  await expect(page.locator('#about-title')).toBeInViewport();
   await scrollThrough(page);
   await page.waitForTimeout(400);
   expect(await page.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => item.classList.contains('is-visible')))).toBeTruthy();
@@ -162,24 +161,6 @@ test('an initial deep link lands on the requested chapter after hero setup', asy
   const top = await page.locator('#work-title').evaluate((el) => el.getBoundingClientRect().top);
   expect(top).toBeGreaterThanOrEqual(-2);
   expect(top).toBeLessThan(450);
-});
-
-test('mobile navigation opens, closes, and keeps the document usable', async ({ page }) => {
-  await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto('/');
-  const toggle = page.getByRole('button', { name: '메뉴', exact: true });
-  await expect(toggle).toBeVisible();
-  await expect(page.locator('.nav-links')).toBeHidden();
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('.nav-links')).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(toggle).toBeFocused();
-  await toggle.click();
-  await page.locator('.nav-links a[href="#work"]').click();
-  await expect(page).toHaveURL(/#work$/);
-  await expect(page.locator('.nav-links')).toBeHidden();
 });
 
 test('reduced motion and JavaScript-disabled contexts retain the complete static document', async ({ browser, page }) => {
@@ -201,7 +182,6 @@ test('reduced motion and JavaScript-disabled contexts retain the complete static
     await expect(staticPage.locator('.hero-name')).toHaveText('양현준');
     await expect(staticPage.locator('.experience-item')).toHaveCount(4);
     await expect(staticPage.locator('.project')).toHaveCount(3);
-    await expect(staticPage.locator('.menu-toggle')).toBeHidden();
     expect(await staticPage.locator('.hero-stage').evaluate((el) => getComputedStyle(el).position)).not.toBe('sticky');
     expect(await staticPage.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => getComputedStyle(item).transform === 'none'))).toBeTruthy();
     await staticPage.keyboard.press('Tab');
@@ -256,7 +236,7 @@ test('public project and contact links open their named destinations', async ({ 
   }
 });
 
-test('failed local images and blocked storage do not remove navigation or content', async ({ page }) => {
+test('failed local images and blocked storage do not remove content', async ({ page }) => {
   await page.addInitScript(() => { Object.defineProperty(window, 'localStorage', { get() { throw new Error('Blocked'); } }); });
   await page.route('**/assets/images/**', (route) => route.abort());
   await page.setViewportSize({ width: 375, height: 812 });
@@ -278,9 +258,7 @@ for (const width of [375, 1440]) {
     await page.waitForTimeout(450);
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
     expect(results.violations).toEqual([]);
-    const focusables = width < 768
-      ? [page.getByRole('button', { name: '메뉴', exact: true }), page.locator('.hero-link'), page.locator('.email-link')]
-      : [page.locator('.nav-brand'), page.locator('.hero-link'), page.locator('.project-link').first(), page.locator('.email-link')];
+    const focusables = [page.locator('.hero-link'), page.locator('.project-link').first(), page.locator('.email-link')];
     for (const target of focusables) {
       await target.scrollIntoViewIfNeeded();
       await target.focus();

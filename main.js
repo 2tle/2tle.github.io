@@ -9,9 +9,6 @@ const experienceFill = document.querySelector('.experience-line span');
 const projectObjects = [...document.querySelectorAll('.project-object')];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const desktopScene = matchMedia('(min-width: 900px) and (min-height: 650px)');
-const nav = document.querySelector('.nav');
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
 let frame = 0;
 
 const clamp = (value) => Math.min(1, Math.max(0, value));
@@ -115,26 +112,8 @@ function applyReveals() {
   }
 }
 
-function setMenu(open, returnFocus = false) {
-  if (!menuToggle || !nav) return;
-  nav.classList.toggle('is-menu-open', open);
-  menuToggle.setAttribute('aria-expanded', String(open));
-  if (returnFocus) menuToggle.focus();
-}
-
-menuToggle?.addEventListener('click', () => setMenu(!nav.classList.contains('is-menu-open')));
-navLinks?.addEventListener('click', (event) => {
-  if (event.target.closest('a')) setMenu(false);
-});
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && nav?.classList.contains('is-menu-open')) setMenu(false, true);
-});
-document.addEventListener('click', (event) => {
-  if (nav?.classList.contains('is-menu-open') && !nav.contains(event.target)) setMenu(false);
-});
-
 addEventListener('scroll', schedule, { passive: true });
-addEventListener('resize', () => { configureScene(); setMenu(false); }, { passive: true });
+addEventListener('resize', configureScene, { passive: true });
 addEventListener('pageshow', configureScene);
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {

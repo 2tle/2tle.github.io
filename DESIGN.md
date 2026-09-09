@@ -76,13 +76,13 @@ Source row: `typography.csv` No. 23, Korean Modern.
 - Career timeline: individual entries reveal via clip/translate on first entry. The vertical line fills as a reading-progress cue, not as a second pin.
 - Stack: word strips slide a small distance from alternating sides when they enter view. No infinite marquee.
 - Project visuals: object scale settles as each real project identifier enters view. Each motion shows that a new project chapter has been reached.
-- Reduced motion: remove pinning, all JS transforms, all reveal delays, all opacity transitions, and the menu transition. Content begins fully visible.
+- Reduced motion: remove pinning, all JS transforms, all reveal delays, and all opacity transitions. Content begins fully visible.
 - Mobile: no pinning and no large parallax. The hero is normal document flow and all content remains readable while scrolling.
 
 ## Component patterns
 
-- Navigation: 64px frosted top bar on desktop. Four anchor links. A text menu button appears under 768px only when JavaScript is available; no-JS keeps all links visible.
-- Hero: full viewport orbit visual with one heading, name, concise role line, and a small anchor to the record below.
+- Navigation: no persistent top navigation. The hero's small anchor leads naturally into the record below, preserving an uncluttered opening.
+- Hero: full viewport orbit visual with a restrained heading, name, concise role line, and a small anchor to the record below.
 - About: asymmetric profile photo and source-grounded statement set, divided by a fine line. No card wrapper.
 - Experience: chronological editorial list. A date rail, organization, role, and at most two responsibilities per entry. No rating, metric, or decorative badge.
 - Stack: three typographic bands grouped by discipline, based on the public Notion technology list. The labels state scope, never mastery.
@@ -102,7 +102,7 @@ Source row: `typography.csv` No. 23, Korean Modern.
 - WCAG AA contrast minimum: 4.5:1 for body copy, 3:1 for large display type.
 - Focus indicator: 2px `#F8FAFC` outline plus 4px offset on every keyboard-focusable control.
 - Minimum control size: 44px by 44px.
-- Semantic landmarks: skip link, navigation, header, main, labelled sections, footer.
+- Semantic landmarks: skip link, header, main, labelled sections, footer.
 - One H1 and logical H2/H3 hierarchy.
 - Every visual either has meaningful alt text or `alt=""` when decorative.
 - No user task depends on animation or JavaScript.

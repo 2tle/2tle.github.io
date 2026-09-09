@@ -51,6 +51,6 @@ npm run build
 
 ## 검증
 
-`npm test`는 콘텐츠 이스케이프, 여러 화면 폭의 오버플로, 실제 스크롤 변환, 해시 딥링크, 모바일 메뉴, reduced motion, JavaScript 비활성화, 이미지 실패, 키보드 포커스, axe WCAG A/AA, 200% 확대, 인쇄 스타일을 확인합니다.
+`npm test`는 콘텐츠 이스케이프, 여러 화면 폭의 오버플로, 실제 스크롤 변환, 해시 딥링크, reduced motion, JavaScript 비활성화, 이미지 실패, 키보드 포커스, axe WCAG A/AA, 200% 확대, 인쇄 스타일을 확인합니다.
 
 배포, 커밋, 푸시는 별도 요청이 있을 때만 수행합니다.
