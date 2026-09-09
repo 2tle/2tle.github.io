@@ -93,7 +93,9 @@ test('stylesheets load with the intended dark visual system', async ({ page }) =
   expect(state.sheets.length).toBeGreaterThanOrEqual(2);
   expect(state.sheets.every((sheet) => sheet.rules > 0)).toBeTruthy();
   expect(state.background).toBe('rgb(11, 11, 16)');
-  expect(parseFloat(state.h1Size)).toBeGreaterThan(100);
+  expect(parseFloat(state.h1Size)).toBeGreaterThanOrEqual(64);
+  expect(parseFloat(state.h1Size)).toBeLessThanOrEqual(80);
+  await expect(page.getByRole('navigation')).toHaveCount(0);
   expect(state.h1Color).toBe('rgb(248, 250, 252)');
   expect(state.fontFamily).toContain('Noto Sans KR');
 });
