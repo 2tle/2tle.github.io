@@ -1,61 +1,75 @@
-// Progressive scroll choreography. Content and links never depend on this file.
+// Progressive enhancement: every fact and destination remains available without this file.
+document.documentElement.classList.add('js');
+
 const hero = document.querySelector('.hero');
-const stage = document.querySelector('.hero-stage');
-const copy = document.querySelector('.hero-copy');
+const heroCopy = document.querySelector('.hero-copy');
 const moon = document.querySelector('.moon');
-const visuals = [...document.querySelectorAll('.project-visual')].map((element) => ({
-  element,
-  object: element.querySelector('.project-object'),
-}));
+const experience = document.querySelector('.experience');
+const experienceFill = document.querySelector('.experience-line span');
+const projectObjects = [...document.querySelectorAll('.project-object')];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-const desktop = matchMedia('(min-width: 900px) and (min-height: 650px)');
+const desktopScene = matchMedia('(min-width: 900px) and (min-height: 650px)');
+const nav = document.querySelector('.nav');
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
 let frame = 0;
 
 const clamp = (value) => Math.min(1, Math.max(0, value));
-const smooth = (value) => { const t = clamp(value); return t * t * (3 - 2 * t); };
+const smooth = (value) => {
+  const t = clamp(value);
+  return t * t * (3 - 2 * t);
+};
 
-function reset() {
+function resetMotion() {
   moon.style.transform = '';
-  copy.style.transform = '';
-  copy.style.opacity = '';
-  for (const { object } of visuals) {
-    object.style.transform = '';
-    object.style.opacity = '';
-  }
+  heroCopy.style.transform = '';
+  heroCopy.style.opacity = '';
+  experienceFill.style.transform = '';
+  for (const object of projectObjects) object.style.transform = '';
+}
+
+function readScrollState() {
+  const viewport = innerHeight;
+  const heroBounds = hero.getBoundingClientRect();
+  const pinned = hero.classList.contains('is-pinned');
+  const travel = hero.offsetHeight - hero.querySelector('.hero-stage').offsetHeight;
+  const heroProgress = pinned ? clamp(-heroBounds.top / Math.max(1, travel)) : 0;
+  const experienceBounds = experience.getBoundingClientRect();
+  const experienceProgress = smooth((viewport * .72 - experienceBounds.top) / Math.max(1, experienceBounds.height * .72));
+  const projects = projectObjects.map((object) => {
+    const bounds = object.getBoundingClientRect();
+    const focus = object.closest('.project')?.matches(':focus-within');
+    return { object, progress: focus ? 1 : smooth((viewport * .92 - bounds.top) / Math.max(1, viewport * .72)) };
+  });
+  return { pinned, heroProgress, experienceProgress, projects };
 }
 
 function render() {
   frame = 0;
-  if (reducedMotion.matches) { reset(); return; }
-
-  // Read layout together before applying any transforms.
-  const viewport = innerHeight;
-  const bounds = hero.getBoundingClientRect();
-  const pinned = hero.classList.contains('is-pinned');
-  const travel = hero.offsetHeight - stage.offsetHeight;
-  const progress = pinned ? clamp(-bounds.top / Math.max(1, travel)) : clamp(-bounds.top / Math.max(1, bounds.height));
-  const entries = visuals.map(({ element, object }) => ({
-    object,
-    top: element.getBoundingClientRect().top,
-    focused: element.closest('a').matches(':focus-within'),
-  }));
-
-  if (pinned) {
-    moon.style.transform = `translate3d(${-14 * progress}%, ${-4 * progress}%, 0) scale(${1 + .72 * progress}) rotate(${-6 * progress}deg)`;
-    copy.style.transform = `translate3d(0, ${-72 * progress}px, 0)`;
-    copy.style.opacity = String(1 - smooth((progress - .12) / .84));
-  } else {
-    moon.style.transform = `translate3d(0, ${-24 * progress}px, 0) scale(${1 + .12 * progress})`;
-    copy.style.transform = '';
-    copy.style.opacity = '';
+  if (reducedMotion.matches) {
+    resetMotion();
+    return;
   }
 
-  for (const { object, top, focused } of entries) {
-    const reveal = focused ? 1 : smooth((viewport - top) / (viewport * .72));
-    const amount = desktop.matches ? .16 : .06;
-    const distance = desktop.matches ? 48 : 20;
-    object.style.transform = `translate3d(0, ${distance * (1 - reveal)}px, 0) scale(${1 - amount * (1 - reveal)})`;
-    object.style.opacity = String(.55 + .45 * reveal);
+  // Read all geometry before a single style write, preventing layout read/write interleaving.
+  const state = readScrollState();
+
+  if (state.pinned) {
+    const scale = 1 + state.heroProgress * .52;
+    moon.style.transform = `translate3d(${state.heroProgress * 4}%, ${-state.heroProgress * 5}%, 0) scale(${scale}) rotate(${-state.heroProgress * 3}deg)`;
+    heroCopy.style.transform = `translate3d(0, ${-state.heroProgress * 58}px, 0)`;
+    heroCopy.style.opacity = String(1 - smooth((state.heroProgress - .28) / .6));
+  } else {
+    moon.style.transform = '';
+    heroCopy.style.transform = '';
+    heroCopy.style.opacity = '';
+  }
+
+  experienceFill.style.transform = `scaleY(${state.experienceProgress})`;
+  for (const { object, progress } of state.projects) {
+    const scale = .86 + progress * .14;
+    const distance = 40 * (1 - progress);
+    object.style.transform = `translate3d(0, ${distance}px, 0) scale(${scale})`;
   }
 }
 
@@ -63,28 +77,104 @@ function schedule() {
   if (!frame && !document.hidden) frame = requestAnimationFrame(render);
 }
 
-function configure() {
-  // Large text, short viewports and mobile keep normal flow, not clipped pinning.
-  const fits = copy.scrollHeight + 192 <= innerHeight;
-  hero.classList.toggle('is-pinned', !reducedMotion.matches && desktop.matches && fits);
+function configureScene() {
+  // Preserve normal flow when large text or a short viewport would clip hero content.
+  const fits = heroCopy.scrollHeight + 232 <= innerHeight;
+  const shouldPin = !reducedMotion.matches && desktopScene.matches && fits;
+  hero.classList.toggle('is-pinned', shouldPin);
+  if (!shouldPin) {
+    moon.style.transform = '';
+    heroCopy.style.transform = '';
+    heroCopy.style.opacity = '';
+  }
   schedule();
 }
 
-addEventListener('scroll', schedule, { passive: true });
-addEventListener('resize', configure, { passive: true });
-addEventListener('pageshow', configure);
-reducedMotion.addEventListener('change', configure);
-desktop.addEventListener('change', configure);
-document.addEventListener('focusin', schedule);
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
-  else configure();
-});
-if ('ResizeObserver' in window) new ResizeObserver(configure).observe(copy);
-document.fonts?.ready.then(configure);
-configure();
+const revealItems = [...document.querySelectorAll('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale')];
+let revealObserver;
+const show = (element) => element.classList.add('is-visible');
 
-// Initial native anchors may be resolved before progressive pinning changes height.
-if (/^#(?:main|work|journey|contact)$/.test(location.hash)) {
-  requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView());
+function applyReveals() {
+  revealObserver?.disconnect();
+  revealObserver = undefined;
+  if (reducedMotion.matches || !('IntersectionObserver' in window)) {
+    revealItems.forEach(show);
+    return;
+  }
+  revealObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        show(entry.target);
+        revealObserver.unobserve(entry.target);
+      }
+    }
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
+  for (const element of revealItems) {
+    if (element.getBoundingClientRect().top < innerHeight * .9) show(element);
+    else revealObserver.observe(element);
+  }
+}
+
+function setMenu(open, returnFocus = false) {
+  if (!menuToggle || !nav) return;
+  nav.classList.toggle('is-menu-open', open);
+  menuToggle.setAttribute('aria-expanded', String(open));
+  if (returnFocus) menuToggle.focus();
+}
+
+menuToggle?.addEventListener('click', () => setMenu(!nav.classList.contains('is-menu-open')));
+navLinks?.addEventListener('click', (event) => {
+  if (event.target.closest('a')) setMenu(false);
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && nav?.classList.contains('is-menu-open')) setMenu(false, true);
+});
+document.addEventListener('click', (event) => {
+  if (nav?.classList.contains('is-menu-open') && !nav.contains(event.target)) setMenu(false);
+});
+
+addEventListener('scroll', schedule, { passive: true });
+addEventListener('resize', () => { configureScene(); setMenu(false); }, { passive: true });
+addEventListener('pageshow', configureScene);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    cancelAnimationFrame(frame);
+    frame = 0;
+  } else {
+    configureScene();
+  }
+});
+document.addEventListener('focusin', (event) => {
+  event.target.closest('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale')?.classList.add('is-visible');
+  schedule();
+});
+reducedMotion.addEventListener('change', () => {
+  configureScene();
+  applyReveals();
+});
+desktopScene.addEventListener('change', configureScene);
+
+if ('ResizeObserver' in window) new ResizeObserver(configureScene).observe(heroCopy);
+document.fonts?.ready.then(configureScene);
+configureScene();
+applyReveals();
+
+// Pinning changes document height after native hash restoration; settle on the intended record.
+function settleInitialHash() {
+  const target = location.hash && document.getElementById(location.hash.slice(1));
+  if (!target) return;
+  const root = document.documentElement;
+  const offset = Number.parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+  const top = Math.max(0, target.getBoundingClientRect().top + scrollY - offset);
+  // A deep link should land immediately, unlike an intentional in-page click.
+  const previousBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = 'auto';
+  scrollTo(0, top);
+  root.style.scrollBehavior = previousBehavior;
+}
+if (location.hash) {
+  // Browsers may restore the hash before the sticky runway has its final height.
+  [0, 80, 260, 640].forEach((delay) => setTimeout(settleInitialHash, delay));
+  addEventListener('load', () => setTimeout(settleInitialHash, 80), { once: true });
+  document.fonts?.ready.then(() => setTimeout(settleInitialHash, 260));
 }

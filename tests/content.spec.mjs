@@ -15,23 +15,53 @@ async function fixture(check) {
     await cp('content', join(root, 'content'), { recursive: true });
     await cp('index.html', join(root, 'index.html'));
     await check(root, () => run(process.execPath, [join(root, 'scripts/build-content.mjs')]));
-  } finally { await rm(root, { recursive: true, force: true }); }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 }
 
-test('content sync is idempotent and dist matches the checked-in page', async () => {
+test('content sync is idempotent and the built page matches source', async () => {
   await fixture(async (root, sync) => {
     const before = await readFile(join(root, 'index.html'), 'utf8');
     await sync();
     expect(await readFile(join(root, 'index.html'), 'utf8')).toBe(before);
     await sync();
     expect(await readFile(join(root, 'index.html'), 'utf8')).toBe(before);
-    expect(await readFile('dist/index.html', 'utf8')).toBe(before);
+    expect(await readFile('dist/index.html', 'utf8')).toBe(await readFile('index.html', 'utf8'));
     expect(before).toMatch(/<script src="\.\/main\.js\?v=[0-9a-f]+" defer><\/script>/);
-    expect(before).not.toMatch(/class="(?:tech-tags|project-meta|project-headline|reveal)"/);
+    for (const marker of ['experience', 'skills', 'projects', 'education', 'history']) {
+      expect(before).toContain(`<!-- content:${marker}:start -->`);
+      expect(before).toContain(`<!-- content:${marker}:end -->`);
+    }
   });
 });
 
-test('minimal project fields are enough and literal content is escaped', async () => {
+test('source content renders the verified resume chapters', async () => {
+  const html = await readFile('index.html', 'utf8');
+  for (const text of ['주식회사 커리어노트', '한봄고등학교', '시스템컨설턴트그룹', '마이다스아이티', 'Hugging Face', 'Backend &amp; Data']) {
+    expect(html).toContain(text);
+  }
+  expect((html.match(/class="experience-item/g) || []).length).toBe(4);
+  expect((html.match(/class="stack-row/g) || []).length).toBe(3);
+  expect((html.match(/class="project"/g) || []).length).toBe(3);
+  expect((html.match(/class="education-item/g) || []).length).toBe(2);
+  expect((html.match(/class="history-item/g) || []).length).toBe(2);
+  expect(html).not.toContain('주요 수상 실적');
+});
+
+for (const marker of ['experience', 'skills', 'projects', 'education', 'history']) {
+  test(`missing ${marker} marker fails without rewriting the page`, async () => {
+    await fixture(async (root, sync) => {
+      const path = join(root, 'index.html');
+      const html = (await readFile(path, 'utf8')).replace(`<!-- content:${marker}:end -->`, '');
+      await writeFile(path, html);
+      await expect(sync()).rejects.toThrow(`missing content:${marker} markers`);
+      expect(await readFile(path, 'utf8')).toBe(html);
+    });
+  });
+}
+
+test('project content is escaped and can omit its local visual', async () => {
   await fixture(async (root, sync) => {
     await writeFile(join(root, 'content/projects.md'), '---\nname: A & B <tool>\nlink: https://example.com/?a=1&b=2\n---\nLiteral $& text <script>alert(1)</script>\n');
     await sync();
@@ -43,18 +73,6 @@ test('minimal project fields are enough and literal content is escaped', async (
     expect(html).not.toContain('project-visual');
   });
 });
-
-for (const marker of ['projects', 'timeline']) {
-  test(`missing ${marker} marker fails without rewriting the page`, async () => {
-    await fixture(async (root, sync) => {
-      const path = join(root, 'index.html');
-      const html = (await readFile(path, 'utf8')).replace(`<!-- content:${marker}:end -->`, '');
-      await writeFile(path, html);
-      await expect(sync()).rejects.toThrow(`missing content:${marker} markers`);
-      expect(await readFile(path, 'utf8')).toBe(html);
-    });
-  });
-}
 
 for (const [header, body, error] of [
   ['name: Test', 'Description', 'missing "link"'],
@@ -70,3 +88,10 @@ for (const [header, body, error] of [
     });
   });
 }
+
+test('experience entries require a dated organization, role, and detail', async () => {
+  await fixture(async (root, sync) => {
+    await writeFile(join(root, 'content/experience.md'), '---\ndate: 2025.01\norg: Test\n---\nDetail\n');
+    await expect(sync()).rejects.toThrow('missing "role"');
+  });
+});

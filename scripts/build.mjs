@@ -6,7 +6,7 @@ import { syncContent } from './build-content.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const synced = await syncContent();
-console.log(`Content: ${synced.projects} projects, ${synced.timeline} timeline entries from content/*.md.`, synced.changed ? '(updated index.html)' : '(unchanged)');
+console.log(`Content: ${synced.experience} experience, ${synced.skills} skill groups, ${synced.projects} projects, ${synced.education} education, ${synced.history} history from content/*.md.`, synced.changed ? '(updated index.html)' : '(unchanged)');
 const check = spawnSync(process.execPath, ['--check', resolve(root, 'main.js')], { stdio: 'inherit' });
 if (check.status !== 0) process.exit(check.status ?? 1);
 

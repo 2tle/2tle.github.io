@@ -4,111 +4,229 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0B0B10">
-  <meta name="description" content="양현준, stringju. 백엔드 · 네이티브 앱 · 머신러닝.">
+  <meta name="description" content="양현준, stringju. 백엔드와 인프라를 함께 공부하는 개발자의 경험과 프로젝트.">
   <meta property="og:title" content="stringju · 양현준">
-  <meta property="og:description" content="양현준의 프로젝트와 이력.">
+  <meta property="og:description" content="양현준의 경험, 기술, 프로젝트 기록.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:image" content="https://2tle.github.io/assets/images/profile.jpg">
   <title>stringju · 양현준</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/fonts/fonts.css?v=2d86d68cb955">
-  <link rel="stylesheet" href="./styles.css?v=1c5be7a1b93f">
+  <link rel="stylesheet" href="./assets/fonts/fonts.css?v=0781db0d3ca8">
+  <link rel="stylesheet" href="./styles.css?v=82aac3d25aee">
   <link rel="preload" href="./assets/images/moon.webp" as="image" fetchpriority="high">
-  <script src="./main.js?v=bedd90fde5cd" defer></script>
+  <script src="./main.js?v=20dcefef0e30" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
-  <header class="hero" id="home">
-    <div class="hero-stage">
-      <div class="moon-scene" aria-hidden="true">
-        <img class="moon" src="./assets/images/moon.webp" alt="" width="1100" height="1100" fetchpriority="high">
+
+  <nav class="nav" aria-label="페이지 이동">
+    <div class="nav-inner shell">
+      <a class="nav-brand" href="#home" aria-label="stringju 처음으로">stringju</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">메뉴</button>
+      <div class="nav-links" id="site-navigation">
+        <a href="#about">소개</a>
+        <a href="#experience">경험</a>
+        <a href="#work">프로젝트</a>
+        <a href="#contact">연락</a>
       </div>
-      <div class="hero-shade" aria-hidden="true"></div>
-      <div class="hero-copy container">
-        <h1>stringju</h1>
-        <div class="identity">
-          <img class="portrait" src="./assets/images/profile.jpg" alt="양현준의 프로필 사진" width="64" height="64">
-          <div>
-            <p class="name">양현준</p>
-            <p class="interests">백엔드 · 네이티브 앱 · 머신러닝</p>
-          </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="home" aria-labelledby="page-title">
+    <div class="hero-runway">
+      <div class="hero-stage">
+        <div class="moon-scene" aria-hidden="true">
+          <img class="moon" src="./assets/images/moon.webp" alt="" width="1100" height="1100" fetchpriority="high">
         </div>
-        <a class="hero-link" href="#work">프로젝트 <span aria-hidden="true">↓</span></a>
+        <div class="hero-scrim" aria-hidden="true"></div>
+        <div class="hero-copy shell">
+          <p class="hero-name">양현준</p>
+          <h1 id="page-title">stringju</h1>
+          <p class="hero-summary">백엔드 개발과 인프라를 함께 공부합니다.</p>
+          <a class="hero-link" href="#about">기록 보기 <span aria-hidden="true">↓</span></a>
+        </div>
       </div>
     </div>
   </header>
 
   <main id="main" tabindex="-1">
-    <section class="work section container" id="work" aria-labelledby="work-title">
-      <h2 id="work-title">프로젝트</h2>
+    <section class="about section shell" id="about" aria-labelledby="about-title">
+      <div class="about-portrait reveal-scale">
+        <img src="./assets/images/profile.jpg" alt="양현준의 프로필 사진" width="460" height="460" loading="lazy">
+      </div>
+      <div class="about-copy">
+        <h2 id="about-title" class="reveal-left">새로운 도전을<br>좋아합니다.</h2>
+        <div class="about-statements">
+          <p class="reveal-right">백엔드 개발과 함께 인프라도 공부합니다.</p>
+          <p class="reveal-right">협업의 맥락을 꼼꼼하게 챙깁니다.</p>
+          <p class="reveal-right">차분하게 주어진 일을 끝까지 진행합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="experience section" id="experience" aria-labelledby="experience-title">
+      <div class="shell experience-layout">
+        <header class="experience-intro">
+          <h2 id="experience-title" class="reveal-left">함께 만든<br>경험들.</h2>
+          <p class="reveal-left">프로젝트, 교육, 그리고 팀 안에서 맡았던 역할입니다.</p>
+        </header>
+        <div class="experience-list-wrap">
+          <div class="experience-line" aria-hidden="true"><span></span></div>
+          <ol class="experience-list">
+            <!-- content:experience:start -->
+            <li class="experience-item reveal-entry">
+              <div class="experience-date"><time datetime="2025-04">2025.04</time> <span aria-hidden="true">·</span> <time datetime="2025-12">2025.12</time></div>
+              <article>
+                <p class="experience-org">성균관대학교 산학협력 프로젝트<span>주식회사 커리어노트</span></p>
+                <h3>프롬프트 엔지니어링 · 백엔드 개발</h3>
+                <ul><li>이력서·채용공고 첨삭 기능 개발</li><li>하계집중근무 진행 · 2025.06 ~ 2025.08</li></ul>
+              </article>
+            </li>
+            <li class="experience-item reveal-entry">
+              <div class="experience-date"><time datetime="2025-03">2025.03</time> <span aria-hidden="true">·</span> <time datetime="2025-04">2025.04</time></div>
+              <article>
+                <p class="experience-org">한봄고등학교</p>
+                <h3>기능대회 강사</h3>
+                <ul><li>클라우드컴퓨팅 직종</li><li>AWS 기초 및 관련 문제 풀이</li></ul>
+              </article>
+            </li>
+            <li class="experience-item reveal-entry">
+              <div class="experience-date"><time datetime="2024-04">2024.04</time> <span aria-hidden="true">·</span> <time datetime="2026-02">2026.02</time></div>
+              <article>
+                <p class="experience-org">성균관대학교 시스템컨설턴트그룹</p>
+                <h3>학생단체 개발자 · Backend</h3>
+                <ul><li>S-TOP 전시 사이트 백엔드 개발</li></ul>
+              </article>
+            </li>
+            <li class="experience-item reveal-entry">
+              <div class="experience-date"><time datetime="2023-02-06">2023.02.06</time> <span aria-hidden="true">·</span> <time datetime="2023-02-24">2023.02.24</time></div>
+              <article>
+                <p class="experience-org">마이다스아이티</p>
+                <h3>겨울방학 인턴십 · Android 개발</h3>
+                <ul><li>모바일 HR 서비스 개발 과제 진행</li></ul>
+              </article>
+            </li>
+            <!-- content:experience:end -->
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack section" id="stack" aria-labelledby="stack-title">
+      <div class="shell">
+        <header class="stack-head">
+          <h2 id="stack-title" class="reveal-left">다뤄 온<br>도구들.</h2>
+          <p class="reveal-right">기술의 이름보다, 어디에 썼는지를 더 중요하게 생각합니다.</p>
+        </header>
+        <ul class="stack-list" aria-label="기술 목록">
+          <!-- content:skills:start -->
+            <li class="stack-row reveal-stack">
+              <h3>Backend &amp; Data</h3>
+              <p>Java · Spring Boot · MySQL · MongoDB · Redis · Socket.IO</p>
+            </li>
+            <li class="stack-row reveal-stack">
+              <h3>Platform &amp; Delivery</h3>
+              <p>AWS · Docker · GitHub Actions · CircleCI · Ubuntu · Rocky Linux</p>
+            </li>
+            <li class="stack-row reveal-stack">
+              <h3>Application</h3>
+              <p>JavaScript · TypeScript · Express.js · Python · Kotlin</p>
+            </li>
+            <!-- content:skills:end -->
+        </ul>
+      </div>
+    </section>
+
+    <section class="work" id="work" aria-labelledby="work-title">
+      <header class="work-head shell">
+        <h2 id="work-title" class="reveal-left">프로젝트</h2>
+        <p class="reveal-right">직접 확인할 수 있는 기록입니다.</p>
+      </header>
       <ul class="projects">
         <!-- content:projects:start -->
-        <li class="project">
-          <a class="project-link" href="https://github.com/2tle/Nether" target="_blank" rel="noopener noreferrer" aria-label="Nether 저장소 (새 탭)">
-            <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/nether-logo.svg" alt="" width="320" height="320" loading="lazy"></div>
-            <div class="project-info">
-              <div><h3>Nether</h3><p>Rust 데스크톱 터미널 · 초기 개발</p></div>
-              <span class="project-arrow" aria-hidden="true">↗</span>
-            </div>
-          </a>
-        </li>
-        <li class="project">
-          <a class="project-link" href="https://github.com/2tle/macmagotchi" target="_blank" rel="noopener noreferrer" aria-label="Macmagotchi 저장소 (새 탭)">
-            <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/macmagotchi-logo.svg" alt="" width="320" height="320" loading="lazy"></div>
-            <div class="project-info">
-              <div><h3>Macmagotchi</h3><p>macOS 메뉴 막대 반려동물</p></div>
-              <span class="project-arrow" aria-hidden="true">↗</span>
-            </div>
-          </a>
-        </li>
-        <li class="project">
-          <a class="project-link" href="https://github.com/2tle/SurvirunAPI" target="_blank" rel="noopener noreferrer" aria-label="SurvirunAPI 저장소 (새 탭)">
-            <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/api-mark.svg" alt="" width="320" height="320" loading="lazy"></div>
-            <div class="project-info">
-              <div><h3>SurvirunAPI</h3><p>운동 앱 REST API</p></div>
-              <span class="project-arrow" aria-hidden="true">↗</span>
-            </div>
-          </a>
-        </li>
-        <!-- content:projects:end -->
+            <li class="project">
+              <article class="project-shell">
+                <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/nether-logo.svg" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-info reveal-project">
+                  <h3>Nether</h3>
+                  <p>Rust와 Iced로 시작한 데스크톱 터미널 구현</p>
+                  <a class="project-link" href="https://github.com/2tle/Nether" target="_blank" rel="noopener noreferrer" aria-label="Nether 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
+                </div>
+              </article>
+            </li>
+            <li class="project">
+              <article class="project-shell">
+                <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/macmagotchi-logo.svg" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-info reveal-project">
+                  <h3>Macmagotchi</h3>
+                  <p>SwiftUI와 AppKit으로 만든 macOS 메뉴 막대 반려동물</p>
+                  <a class="project-link" href="https://github.com/2tle/macmagotchi" target="_blank" rel="noopener noreferrer" aria-label="Macmagotchi 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
+                </div>
+              </article>
+            </li>
+            <li class="project">
+              <article class="project-shell">
+                <div class="project-visual" aria-hidden="true"><img class="project-object" src="./assets/images/api-mark.svg" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-info reveal-project">
+                  <h3>SurvirunAPI</h3>
+                  <p>운동, 친구, 목표 관리를 위한 REST API</p>
+                  <a class="project-link" href="https://github.com/2tle/SurvirunAPI" target="_blank" rel="noopener noreferrer" aria-label="SurvirunAPI 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
+                </div>
+              </article>
+            </li>
+            <!-- content:projects:end -->
       </ul>
     </section>
 
-    <section class="journey section container" id="journey" aria-labelledby="journey-title">
-      <h2 id="journey-title">이력</h2>
-      <ol class="timeline">
-        <!-- content:timeline:start -->
-        <li>
-          <div><h3>성균관대학교</h3><p>컴퓨터공학과 입학</p></div>
-          <div class="timeline-date"><time datetime="2024-02">2024.02</time></div>
-        </li>
-        <li>
-          <div><h3>MIDAS IT</h3><p>동계 인턴십</p></div>
-          <div class="timeline-date"><time datetime="2023-02">2023.02</time></div>
-        </li>
-        <li>
-          <div><h3>Team LogCat</h3><p>백엔드 개발</p></div>
-          <div class="timeline-date"><time datetime="2022-12">2022.12</time> ~ <time datetime="2024-12">2024.12</time></div>
-        </li>
-        <li>
-          <div><h3>Survirun</h3><p>Android 앱 · 백엔드 개발</p></div>
-          <div class="timeline-date"><time datetime="2021-10">2021.10</time> ~ <time datetime="2022-12">2022.12</time></div>
-        </li>
-        <li>
-          <div><h3>선린인터넷고등학교</h3><p>소프트웨어과</p></div>
-          <div class="timeline-date"><time datetime="2021-03">2021.03</time> ~ <time datetime="2024-02">2024.02</time></div>
-        </li>
-        <!-- content:timeline:end -->
-      </ol>
+    <section class="record section shell" id="journey" aria-labelledby="record-title">
+      <div class="education-record">
+        <header>
+          <h2 id="record-title" class="reveal-left">배움의 기록</h2>
+        </header>
+        <ol class="education-list">
+          <!-- content:education:start -->
+            <li class="education-item reveal-entry">
+              <div class="record-date"><time datetime="2024-03">2024.03</time></div>
+              <div><h3>성균관대학교</h3><p>소프트웨어과</p></div>
+            </li>
+            <li class="education-item reveal-entry">
+              <div class="record-date"><time datetime="2021-03">2021.03</time> <span aria-hidden="true">·</span> <time datetime="2024-02">2024.02</time></div>
+              <div><h3>선린인터넷고등학교</h3><p>소프트웨어과 졸업</p></div>
+            </li>
+            <!-- content:education:end -->
+        </ol>
+      </div>
+      <div class="history-record">
+        <header>
+          <h3 class="reveal-right">이전의 작업</h3>
+        </header>
+        <ol class="history-list">
+          <!-- content:history:start -->
+            <li class="history-item reveal-entry">
+              <div><h3>Team LogCat</h3><p>백엔드 개발</p></div>
+              <div class="record-date"><time datetime="2022-12">2022.12</time> <span aria-hidden="true">·</span> <time datetime="2024-12">2024.12</time></div>
+            </li>
+            <li class="history-item reveal-entry">
+              <div><h3>Survirun</h3><p>Android 앱 · 백엔드 개발</p></div>
+              <div class="record-date"><time datetime="2021-10">2021.10</time> <span aria-hidden="true">·</span> <time datetime="2022-12">2022.12</time></div>
+            </li>
+            <!-- content:history:end -->
+        </ol>
+      </div>
     </section>
   </main>
 
-  <footer class="contact container" id="contact">
-    <a href="mailto:iam@2tle.io">iam@2tle.io</a>
-    <div class="social-links">
-      <a href="https://github.com/2tle" target="_blank" rel="noopener noreferrer" aria-label="GitHub (새 탭)">GitHub <span aria-hidden="true">↗</span></a>
-      <a href="https://stringju.tistory.com" target="_blank" rel="noopener noreferrer" aria-label="Blog (새 탭)">Blog <span aria-hidden="true">↗</span></a>
+  <footer class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="shell contact-inner">
+      <h2 id="contact-title" class="reveal-left">연락</h2>
+      <a class="email-link reveal-scale" href="mailto:iam@2tle.io">iam@2tle.io</a>
+      <div class="contact-links reveal-right" aria-label="외부 연락처">
+        <a href="https://github.com/2tle" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <a href="https://huggingface.co/2tle" target="_blank" rel="noopener noreferrer">Hugging Face <span aria-hidden="true">↗</span></a>
+        <a href="https://stringju.tistory.com" target="_blank" rel="noopener noreferrer">Blog <span aria-hidden="true">↗</span></a>
+      </div>
+      <p class="footer-mark">stringju</p>
     </div>
   </footer>
 </body>

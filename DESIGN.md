@@ -1,50 +1,108 @@
-# stringju visual system
+# DESIGN.md - stringju visual system
 
-## Direction
-Apple-inspired scroll presentation with concise Korean copy. Large imagery, large type, one deliberate pinned camera move, then quietly animated project visuals. Not a compact directory and not a copy-heavy landing page.
+## Brand
 
-DESIGN_VARIANCE: 6 / MOTION_INTENSITY: 6 / VISUAL_DENSITY: 2.
+- Name: stringju
+- Voice: calm, precise, curious
+- Art direction: a dark orbital field where the existing moon opens the portfolio, then gives way to a factual developer record. The cinematic entrance is earned by an existing personal visual, not by a generic technology glow.
+- Anti-patterns: generic SaaS grids, purple gradients, fake dashboards, inflated achievements, decorative counters, multiple competing pinned scenes, and copy that could belong to any developer.
+- Dials: `DESIGN_VARIANCE: 8`, `MOTION_INTENSITY: 7`, `VISUAL_DENSITY: 4`.
 
-## Source palette and type
-Retain colors.csv row 83 (Space Tech / Aerospace) and typography.csv row 23 (Korean Modern).
-- Background: #0B0B10; foreground / primary / ring: #F8FAFC.
-- Secondary / muted foreground: #94A3B8; on primary / secondary: #0F172A.
-- Accent: #3B82F6; on accent: #FFFFFF.
-- Card / card foreground: #1E1E23 / #F8FAFC; muted: #232328.
-- Border: #1E293B; destructive / on destructive: #EF4444 / #FFFFFF.
-- Hairlines: foreground at 12% opacity. Scrims are alpha variants of background. Authentic photos and upstream logos retain their own asset colors.
-- Noto Sans KR, self-hosted variable WOFF2 with font-display swap. No remote font requests.
+## Color system
+
+Source row: `colors.csv` No. 83, Space Tech / Aerospace.
+
+- Primary: `#F8FAFC` for bright controls and high-priority text
+- On Primary: `#0F172A`
+- Secondary: `#94A3B8` for secondary controls
+- On Secondary: `#0F172A`
+- Accent: `#3B82F6` for links, active states, and the progress cue
+- On Accent: `#FFFFFF`
+- Background: `#0B0B10` for the page canvas
+- Foreground: `#F8FAFC` for primary text
+- Card: `#1E1E23` for rare elevated planes only
+- Card Foreground: `#F8FAFC`
+- Muted: `#232328` for section shifts and low-emphasis surfaces
+- Muted Foreground: `#94A3B8`
+- Border: `#1E293B` for dividers and form outlines
+- Destructive: `#EF4444`
+- On Destructive: `#FFFFFF`
+- Ring: `#F8FAFC`
+
+Dark mode: dark-first only. The source palette is already dark. Transparent scrims use alpha versions of `#0B0B10` or `#F8FAFC`; no additional opaque colors are introduced. Authentic local image and logo colors are exempt inside image files.
 
 ## Typography
-- Hero: clamp(80px, 12vw, 176px), 650, line-height 1.08, tracking -.06em. Mobile clamp(60px, 15vw, 88px).
-- Real name: 20px, 500, line-height 1.5; interests 16px, 400, line-height 1.7.
-- Section headings: clamp(40px, 5vw, 64px), 600, line-height 1.2, tracking -.05em.
-- Project names: 40px, featured 64px; mobile 32px. Weight 550, line-height 1.2.
-- Project descriptions: 18px desktop / 16px mobile, line-height 1.7. One factual sentence fragment each.
-- Timeline organization: 18px, 500; detail 16px; dates 14px tabular numerals, line-height 1.6.
-- Contact email: clamp(28px, 4vw, 48px); social links 14px.
-- Do not add eyebrows, slogans, feature tags, numbered project labels, invitation text or repeated repository-button labels.
 
-## Layout
-- Content width 1200px, side inset 64px desktop / 32px tablet / 24px mobile / 20px under 360px.
-- Hero: full initial viewport, moon large on the right and identity on the left. Name, small real portrait, real name, interests, one direct project anchor. No extra nav bar.
-- Desktop hero with motion: 180svh scroll runway, 100svh sticky stage. Stage overflow is clipped internally, never on the sticky ancestor. No empty spacer outside this scene.
-- Hero fallback: regular flow with min-height max(700px, 100svh); no fixed text-height constraint. Mobile identity at the top, moon lower-right.
-- Work: 96px vertical spacing; one full-width featured project followed by two equal support projects, gap 24px. Large authentic project logos, no fabricated screenshots. Featured link is a split composition; support links put the visual above copy. Mobile is one column.
-- Cards: 24px radius, flat surface, no shadows. Portrait 16px radius; project logos 24px radius; the arrow target is circular. These are documented roles, not random radii.
-- Experience: heading left and compact dated list right. 32px between rows, no per-row card boxes. Mobile heading and dates stack.
-- Contact: one hairline, email and social links. No repeated brand or invitation paragraph.
+Source row: `typography.csv` No. 23, Korean Modern.
 
-## Motion contract
-All animations are transforms and opacity. Never intercept wheel/touch, change scroll speed, or auto-scroll through scenes.
-- Hero desktop: normalized native scroll progress 0→1 over the sticky runway. Moon scales 1→1.72, travels left 14% and up 4%, rotates up to -6deg. Identity moves up 72px and fades as the moon takes focus. A focused hero link forces its copy visible.
-- Hero mobile: no pin. Moon scales only 1→1.12 with at most 24px translation; identity never fades. Large visual motion stays on desktop.
-- Project visual: scroll-linked scale .84→1 and translateY 48→0px as it enters. Mobile .94→1 and 20→0px. Copy and link targets always stay visible and static.
-- Hover: arrow translate(2px,-2px), 180ms ease-out; press 100ms scale(.98).
-- No entrance delay, reveal-observer hidden content, perpetual loop, blur animation, motion toggle or decorative counters.
-- requestAnimationFrame is scheduled only for scroll/resize/font/layout changes. Read geometry before writing styles; keep distant scenes at stable final states.
-- Reduced motion: remove pin and runway, clear inline transforms/opacity, disable hover movement. Same fallback for missing JS. Print removes decorative visuals and animation.
-- Disable pin when the viewport is short or enlarged text cannot fit. Re-evaluate after fonts, resize and content-size changes. Pause frame work when the document is hidden.
+- Heading font: Noto Sans KR
+- Body font: Noto Sans KR
+- Display: 650, `clamp(5rem, 14vw, 12.5rem)`, tracking `-0.075em`, leading `0.9`
+- H1: display role only, one instance
+- H2: 650, `clamp(2.75rem, 6vw, 5.5rem)`, tracking `-0.065em`, leading `1.02`
+- H3: 620, `clamp(1.5rem, 2.2vw, 2.25rem)`, tracking `-0.04em`, leading `1.18`
+- Body: 400, 16px desktop and mobile minimum, line-height `1.7`
+- Small: 500, 12px minimum, line-height `1.5`
+- Date/meta: 500, 13px, tabular numerals
+- Mono is intentionally not used. The resume is read as a human record, not a terminal simulation.
+- Self-hosted Noto Sans KR remains the only remote-free loaded font. System sans fallbacks cover unlisted glyphs.
+- Type scale ratio: 1.25. Body text max line length: 36ch.
 
-## Accessibility and asset delivery
-Static semantic content, single h1, visible focus, 44px targets, real image alt text and empty alt on decoration. Main skip link and direct project navigation. Retain verified account/mail URLs. No runtime external API or CDN. Build verifies referenced paths including query strings, versions CSS/JS with content hashes to avoid stale cross-release assets, and emits matching root/dist HTML. Test CSS MIME and computed styles, not just screenshot dimensions.
+## Spacing and grid
+
+- Base unit: 4px
+- Scale: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160
+- Content max-width: 1200px
+- Desktop side inset: 40px. Tablet: 28px. Mobile: 20px.
+- Sections: `padding-block: clamp(96px, 14vw, 192px)` except the hero.
+- Grid: 12 columns at 1024px and up. Semantic breakpoints: 640px, 768px, 1024px, 1280px, 1536px.
+- Multi-column sections stack below 768px. The work section keeps full-width visual bands at all widths.
+
+## Shape, borders, elevation
+
+- Radius rule: surfaces use 20px; controls use 12px; circular portrait remains circular; text links have no container.
+- Level 0: no shadow, dividers or negative space separate content.
+- Level 1: `0 20px 60px rgb(11 11 16 / 28%)` only for menu and portrait frame.
+- No generic floating cards. Project bands and the mobile menu are the only elevated surfaces.
+
+## Motion
+
+- Entrance: 280ms, `cubic-bezier(.22, 1, .36, 1)`, opacity and transform only.
+- Exit: 180ms, `ease-in`, opacity and transform only.
+- Hover: 160ms, `cubic-bezier(.22, 1, .36, 1)`, color, underline offset, and transform only.
+- Active: 100ms, `ease-out`, `scale(.98)`.
+- Stagger: 70ms maximum between related entries.
+- Hero narrative: desktop screens at least 900px wide and 650px high receive one 180svh native-scroll runway. The moon scales and shifts upward as the identity copy gives the next chapter space. This is the single dramatic moment.
+- Career timeline: individual entries reveal via clip/translate on first entry. The vertical line fills as a reading-progress cue, not as a second pin.
+- Stack: word strips slide a small distance from alternating sides when they enter view. No infinite marquee.
+- Project visuals: object scale settles as each real project identifier enters view. Each motion shows that a new project chapter has been reached.
+- Reduced motion: remove pinning, all JS transforms, all reveal delays, all opacity transitions, and the menu transition. Content begins fully visible.
+- Mobile: no pinning and no large parallax. The hero is normal document flow and all content remains readable while scrolling.
+
+## Component patterns
+
+- Navigation: 64px frosted top bar on desktop. Four anchor links. A text menu button appears under 768px only when JavaScript is available; no-JS keeps all links visible.
+- Hero: full viewport orbit visual with one heading, name, concise role line, and a small anchor to the record below.
+- About: asymmetric profile photo and source-grounded statement set, divided by a fine line. No card wrapper.
+- Experience: chronological editorial list. A date rail, organization, role, and at most two responsibilities per entry. No rating, metric, or decorative badge.
+- Stack: three typographic bands grouped by discipline, based on the public Notion technology list. The labels state scope, never mastery.
+- Projects: three full-bleed showcase bands with real local repository identifiers, a sourced one-line description, and one GitHub link each.
+- Education: two side-by-side factual records that become a vertical list on mobile.
+- Contact: one clear email action with GitHub, Hugging Face, and Blog destinations as secondary links.
+
+## Image style
+
+- Hero: existing NASA-derived moon asset at large scale, locally served.
+- About: existing real profile photograph, square-cropped with an accessible alt.
+- Projects: local repository identifiers on a sparse dark field. No mock application windows.
+- No generated imagery is required because the page already has real, source-grounded visuals.
+
+## Accessibility
+
+- WCAG AA contrast minimum: 4.5:1 for body copy, 3:1 for large display type.
+- Focus indicator: 2px `#F8FAFC` outline plus 4px offset on every keyboard-focusable control.
+- Minimum control size: 44px by 44px.
+- Semantic landmarks: skip link, navigation, header, main, labelled sections, footer.
+- One H1 and logical H2/H3 hierarchy.
+- Every visual either has meaningful alt text or `alt=""` when decorative.
+- No user task depends on animation or JavaScript.

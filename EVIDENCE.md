@@ -1,31 +1,36 @@
-# Evidence ledger
+# EVIDENCE.md
 
 | Claim | Source | Confidence | Allowed wording | Usage |
-|---|---|---|---|---|
-| stringju / 양현준 | User: "change 2tle to stringju. and fully name is 양현준. use this in introduction." | High, user-provided | stringju as display name; 양현준 in introduction and metadata | Profile / document title |
-| GitHub account 2tle / avatar | https://api.github.com/users/2tle | High, previously retrieved public API | Keep verified GitHub URLs and avatar; not the site's display name | Profile image / links |
-| Backend, native app and ML interests | https://github.com/2tle/2tle/blob/master/README.md | High, self-reported | 백엔드 · 네이티브 앱 · 머신러닝 | Profile |
-| Sungkyunkwan CSE starts 2024.02 | Same profile README | High, self-reported | 2024.02 성균관대학교 컴퓨터공학과 입학; no unverified current enrollment | Timeline |
-| Team LogCat Backend Developer 2022.12~2024.12 | Same profile README | High, self-reported | Team LogCat 백엔드 개발 | Timeline |
-| MIDAS IT internship 2023.02.06~2023.02.24 | Same profile README | High, self-reported | MIDAS IT 동계 인턴십, 2023.02 | Timeline |
-| Sunrin software 2021.03.02~2024.02.29 | Same profile README | High, self-reported | 선린인터넷고등학교 소프트웨어과 2021.03~2024.02 | Timeline |
-| Survirun Android & backend 2021.10~2022.12 | Same profile README | High, self-reported | Android 앱과 백엔드 개발 | Project |
-| Email and blog | Same profile README contact links | High, public contact | iam@2tle.io, stringju.tistory.com | Contact |
-| Nether initial desktop scaffold, Rust/Iced | https://github.com/2tle/Nether/blob/main/README.md (read through GitHub README API) | High | 커스터마이징 가능한 터미널을 향한 초기 구현, Rust / Iced; do not claim mature release | Project |
-| Macmagotchi menu bar virtual pet, SwiftUI/AppKit | https://api.github.com/repos/2tle/macmagotchi/readme | High | macOS 메뉴 막대의 작은 반려동물, Swift / SwiftUI / AppKit | Project |
-| SurvirunAPI endpoints | https://api.github.com/repos/2tle/SurvirunAPI/readme | High | 운동·친구·목표 관리 REST API, Socket.io 실시간 운동 기능, JavaScript | Project |
-| Project years 2026/2026/2021 | https://api.github.com/users/2tle/repos?per_page=100 | High, creation years only | 시작 연도 only; not completion or release dates | Omitted in simplified design |
-| Awards, metrics, exact personal ownership | Missing | 0 | MUST NOT USE | Omitted |
+|---|---|---:|---|---|
+| Display name stringju and name 양현준 | User and user-provided public Notion resume | high | Exact names only | Metadata, hero, introduction |
+| Intro: likes new challenges; studies backend and infrastructure; values collaboration and careful work | User-provided public Notion resume, About me | high | Short Korean paraphrase without performance claims | About section |
+| 성균관대학교 산학협력 프로젝트, 주식회사 커리어노트, 2025.04 to 2025.12 | User-provided public Notion resume, Career | high | Exact organization, project label, and dates | Experience section |
+| CareerNote work: prompt engineering, backend development, resume and job-posting feedback feature, summer intensive work | User-provided public Notion resume, Career | high | Exact responsibilities only | Experience section |
+| 한봄고등학교 기능대회 강사, 2025.03 to 2025.04 | User-provided public Notion resume, Career | high | Exact organization, role, and dates | Experience section |
+| Hanbom work: cloud computing and AWS basics/problem solving | User-provided public Notion resume, Career | high | Exact activity wording only | Experience detail |
+| 성균관대학교 시스템컨설턴트그룹 학생단체 개발자, 2024.04 to 2026.02 | User-provided public Notion resume, Career | high | Exact organization, role, and dates | Experience section |
+| System Consulting Group work: backend developer; S-TOP exhibition site backend | User-provided public Notion resume, Career | high | Exact responsibility wording only | Experience detail |
+| MIDAS IT high-school winter internship, 2023.02.06 to 2023.02.24 | User-provided public Notion resume, Career | high | Exact organization, program, and dates | Experience section |
+| MIDAS IT work: Android developer; mobile HR service development assignment | User-provided public Notion resume, Career | high | Exact role and activity only | Experience detail |
+| Sungkyunkwan University, 2024.03 onward | User-provided public Notion resume, Education | high | School and date only. Do not infer current enrollment beyond source wording. | Education section |
+| Sunrin Internet High School software department, 2021.03 to 2024.02 | User-provided public Notion resume, Education | high | Exact school, department, and dates | Education section |
+| Tech labels: AWS, GitHub Actions, CircleCI, Docker, Ubuntu, Rocky Linux, JavaScript, TypeScript, Express.js, Python, Java, Kotlin, MongoDB, Redis, MySQL, Spring Boot, Socket.IO | User-provided public Notion resume, Tech Skills collection schema | medium | Show as a source-derived technology list only. Do not claim mastery or years. | Stack section |
+| GitHub account 2tle | User-provided public Notion resume and https://github.com/2tle | high | https://github.com/2tle | Contact |
+| Hugging Face account 2tle | User-provided public Notion resume | high | https://huggingface.co/2tle | Contact |
+| Email and blog | User-provided public Notion resume | high | iam@2tle.io and https://stringju.tistory.com | Contact |
+| Nether | https://github.com/2tle/Nether README | high | Rust desktop terminal, early implementation. Do not claim release maturity. | Project showcase |
+| Macmagotchi | https://github.com/2tle/macmagotchi README | high | macOS menu-bar virtual pet. | Project showcase |
+| SurvirunAPI | https://github.com/2tle/SurvirunAPI README | high | Exercise app REST API. | Project showcase |
+| Team LogCat backend development, 2022.12 to 2024.12 | Public GitHub profile README, previously verified | high | Exact organization, role, and dates only | History section |
+| Survirun Android and backend development, 2021.10 to 2022.12 | Public GitHub profile README, previously verified | high | Exact organization, role, and dates only | History section |
+| Awards, award count, award names, project outcomes, user counts, skill ratings, current status | Missing or incompletely retrieved | 0 | MUST NOT USE | Omitted |
 
 ## Assets
-- `assets/images/profile.jpg`: https://avatars.githubusercontent.com/u/56637184?v=4&s=640, unmodified public avatar downloaded at user request.
-- `assets/images/moon-texture.jpg`: https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_2k.jpg. NASA Scientific Visualization Studio, CGI Moon Kit https://svs.gsfc.nasa.gov/4720/. Credit NASA/Goddard Space Flight Center Scientific Visualization Studio, LRO/LROC. Used to render a decorative shaded sphere, not a scientific visualization.
-- `assets/images/moon.webp`: locally projected and shaded from the NASA texture using scripts/render-moon.py.
-- Nether and Macmagotchi logos: each public repository's own SVG, displayed in the project cards solely to identify linked projects, not as testimonials. Original colors are preserved.
-- `assets/images/api-mark.svg`: a simple hand-drawn geometric connection mark created for this site to represent the SurvirunAPI backend relationship; not a screenshot or a third-party logo.
-- Noto Sans KR: SIL Open Font License, downloaded from Google Fonts and self-hosted. License included with font assets.
 
-## Research limitations (original implementation)
-- Image generation attempted; unavailable because pi-image-gen.defaultModel is unset. Used attributed NASA imagery instead.
-- Design MCP discovery/browser tools (designmd, ui-layouts, 21st-dev, chrome-devtools) not exposed in this session. No claims of MCP research.
-- Original reference fetched content: Apple AirPods Pro and NASA. The subtractive redesign is compared against local before/after screenshots in QA.md; no new external research is claimed.
+- `assets/images/profile.jpg`: public profile photo already used in the user-provided Notion resume and the existing site.
+- `assets/images/moon.webp`: local derivative of NASA moon surface imagery. Attribution and generation notes remain in `README.md`.
+- `assets/images/nether-logo.svg`, `assets/images/macmagotchi-logo.svg`, `assets/images/api-mark.svg`: local project identifiers described in the existing evidence history.
+
+## Retrieval note
+
+The public Notion page was rendered and its visible page blocks were read on 2026-03-12. Its three database queries were Cloudflare rate-limited, so database row details and award entries are intentionally omitted rather than inferred.
