@@ -151,7 +151,9 @@ function settleInitialHash() {
   const target = location.hash && document.getElementById(location.hash.slice(1));
   if (!target) return;
   const offset = Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-  const top = Math.max(0, target.getBoundingClientRect().top + scrollY - offset);
+  const heading = target.querySelector('.section-heading h2');
+  const anchor = heading || target;
+  const top = Math.max(0, anchor.getBoundingClientRect().top + scrollY - offset);
   const previous = document.documentElement.style.scrollBehavior;
   document.documentElement.style.scrollBehavior = 'auto';
   scrollTo(0, top);

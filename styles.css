@@ -1,10 +1,10 @@
 :root {
   color-scheme: light;
-  --paper: #f8f7f4;
-  --ink: #151614;
-  --muted: #686a64;
-  --accent: #536747;
-  --line: #d9dad5;
+  --paper: #ffffff;
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0071e3;
+  --line: #d2d2d7;
   --edge: clamp(24px, 7vw, 128px);
   --ease: cubic-bezier(.22, 1, .36, 1);
   background: var(--paper);
@@ -25,26 +25,26 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .skip-link:focus { transform: none; }
 
 /* The artwork stays clear. Paper appears only where information needs a stable surface. */
-.landscape { position: fixed; z-index: -1; inset: 0; overflow: hidden; background: #f5e9e6; pointer-events: none; }
+.landscape { position: fixed; z-index: -1; inset: 0; overflow: hidden; background: #000; pointer-events: none; }
 .landscape-images, .landscape-frame { position: absolute; inset: 0; width: 100%; height: 100%; }
 .landscape-frame { object-fit: cover; object-position: center; opacity: 0; }
 .landscape-frame:first-child { opacity: 1; }
-.landscape-veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(248 247 244 / 4%) 0 42%, rgb(248 247 244 / 18%) 58%, rgb(248 247 244 / 58%) 100%); }
+.landscape-veil { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0 48%, rgb(255 255 255 / 12%) 64%, rgb(255 255 255 / 88%) 100%); }
 .reading-progress { position: fixed; z-index: 30; inset: 0 0 auto; height: 3px; background: rgb(255 255 255 / 44%); }
 .reading-progress span { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
 
-.hero { display: grid; align-items: end; min-height: 100svh; padding: var(--edge); }
+.hero { display: grid; align-items: start; justify-items: center; min-height: 100svh; padding: clamp(72px, 11vh, 132px) var(--edge); }
 .hero:focus, main:focus { outline: none; }
-.hero-copy { width: fit-content; max-width: 100%; margin-bottom: clamp(26px, 6vh, 78px); padding: .13em .2em .19em; background: var(--paper); }
-h1 { font-size: clamp(72px, 11vw, 172px); font-weight: 800; line-height: .92; letter-spacing: -.095em; }
+.hero-copy { width: fit-content; max-width: 100%; }
+h1 { font-size: clamp(64px, 8.2vw, 132px); font-weight: 750; line-height: .92; letter-spacing: -.085em; }
 
 /* A chapter is a clear scene above and a wide information plane below. */
 .notebook-shell, .notebook { width: 100%; }
-.section { position: relative; width: 100%; padding: clamp(260px, 40vh, 460px) var(--edge) 0; }
-.section::before { position: absolute; z-index: -1; right: 0; bottom: 0; left: 0; height: 63%; background: var(--paper); content: ''; }
+.section { position: relative; width: 100%; padding: clamp(360px, 53vh, 600px) var(--edge) 0; }
+.section::before { position: absolute; z-index: -1; right: 0; bottom: 0; left: 0; height: 57%; background: var(--paper); content: ''; }
 .section > :not(.projects) { width: min(1280px, 100%); margin-inline: auto; }
 .section-heading { padding-bottom: clamp(26px, 3vw, 44px); border-bottom: 1px solid var(--ink); }
-.section-heading h2 { font-size: clamp(2.5rem, 5.5vw, 5.8rem); font-weight: 750; line-height: 1; letter-spacing: -.085em; }
+.section-heading h2 { font-size: clamp(2.3rem, 4.8vw, 5rem); font-weight: 700; line-height: 1.04; letter-spacing: -.075em; }
 
 .experience { min-height: 100svh; }
 .experience-list-wrap { position: relative; padding: clamp(48px, 7vw, 88px) 0 clamp(72px, 9vw, 128px); }
@@ -63,7 +63,7 @@ h1 { font-size: clamp(72px, 11vw, 172px); font-weight: 800; line-height: .92; le
 
 .stack { min-height: 100svh; }
 .stack-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: min(1280px, 100%); margin: clamp(52px, 7vw, 88px) auto 0; border-top: 1px solid var(--line); }
-.stack-row { min-height: clamp(300px, 31vw, 410px); padding: clamp(28px, 3.4vw, 48px); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--paper); }
+.stack-row { min-height: clamp(300px, 31vw, 410px); padding: clamp(28px, 3.4vw, 48px); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #ffffff; }
 .stack-row:first-child { border-left: 1px solid var(--line); }
 .stack-visual { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--accent); border-radius: 50%; color: var(--accent); }
 .stack-visual span { display: none; }
@@ -78,7 +78,7 @@ h1 { font-size: clamp(72px, 11vw, 172px); font-weight: 800; line-height: .92; le
 .work > .section-heading { width: min(1280px, calc(100% - 2 * var(--edge))); margin: 0 auto; }
 .projects { margin-top: clamp(54px, 7vw, 100px); }
 .project { position: relative; min-height: min(820px, 88svh); padding: 0 var(--edge); }
-.project::before { position: absolute; z-index: -1; right: 0; bottom: 0; left: 0; height: 54%; background: var(--paper); content: ''; }
+.project::before { position: absolute; z-index: -1; right: 0; bottom: 0; left: 0; height: 54%; background: #ffffff; content: ''; }
 .project-shell { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr); align-items: end; gap: clamp(42px, 9vw, 150px); width: min(1280px, 100%); min-height: min(820px, 88svh); margin: auto; padding-bottom: clamp(52px, 8vw, 108px); }
 .project:nth-child(even) .project-shell { grid-template-columns: minmax(320px, .85fr) minmax(0, 1.15fr); }
 .project-visual { position: relative; display: grid; place-items: center; min-height: 420px; transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); transition: transform 300ms var(--ease); }
@@ -90,7 +90,7 @@ h1 { font-size: clamp(72px, 11vw, 172px); font-weight: 800; line-height: .92; le
 .project-plinth { position: absolute; bottom: 17%; width: min(24vw, 290px); height: 18px; border-radius: 50%; background: rgb(23 24 21 / 17%); filter: blur(8px); }
 .project-info { max-width: 480px; padding: 0 0 2px; }
 .project:nth-child(even) .project-info { justify-self: end; }
-.project-info h3 { font-size: clamp(3rem, 5.4vw, 5.7rem); font-weight: 780; line-height: .98; letter-spacing: -.09em; }
+.project-info h3 { font-size: clamp(2.8rem, 4.8vw, 5rem); font-weight: 700; line-height: .98; letter-spacing: -.08em; }
 .project-info > p { margin-top: 20px; color: var(--muted); font-size: clamp(15px, 1.35vw, 17px); line-height: 1.8; }
 .project-info > .project-tools { color: var(--accent); font-size: 13px; font-weight: 750; }
 .project-link { display: inline-flex; align-items: center; gap: 20px; min-height: 46px; margin-top: 24px; border-bottom: 1px solid var(--accent); color: var(--accent); font-size: 14px; font-weight: 750; }
@@ -98,7 +98,7 @@ h1 { font-size: clamp(72px, 11vw, 172px); font-weight: 800; line-height: .92; le
 
 .record { min-height: 100svh; }
 .record-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin-top: clamp(54px, 7vw, 88px); border: 1px solid var(--line); }
-.education-record, .history-record { padding: clamp(30px, 4vw, 54px); background: var(--paper); }
+.education-record, .history-record { padding: clamp(30px, 4vw, 54px); background: #ffffff; }
 .education-record { border-right: 1px solid var(--line); }
 .education-record > h3, .history-record > h3 { font-size: 20px; font-weight: 750; }
 .education-list, .history-list { margin-top: 24px; border-top: 1px solid var(--line); }
@@ -109,7 +109,7 @@ h1 { font-size: clamp(72px, 11vw, 172px); font-weight: 800; line-height: .92; le
 
 .contact { display: grid; min-height: 100svh; padding: clamp(260px, 42vh, 480px) var(--edge) var(--edge); }
 .contact-card { width: min(1280px, 100%); margin: auto; padding: clamp(40px, 6vw, 82px) 0 0; border-top: 1px solid var(--ink); }
-.email-link { display: inline-flex; align-items: center; gap: 28px; min-height: 56px; max-width: 100%; color: var(--ink); font-size: clamp(38px, 7.2vw, 104px); font-weight: 800; line-height: .95; letter-spacing: -.095em; }
+.email-link { display: inline-flex; align-items: center; gap: 28px; min-height: 56px; max-width: 100%; color: var(--ink); font-size: clamp(38px, 6.2vw, 88px); font-weight: 700; line-height: .95; letter-spacing: -.085em; }
 .email-arrow { color: var(--accent); font-size: .45em; }
 .email-link:hover { color: var(--accent); }
 .contact-links { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 40px; }
@@ -125,11 +125,11 @@ h1 { font-size: clamp(72px, 11vw, 172px); font-weight: 800; line-height: .92; le
 
 @media (max-width: 800px) {
   :root { --edge: 28px; }
-  .section { padding-top: 46svh; }
+  .section { padding-top: 50svh; }
   .section::before { height: 67%; }
-  .hero { padding-bottom: 11svh; }
-  .hero-copy { margin: 0 -8px; padding: 11px 8px 15px; }
-  h1 { font-size: clamp(70px, 23vw, 118px); }
+  .hero { justify-items: start; padding-top: 42px; }
+  .hero-copy { margin: 0; padding: 0; }
+  h1 { font-size: clamp(58px, 18vw, 90px); }
   .section-heading h2 { font-size: clamp(2.6rem, 12vw, 4.5rem); }
   .experience-list { grid-template-columns: 1fr; gap: 42px; }
   .experience-line { bottom: 96px; }

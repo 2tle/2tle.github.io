@@ -83,7 +83,7 @@ test('one landscape remains behind every chapter with a consistent visual system
   await expect(page.locator('.landscape-frame')).toHaveCount(4);
   await expect(page.locator('.landscape-frame').first()).toHaveAttribute('src', './background/spring2.png');
   await expect(page.locator('.landscape')).toHaveCSS('position', 'fixed');
-  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(248, 247, 244)');
+  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   await expect(page.locator('.landscape-frame').first()).toHaveCSS('opacity', '1');
   for (const id of ['experience', 'work', 'contact']) {
     await page.locator('#' + id).scrollIntoViewIfNeeded();
