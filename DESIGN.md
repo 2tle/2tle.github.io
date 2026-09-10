@@ -19,7 +19,7 @@
 ## Layout and artwork
 
 - One fixed landscape canvas covers the viewport, behind all content.
-- Four local images share the same crop. Spring remains the opaque base; summer, fall, and winter progressively dissolve over it.
+- Four local images share the same crop. `spring2.png` remains the opaque base; summer, fall, and winter progressively dissolve over it.
 - Native document scroll progress determines image opacity using smoothstep. No timers, scroll hijacking, or section pinning.
 - Incoming images must finish decoding before appearing. Failed images leave the preceding image visible.
 - Desktop: artwork occupies the right 71% of the viewport and fades into the reading column through an ivory gradient.

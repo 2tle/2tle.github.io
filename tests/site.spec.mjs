@@ -28,7 +28,7 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
     await page.evaluate(() => document.fonts.ready);
     await expect(page.locator('h1')).toHaveText('stringju');
     await expect(page.locator('h1')).toHaveCount(1);
-    await expect(page.locator('.hero-name')).toHaveText('양현준');
+    await expect(page.locator('.chapter-strip')).toHaveCount(0);
     await expect(page.locator('.experience-item')).toHaveCount(4);
     await expect(page.locator('.stack-row')).toHaveCount(3);
     await expect(page.locator('.project')).toHaveCount(3);
@@ -78,7 +78,10 @@ test('one landscape remains behind every chapter with a consistent visual system
   await page.goto('/');
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator('[data-season-button]')).toHaveCount(0);
+  await expect(page.locator('.chapter-strip')).toHaveCount(0);
+  await expect(page.locator('.project-category')).toHaveCount(0);
   await expect(page.locator('.landscape-frame')).toHaveCount(4);
+  await expect(page.locator('.landscape-frame').first()).toHaveAttribute('src', './background/spring2.png');
   await expect(page.locator('.landscape')).toHaveCSS('position', 'fixed');
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(247, 243, 237)');
   await expect(page.locator('.landscape-frame').first()).toHaveCSS('opacity', '1');
@@ -203,7 +206,7 @@ test('back to top restores a useful keyboard starting point', async ({ page }) =
   await page.keyboard.press('Enter');
   await expect(page.locator('#home')).toBeFocused();
   await page.keyboard.press('Tab');
-  await expect(page.locator('.hero-link')).toBeFocused();
+  await expect(page.locator('.project-link').first()).toBeFocused();
 });
 
 test('a short landscape viewport keeps the opening in normal document flow', async ({ page }) => {
@@ -211,19 +214,15 @@ test('a short landscape viewport keeps the opening in normal document flow', asy
   await page.goto('/');
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator('.hero')).not.toHaveClass(/is-pinned/);
-  await page.locator('.hero-link').scrollIntoViewIfNeeded();
-  await expect(page.locator('.hero-link')).toBeInViewport();
+  await expect(page.locator('h1')).toBeInViewport();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
   await mkdir('artifacts/final', { recursive: true });
   await page.screenshot({ path: 'artifacts/final/844-landscape.png', animations: 'disabled' });
 });
 
-test('hero action works and all one-time reveals settle after a scroll pass', async ({ page }) => {
+test('all one-time reveals settle after a scroll pass', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
-  await page.locator('.hero-link').click();
-  await expect(page).toHaveURL(/#about$/);
-  await expect(page.locator('#about-title')).toBeInViewport();
   await scrollThrough(page);
   await page.waitForTimeout(400);
   expect(await page.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => item.classList.contains('is-visible')))).toBeTruthy();
@@ -255,7 +254,6 @@ test('reduced motion and JavaScript-disabled contexts retain the complete static
     const staticPage = await context.newPage();
     await staticPage.goto('http://127.0.0.1:4173');
     await expect(staticPage.locator('h1')).toHaveText('stringju');
-    await expect(staticPage.locator('.hero-name')).toHaveText('양현준');
     await expect(staticPage.locator('.experience-item')).toHaveCount(4);
     await expect(staticPage.locator('.project')).toHaveCount(3);
     expect(await staticPage.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => !item.classList.contains('is-visible')))).toBeTruthy();
@@ -264,7 +262,7 @@ test('reduced motion and JavaScript-disabled contexts retain the complete static
     await staticPage.keyboard.press('Enter');
     await expect(staticPage.locator('main')).toBeFocused();
     await staticPage.keyboard.press('Tab');
-    await expect(staticPage.locator('.chapter-strip a').first()).toBeFocused();
+    await expect(staticPage.locator('.project-link').first()).toBeFocused();
   } finally {
     await context.close();
   }
@@ -318,7 +316,6 @@ test('failed local images and blocked storage do not remove content', async ({ p
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('/');
   await expect(page.locator('h1')).toHaveText('stringju');
-  await expect(page.locator('.hero-name')).toHaveText('양현준');
   await expect(page.locator('.about-portrait img')).toHaveCSS('aspect-ratio', '1 / 1');
   await expect(page.locator('.project-link')).toHaveCount(3);
   await expect(page.locator('.experience-item')).toHaveCount(4);
@@ -334,7 +331,7 @@ for (const width of [375, 1440]) {
     await page.waitForTimeout(450);
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
     expect(results.violations).toEqual([]);
-    const focusables = [page.locator('.hero-link'), page.locator('.project-link').first(), page.locator('.email-link')];
+    const focusables = [page.locator('.project-link').first(), page.locator('.email-link'), page.locator('.back-to-top')];
     for (const target of focusables) {
       await target.scrollIntoViewIfNeeded();
       await target.focus();
@@ -362,7 +359,6 @@ test('print keeps the resume readable without decorative imagery', async ({ page
   await page.emulateMedia({ media: 'print' });
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   await expect(page.locator('h1')).toHaveCSS('color', 'rgb(24, 24, 27)');
-  await expect(page.locator('.hero-summary')).toHaveCSS('color', 'rgb(63, 63, 70)');
   await expect(page.locator('.landscape')).toBeHidden();
   for (const card of await page.locator('.stack-row').all()) {
     await expect(card).toHaveCSS('background-color', 'rgb(255, 255, 255)');
@@ -370,12 +366,9 @@ test('print keeps the resume readable without decorative imagery', async ({ page
   await expect(page.locator('.stack-visual').first()).toBeHidden();
 });
 
-test('system high contrast retains the accented heading', async ({ page }) => {
+test('system high contrast keeps the primary heading readable', async ({ page }) => {
   await page.emulateMedia({ forcedColors: 'active' });
   await page.goto('/');
-  const accent = page.locator('.accent-text');
-  await expect(accent).toHaveCSS('background-image', 'none');
-  const color = await accent.evaluate((el) => getComputedStyle(el).color);
-  await expect(accent).toHaveCSS('-webkit-text-fill-color', color);
+  await expect(page.locator('h1')).toHaveCSS('background-image', 'none');
   await expect(page.locator('.surface-light').first()).toBeHidden();
 });

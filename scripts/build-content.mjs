@@ -95,13 +95,11 @@ function renderProject(project, index) {
     throw new Error(`${file} block ${position}: image ${fields.image} must be a local assets/images file`);
   }
   const visual = fields.image ? `<div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./${escapeHtml(fields.image)}" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>` : '';
-  const category = fields.category ? `<p class="project-category"><span aria-hidden="true">${String(position).padStart(2, '0')}</span>${escapeHtml(fields.category)}</p>` : '';
   const projectTools = fields.tools ? `<p class="project-tools">${escapeHtml(fields.tools)}</p>` : '';
   return `<li class="project">
               <article class="project-shell">
                 ${visual}
                 <div class="project-info reveal-project">
-                  ${category}
                   <h3>${escapeHtml(fields.name)}</h3>
                   <p>${escapeHtml(lines.join(' '))}</p>
                   ${projectTools}

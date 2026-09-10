@@ -35,37 +35,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .reading-progress span { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
 .hero { position: relative; display: flex; align-items: center; min-height: max(720px, 100svh); padding: 120px var(--side); }
 .hero:focus, main:focus { outline: none; }
-.site-note { position: absolute; top: 36px; left: var(--side); font-size: 11px; font-weight: 750; letter-spacing: .16em; }
-.site-note span { display: inline-block; margin-left: 24px; color: var(--muted); font-weight: 450; letter-spacing: .12em; }
 .hero-copy { position: relative; width: 44%; }
-.hero-name { color: var(--muted); font-size: 15px; letter-spacing: .12em; }
-h1 { margin: 15px 0 28px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(80px, 8.5vw, 138px); font-weight: 400; line-height: 1; letter-spacing: -.075em; }
-.hero-summary { max-width: 25ch; color: var(--muted); font-size: 17px; line-height: 1.9; }
-.hero-link { display: inline-flex; align-items: center; gap: 30px; min-height: 48px; margin-top: 38px; border-bottom: 1px solid var(--accent); color: var(--accent); font-size: 14px; font-weight: 650; }
-.hero-link span { transition: transform 180ms var(--ease); }
-.hero-link:hover span { transform: translateY(4px); }
-.hero-edge { position: absolute; bottom: 40px; left: var(--side); display: flex; align-items: center; gap: 16px; color: var(--muted); font-size: 11px; letter-spacing: .04em; }
-.hero-edge i { width: 40px; height: 1px; background: var(--accent); }
+h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(80px, 8.5vw, 138px); font-weight: 400; line-height: 1; letter-spacing: -.075em; }
 
 /* One continuous reading column leaves the landscape visible throughout. */
 .notebook-shell { width: min(58%, 850px); padding: 0 var(--side); }
-.chapter-strip { display: flex; flex-wrap: wrap; gap: 4px 20px; padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.chapter-strip a { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; color: var(--muted); font-size: 13px; }
-.chapter-strip a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 6px; }
 .section { padding: 110px 0; }
-.chapter-no { color: var(--accent); font-size: 11px; font-weight: 650; letter-spacing: .13em; }
-.about { display: flex; flex-direction: column; gap: 38px; padding-top: 100px; }
-.about-portrait { display: flex; align-items: center; gap: 18px; }
+.about { padding-block: 64px 32px; }
+.about-portrait { display: flex; align-items: center; }
 .about-portrait img { width: 78px; aspect-ratio: 1; border-radius: 50%; object-fit: cover; }
-.about-portrait p { color: var(--muted); font-size: 12px; }
 .about-copy h2, .section-heading h2, .contact h2 { margin-top: 18px; font-size: clamp(1.75rem, 2.6vw, 2.6rem); font-weight: 550; line-height: 1.45; letter-spacing: -.055em; }
-.accent-text { color: var(--accent); -webkit-text-fill-color: currentColor; }
-.about-statements { margin-top: 32px; }
-.about-statements p { padding: 11px 0; color: var(--muted); font-size: 15px; line-height: 1.8; }
-.section-heading { display: flex; gap: 20px; align-items: baseline; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
-.chapter-index { color: var(--accent); font-family: Georgia, serif; font-size: 17px; font-style: italic; }
+.section-heading { display: flex; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
 .section-heading h2 { margin: 0; }
-.section-heading > div > p { max-width: 36ch; margin-top: 14px; color: var(--muted); font-size: 14px; line-height: 1.9; }
 .experience-list-wrap { position: relative; margin-top: 42px; }
 .experience-line { position: absolute; top: 6px; bottom: 8px; left: 3px; width: 1px; background: var(--line); }
 .experience-line span { display: block; width: 100%; height: 100%; background: var(--accent); transform-origin: top; }
@@ -92,10 +73,8 @@ h1 { margin: 15px 0 28px; font-family: Georgia, 'Times New Roman', serif; font-s
 .project:nth-child(-n+2) .project-object { border-radius: 22%; }
 .project:last-child .project-object { padding: 14px; border-radius: 22%; background: var(--accent); }
 .project-halo, .project-plinth { display: none; }
-.project-category { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: var(--accent); font-size: 10px; font-weight: 550; letter-spacing: .06em; }
-.project-category span { font-family: Georgia, serif; font-style: italic; }
 .project-info h3 { font-size: clamp(1.5rem, 2.3vw, 2rem); font-weight: 550; line-height: 1.2; letter-spacing: -.055em; }
-.project-info > p:not(.project-category) { margin-top: 16px; color: var(--muted); font-size: 14px; line-height: 1.85; }
+.project-info > p { margin-top: 16px; color: var(--muted); font-size: 14px; line-height: 1.85; }
 .project-info > .project-tools { font-size: 12px; }
 .project-link { display: inline-flex; align-items: center; gap: 22px; min-height: 44px; margin-top: 14px; color: var(--accent); font-size: 13px; font-weight: 600; }
 .project-link:hover { text-decoration: underline; text-underline-offset: 5px; }
@@ -106,17 +85,14 @@ h1 { margin: 15px 0 28px; font-family: Georgia, 'Times New Roman', serif; font-s
 .education-item h3, .history-item h3 { font-size: 15px; font-weight: 550; line-height: 1.6; }
 .education-item p, .history-item p { margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.8; }
 .contact { width: min(58%, 850px); padding: 120px var(--side) 36px; }
-.contact-card { border-top: 1px solid var(--line); padding-top: 54px; }
-.contact h2 { margin-top: 18px; }
-.contact-copy { max-width: 30ch; margin-top: 22px; color: var(--muted); font-size: 15px; line-height: 1.9; }
+.contact-card { border-top: 1px solid var(--line); padding-top: 36px; }
 .email-link { display: inline-flex; align-items: center; gap: 20px; min-height: 52px; max-width: 100%; margin-top: 30px; color: var(--accent); font-family: Georgia, serif; font-size: clamp(28px, 3.6vw, 48px); letter-spacing: -.045em; }
 .email-arrow { font-family: sans-serif; font-size: 24px; }
 .email-link:hover { text-decoration: underline; text-underline-offset: 8px; }
 .contact-links { display: flex; flex-wrap: wrap; gap: 4px 22px; margin-top: 26px; }
 .contact-links a { display: inline-flex; align-items: center; gap: 6px; min-width: 44px; min-height: 44px; color: var(--muted); font-size: 12px; }
 .contact-links a:hover { color: var(--ink); }
-.footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 100px; padding-top: 24px; border-top: 1px solid var(--line); }
-.footer-mark { color: var(--muted); font-size: 11px; }
+.footer-bottom { display: flex; justify-content: flex-end; margin-top: 100px; padding-top: 24px; border-top: 1px solid var(--line); }
 .back-to-top { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; }
 .back-to-top:hover { background: var(--paper); }
 .surface-light { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(160px circle at var(--light-x, 50%) var(--light-y, 50%), rgb(255 255 255 / 28%), transparent); transition: opacity 180ms ease-out; }
@@ -143,30 +119,19 @@ h1 { margin: 15px 0 28px; font-family: Georgia, 'Times New Roman', serif; font-s
   .landscape-frame { object-position: 52% 42%; }
   .landscape-veil { background: linear-gradient(0deg, var(--paper) 0%, rgb(247 243 237 / 98%) 18%, rgb(247 243 237 / 88%) 30%, rgb(247 243 237 / 22%) 53%, transparent 72%); }
   .hero { align-items: flex-end; min-height: max(760px, 100svh); padding: 100px var(--side) 90px; }
-  .site-note { top: 24px; font-size: 10px; padding: 8px 10px; margin-left: -10px; background: rgb(247 243 237 / 88%); }
-  .site-note span { margin-left: 16px; }
   .hero-copy { width: 100%; }
-  h1 { margin: 8px 0 20px; font-size: clamp(76px, 22vw, 118px); }
-  .hero-name { font-size: 13px; }
-  .hero-summary { font-size: 15px; max-width: 27ch; }
-  .hero-link { margin-top: 22px; }
-  .hero-edge { bottom: 26px; font-size: 10px; }
+  h1 { font-size: clamp(76px, 22vw, 118px); }
   .notebook-shell, .contact { width: 100%; padding-inline: var(--side); }
   .notebook-shell { background: linear-gradient(180deg, var(--paper), rgb(247 243 237 / 95%) 100px, rgb(247 243 237 / 95%) calc(100% - 100px), transparent); }
-  .chapter-strip { gap: 4px 24px; padding: 12px 0; }
   .section { padding: 76px 0; }
-  .about { gap: 34px; }
+  .about { padding-block: 52px 20px; }
   .about-copy h2, .section-heading h2, .contact h2 { font-size: clamp(1.6rem, 6.6vw, 2.3rem); }
-  .section-heading { gap: 15px; }
-  .section-heading > div > p { font-size: 13px; }
-  .about-statements p { font-size: 14px; }
   .project-shell { grid-template-columns: 64px minmax(0, 1fr); gap: 20px; padding-block: 36px; }
   .project-object { width: 64px; }
   .project-info h3 { font-size: 1.6rem; }
-  .project-category { gap: 8px; font-size: 9px; }
   .education-item, .history-item { grid-template-columns: 1fr; gap: 6px; }
   .contact { margin-top: 36svh; padding-top: 110px; background: linear-gradient(180deg, transparent, rgb(247 243 237 / 96%) 100px, var(--paper)); }
-  .contact-card { padding-top: 36px; }
+  .contact-card { padding-top: 28px; }
   .footer-bottom { margin-top: 70px; }
 }
 @media (max-width: 359px) {
@@ -186,16 +151,14 @@ h1 { margin: 15px 0 28px; font-family: Georgia, 'Times New Roman', serif; font-s
 }
 @media (forced-colors: active) {
   .landscape, .surface-light { display: none; }
-  .accent-text { color: CanvasText; -webkit-text-fill-color: currentColor; background-image: none; }
-  .hero-link, .project-link, .back-to-top { border: 1px solid LinkText; }
+  .project-link, .back-to-top { border: 1px solid LinkText; }
 }
 @media print {
   :root, body { background: white; color: #18181b; }
-  .landscape, .reading-progress, .skip-link, .hero-edge, .hero-link, .chapter-strip, .back-to-top, .surface-light, .site-note { display: none; }
+  .landscape, .reading-progress, .skip-link, .back-to-top, .surface-light { display: none; }
   .hero { min-height: 0; padding: 0 0 24px; }
   .hero-copy { width: 100%; }
   h1 { color: #18181b; font-size: 50px; }
-  .hero-summary { color: #3f3f46; }
   .notebook-shell, .contact { width: 100%; padding: 0; margin: 0; background: white; }
   .section { padding: 24px 0; }
   .section-heading { padding-bottom: 16px; }
