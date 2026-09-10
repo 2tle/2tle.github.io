@@ -29,7 +29,7 @@ test('content sync is idempotent and the built page matches source', async () =>
     expect(await readFile(join(root, 'index.html'), 'utf8')).toBe(before);
     expect(await readFile('dist/index.html', 'utf8')).toBe(await readFile('index.html', 'utf8'));
     expect(before).toMatch(/<script src="\.\/main\.js\?v=[0-9a-f]+" defer><\/script>/);
-    for (const marker of ['experience', 'skills', 'projects', 'education', 'history']) {
+    for (const marker of ['experience', 'projects', 'education']) {
       expect(before).toContain(`<!-- content:${marker}:start -->`);
       expect(before).toContain(`<!-- content:${marker}:end -->`);
     }
@@ -38,18 +38,16 @@ test('content sync is idempotent and the built page matches source', async () =>
 
 test('source content renders the verified resume chapters', async () => {
   const html = await readFile('index.html', 'utf8');
-  for (const text of ['주식회사 커리어노트', '한봄고등학교', '시스템컨설턴트그룹', '마이다스아이티', 'Hugging Face', 'Backend &amp; Data']) {
+  for (const text of ['주식회사 커리어노트', '한봄고등학교', '시스템컨설턴트그룹', '마이다스아이티', 'Hugging Face', 'Introducing']) {
     expect(html).toContain(text);
   }
   expect((html.match(/class="experience-item/g) || []).length).toBe(4);
-  expect((html.match(/class="stack-row/g) || []).length).toBe(3);
   expect((html.match(/class="project"/g) || []).length).toBe(3);
   expect((html.match(/class="education-item/g) || []).length).toBe(2);
-  expect((html.match(/class="history-item/g) || []).length).toBe(2);
   expect(html).not.toContain('주요 수상 실적');
 });
 
-for (const marker of ['experience', 'skills', 'projects', 'education', 'history']) {
+for (const marker of ['experience', 'projects', 'education']) {
   test(`missing ${marker} marker fails without rewriting the page`, async () => {
     await fixture(async (root, sync) => {
       const path = join(root, 'index.html');

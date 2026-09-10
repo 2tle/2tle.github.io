@@ -29,11 +29,10 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
     await expect(page.locator('h1')).toHaveText('stringju');
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('.chapter-strip')).toHaveCount(0);
+    await expect(page.locator('#introducing')).toHaveCount(1);
     await expect(page.locator('.experience-item')).toHaveCount(4);
-    await expect(page.locator('.stack-row')).toHaveCount(3);
     await expect(page.locator('.project')).toHaveCount(3);
     await expect(page.locator('.education-item')).toHaveCount(2);
-    await expect(page.locator('.history-item')).toHaveCount(2);
     await expect(page.getByText('주식회사 커리어노트', { exact: true })).toBeAttached();
     await expect(page.getByRole('link', { name: 'Hugging Face', exact: true })).toBeAttached();
 
@@ -64,7 +63,7 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
       await mkdir('artifacts/final', { recursive: true });
       await page.screenshot({ path: `artifacts/final/${width}-full.png`, fullPage: true });
       await writeFile(`artifacts/final/${width}-metrics.json`, JSON.stringify({ width, ...metrics }, null, 2));
-      for (const id of ['home', 'experience', 'stack', 'work', 'contact']) {
+      for (const id of ['home', 'introducing', 'experience', 'work', 'education', 'contact']) {
         await page.locator(`#${id}`).scrollIntoViewIfNeeded();
         await page.waitForTimeout(250);
         await page.screenshot({ path: `artifacts/final/${width}-${id}.png` });
@@ -83,12 +82,12 @@ test('seasonal room scenes are used as each chapter background', async ({ page }
   await expect(page.locator('.landscape-frame')).toHaveCount(4);
   await expect(page.locator('.landscape-frame').first()).toHaveAttribute('src', './background/spring2.png');
   await expect(page.locator('.landscape')).toBeHidden();
-  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(255, 253, 250)');
+  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(246, 216, 216)');
   await expect(page.locator('.landscape-frame').first()).toHaveCSS('opacity', '1');
   expect(await page.locator('.hero').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('spring2.png');
   expect(await page.locator('#experience').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('summer.png');
   expect(await page.locator('#work').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('fall.png');
-  expect(await page.locator('#journey').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('winter.png');
+  expect(await page.locator('#education').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('winter.png');
 });
 
 test('all four scenes dissolve continuously with scroll and reverse to the opening', async ({ page }) => {
@@ -274,7 +273,7 @@ test('identity, sourced resume content, metadata, and destinations stay correct'
   await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /양현준, stringju/);
   expect(await readFile('assets/favicon.svg', 'utf8')).toContain('>s</text>');
   const text = await page.locator('body').innerText();
-  for (const sourceText of ['커리어노트', '한봄고등학교', '시스템컨설턴트그룹', '마이다스아이티', 'Team LogCat', 'Survirun']) {
+  for (const sourceText of ['커리어노트', '한봄고등학교', '시스템컨설턴트그룹', '마이다스아이티']) {
     expect(text).toContain(sourceText);
   }
   expect(text).not.toContain('주요 수상 실적');
@@ -357,10 +356,7 @@ test('print keeps the resume readable without decorative imagery', async ({ page
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   await expect(page.locator('h1')).toHaveCSS('color', 'rgb(24, 24, 27)');
   await expect(page.locator('.landscape')).toBeHidden();
-  for (const card of await page.locator('.stack-row').all()) {
-    await expect(card).toHaveCSS('background-color', 'rgb(255, 255, 255)');
-  }
-  await expect(page.locator('.stack-visual').first()).toBeHidden();
+  await expect(page.locator('.education-record')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
 });
 
 test('system high contrast keeps the primary heading readable', async ({ page }) => {

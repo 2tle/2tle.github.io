@@ -71,19 +71,6 @@ function renderExperience(entry, index) {
             </li>`;
 }
 
-function renderSkill(skill, index) {
-  const file = 'content/skills.md';
-  const position = index + 1;
-  const { meta: fields, lines } = skill;
-  requireFields(skill, file, position, ['name']);
-  if (!lines.length) throw new Error(`${file} block ${position}: missing skill list`);
-  return `<li class="stack-row reveal-stack">
-              <div class="stack-visual" aria-hidden="true"><span></span><span></span><span></span></div>
-              <h3>${escapeHtml(fields.name)}</h3>
-              <p>${escapeHtml(lines.join(' '))}</p>
-            </li>`;
-}
-
 function renderProject(project, index) {
   const file = 'content/projects.md';
   const position = index + 1;
@@ -121,18 +108,6 @@ function renderEducation(entry, index) {
             </li>`;
 }
 
-function renderHistory(entry, index) {
-  const file = 'content/timeline.md';
-  const position = index + 1;
-  const { meta: fields, lines } = entry;
-  requireFields(entry, file, position, ['date', 'org']);
-  if (!lines.length) throw new Error(`${file} block ${position}: missing detail body`);
-  return `<li class="history-item reveal-entry">
-              <div><h3>${escapeHtml(fields.org)}</h3><p>${escapeHtml(lines.join(' '))}</p></div>
-              <div class="record-date">${period(fields.date, fields.dateend)}</div>
-            </li>`;
-}
-
 function replaceBlock(html, marker, items) {
   const pattern = new RegExp(`<!-- content:${marker}:start -->[\\s\\S]*?<!-- content:${marker}:end -->`);
   if (!pattern.test(html)) throw new Error(`index.html: missing content:${marker} markers`);
@@ -140,27 +115,23 @@ function replaceBlock(html, marker, items) {
 }
 
 export async function syncContent() {
-  const files = ['experience', 'skills', 'projects', 'education', 'timeline'];
-  const [experienceMarkdown, skillsMarkdown, projectsMarkdown, educationMarkdown, historyMarkdown, html] = await Promise.all([
+  const files = ['experience', 'projects', 'education'];
+  const [experienceMarkdown, projectsMarkdown, educationMarkdown, html] = await Promise.all([
     ...files.map((file) => readFile(resolve(root, 'content', `${file}.md`), 'utf8')),
     readFile(resolve(root, 'index.html'), 'utf8'),
   ]);
   const experience = parseBlocks(experienceMarkdown, 'content/experience.md');
-  const skills = parseBlocks(skillsMarkdown, 'content/skills.md');
   const projects = parseBlocks(projectsMarkdown, 'content/projects.md');
   const education = parseBlocks(educationMarkdown, 'content/education.md');
-  const history = parseBlocks(historyMarkdown, 'content/timeline.md');
   let next = replaceBlock(html, 'experience', experience.map(renderExperience));
-  next = replaceBlock(next, 'skills', skills.map(renderSkill));
   next = replaceBlock(next, 'projects', projects.map(renderProject));
   next = replaceBlock(next, 'education', education.map(renderEducation));
-  next = replaceBlock(next, 'history', history.map(renderHistory));
   const changed = next !== html;
   if (changed) await writeFile(resolve(root, 'index.html'), next);
-  return { experience: experience.length, skills: skills.length, projects: projects.length, education: education.length, history: history.length, changed };
+  return { experience: experience.length, projects: projects.length, education: education.length, changed };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const result = await syncContent();
-  console.log(`Content synced: ${result.experience} experience, ${result.skills} skill groups, ${result.projects} projects, ${result.education} education records, ${result.history} history records${result.changed ? '' : ' (unchanged)'}`);
+  console.log(`Content synced: ${result.experience} experience, ${result.projects} projects, ${result.education} education records${result.changed ? '' : ' (unchanged)'}`);
 }
