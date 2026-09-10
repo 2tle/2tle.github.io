@@ -24,12 +24,7 @@ npm test
 
 각 블록은 `---` 헤더와 본문 줄로 구성합니다. 프로젝트 링크는 HTTPS여야 하고 이미지는 `assets/images/` 아래의 로컬 파일만 허용합니다. 콘텐츠 생성기와 검증은 `scripts/build-content.mjs` 및 `tests/content.spec.mjs`에 있습니다.
 
-한국어 문구를 수정한 뒤에는 다음 명령으로 자가 호스팅 Noto Sans KR 글리프를 갱신합니다.
-
-```sh
-node scripts/subset-font.mjs
-npm run build
-```
+Pretendard 가변 폰트는 `assets/fonts/PretendardVariable.woff2`에 로컬로 포함되어 있습니다.
 
 ## 경험 설계
 

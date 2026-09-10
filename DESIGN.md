@@ -11,7 +11,7 @@
 - Accent: muted olive #596947, consistent throughout the page.
 - Rules: olive ink at 22% opacity.
 - Identity: Georgia serif, 80–138px desktop, 76–118px mobile.
-- Korean copy: locally hosted Noto Sans KR.
+- Korean copy: locally hosted Pretendard variable font.
 - Section titles: 28–42px desktop, 26–37px mobile, weight 550.
 - Reading text: 14–17px with 1.8–2 line height.
 - No notebook outlines, tape, memo cards, or separate seasonal palettes.
