@@ -73,7 +73,7 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
   });
 }
 
-test('one landscape remains behind every chapter with a consistent visual system', async ({ page }) => {
+test('seasonal room scenes are used as each chapter background', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
   await page.evaluate(() => document.fonts.ready);
@@ -82,14 +82,13 @@ test('one landscape remains behind every chapter with a consistent visual system
   await expect(page.locator('.project-category')).toHaveCount(0);
   await expect(page.locator('.landscape-frame')).toHaveCount(4);
   await expect(page.locator('.landscape-frame').first()).toHaveAttribute('src', './background/spring2.png');
-  await expect(page.locator('.landscape')).toHaveCSS('position', 'fixed');
-  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expect(page.locator('.landscape')).toBeHidden();
+  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(255, 253, 250)');
   await expect(page.locator('.landscape-frame').first()).toHaveCSS('opacity', '1');
-  for (const id of ['experience', 'work', 'contact']) {
-    await page.locator('#' + id).scrollIntoViewIfNeeded();
-    const bounds = await page.locator('.landscape').boundingBox();
-    expect(bounds).toEqual({ x: 0, y: 0, width: 1440, height: 900 });
-  }
+  expect(await page.locator('.hero').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('spring2.png');
+  expect(await page.locator('#experience').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('summer.png');
+  expect(await page.locator('#work').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('fall.png');
+  expect(await page.locator('#journey').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('winter.png');
 });
 
 test('all four scenes dissolve continuously with scroll and reverse to the opening', async ({ page }) => {
