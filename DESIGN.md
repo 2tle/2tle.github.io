@@ -22,14 +22,10 @@
 - Four local images share the same crop. `spring2.png` remains the opaque base; summer, fall, and winter progressively dissolve over it.
 - Native document scroll progress determines image opacity using smoothstep. No timers, scroll hijacking, or section pinning.
 - Incoming images must finish decoding before appearing. Failed images leave the preceding image visible.
-- Desktop: artwork occupies the right 71% of the viewport and fades into the reading column through an ivory gradient.
-- Reading column: up to 850px including side padding, normally 58% of the viewport.
-- Portrait: compact round photograph with a caption.
-- Experience: a continuous vertical timeline.
-- Skills and projects: open rows with fine rules; project logos have one consistent size.
-- Contact: continues the same reading column and landscape.
-- Mobile, at 700px and below: the illustration occupies the upper 68svh and fades into the introduction. A translucent ivory reading surface supports text; the scenery reappears before the contact section.
-- Tablet: column width and image gradient adjust to preserve readable line lengths.
+- Desktop: every chapter uses the full viewport width. Content expands to a 1240px product-story grid, while the scene remains visible beneath a light ivory veil.
+- Experience: a two-column timeline. Skills: three large panels. Projects: alternating full-width feature scenes with oversized marks and descriptions.
+- Contact: a full-screen final panel with a single large email intent.
+- Mobile, at 700px and below: large stages become a single vertical reading flow; the scene stays behind a higher-opacity ivory veil.
 
 ## Motion and accessibility
 

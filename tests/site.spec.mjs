@@ -64,7 +64,7 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
       await mkdir('artifacts/final', { recursive: true });
       await page.screenshot({ path: `artifacts/final/${width}-full.png`, fullPage: true });
       await writeFile(`artifacts/final/${width}-metrics.json`, JSON.stringify({ width, ...metrics }, null, 2));
-      for (const id of ['home', 'about', 'experience', 'stack', 'work', 'contact']) {
+      for (const id of ['home', 'experience', 'stack', 'work', 'contact']) {
         await page.locator(`#${id}`).scrollIntoViewIfNeeded();
         await page.waitForTimeout(250);
         await page.screenshot({ path: `artifacts/final/${width}-${id}.png` });
@@ -85,7 +85,7 @@ test('one landscape remains behind every chapter with a consistent visual system
   await expect(page.locator('.landscape')).toHaveCSS('position', 'fixed');
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(247, 243, 237)');
   await expect(page.locator('.landscape-frame').first()).toHaveCSS('opacity', '1');
-  for (const id of ['about', 'experience', 'work', 'contact']) {
+  for (const id of ['experience', 'work', 'contact']) {
     await page.locator('#' + id).scrollIntoViewIfNeeded();
     const bounds = await page.locator('.landscape').boundingBox();
     expect(bounds).toEqual({ x: 0, y: 0, width: 1440, height: 900 });
@@ -273,7 +273,6 @@ test('identity, sourced resume content, metadata, and destinations stay correct'
   await expect(page).toHaveTitle('stringju · 양현준');
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'stringju · 양현준');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /양현준, stringju/);
-  await expect(page.locator('.about-portrait img')).toHaveAttribute('alt', '양현준의 프로필 사진');
   expect(await readFile('assets/favicon.svg', 'utf8')).toContain('>s</text>');
   const text = await page.locator('body').innerText();
   for (const sourceText of ['커리어노트', '한봄고등학교', '시스템컨설턴트그룹', '마이다스아이티', 'Team LogCat', 'Survirun']) {
@@ -316,7 +315,6 @@ test('failed local images and blocked storage do not remove content', async ({ p
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('/');
   await expect(page.locator('h1')).toHaveText('stringju');
-  await expect(page.locator('.about-portrait img')).toHaveCSS('aspect-ratio', '1 / 1');
   await expect(page.locator('.project-link')).toHaveCount(3);
   await expect(page.locator('.experience-item')).toHaveCount(4);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();

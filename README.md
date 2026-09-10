@@ -44,7 +44,6 @@ npm run build
 ## 자산과 근거
 
 - `background/spring2.png`, `summer.png`, `fall.png`, `winter.png`: 페이지 전체에 이어지는 방 일러스트
-- `assets/images/profile.jpg`: 사용자 제공 공개 Notion 이력서와 기존 사이트에서 사용한 프로필 사진
 - 프로젝트 식별 이미지: 해당 공개 저장소의 로고 또는 기존 사이트의 관계 표식
 - `EVIDENCE.md`: 표시 가능한 외부 사실과 허용 문구
 - `PRODUCT.md`, `DESIGN.md`, `PLAN.md`, `reference-study.md`: 콘텐츠, 시각 시스템, 구현 방향, 참고 연구 기록
