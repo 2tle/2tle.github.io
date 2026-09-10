@@ -1,75 +1,57 @@
-# Implementation plan - grounded resume experience
+# PLAN.md
 
-This file records the initial implementation plan. The current visual specification, compact typography, pointer interactions, and responsive behavior are documented in `DESIGN.md`.
+## 1. Brand & Voice
+- Name: stringju · 양현준
+- One-liner: 백엔드 개발과 인프라를 함께 공부하는 개발자의 계절 기록장.
+- Voice: 포근한, 차분한, 꼼꼼한.
+- Anti-patterns: 어린이용 UI처럼 가벼운 정보 위계, SaaS 카드 템플릿, 과한 유리 효과, 근거 없는 수치와 장식.
 
-## 1. Brand and voice
-
-**Design read:** a Korean developer portfolio for recruiters and collaborators, using an Apple product-page-like cinematic language without turning a resume into a product advertisement.
-
-- Name: stringju, 양현준
-- Voice: calm, exact, curious
-- Primary visitor question sequence: who is this person, what work has been done, what tools appear in that work, what projects can be inspected, how can I contact them.
-- Anti-patterns: generic developer hero text, a wall of equal cards, fake metrics, progress bars, unverified awards, and decoration-only motion.
-
-## 2. Visual system
-
-- Palette: `colors.csv` No. 83, Space Tech / Aerospace. Exact tokens are documented in `DESIGN.md`.
-- Typography: `typography.csv` No. 23, Korean Modern. Exact heading and body font: Noto Sans KR.
-- Dials: `DESIGN_VARIANCE: 8`, `MOTION_INTENSITY: 7`, `VISUAL_DENSITY: 4`.
-- The existing moon and portrait are retained because they identify this specific site and provide a real visual foundation. Blue is a navigation and interaction cue, not a glow effect.
+## 2. Visual System
+- Baseline palette source: colors.csv row 11 `Portfolio/Personal`.
+- Base: #FAFAFA, #09090B, #FFFFFF, #64748B, #E4E4E7, #18181B.
+- Intentional user-asset exception: 계절 강조색은 제공된 네 배경에서 추출한 고정 토큰을 사용한다.
+  - Spring: #A84E66 / #F6D6DE / #6E4148
+  - Summer: #466B3B / #DDE8C8 / #315239
+  - Fall: #B44C23 / #F6D39B / #70361F
+  - Winter: #456789 / #DCE8F4 / #334C68
+- Typography source: typography.csv row 23 `Korean Modern`, Noto Sans KR / Noto Sans KR. 기존 자가 호스팅 가변 글꼴을 유지한다.
+- Dials: DESIGN_VARIANCE 8, MOTION_INTENSITY 5, VISUAL_DENSITY 5.
 
 ## 3. Stack
+- Static HTML, CSS, vanilla JavaScript.
+- Existing content generator and local assets remain.
+- No new runtime dependency, CDN, or external image request.
 
-- GitHub Pages-compatible static HTML, CSS, and progressive JavaScript.
-- No additional dependency. Existing local fonts, image assets, build script, Playwright, and axe tests remain in use.
-- Native CSS and requestAnimationFrame power scroll-linked transforms. No scroll hijacking, canvas, fake UI previews, or runtime external requests.
-
-## 4. Route
-
-- `/` only. A single Korean portfolio page.
+## 4. Pages / Routes
+- One page only: `/`.
+- Hash destinations: `#about`, `#experience`, `#stack`, `#work`, `#journey`, `#contact`.
 
 ## 5. Sections
+1. Hero room: current-season room fills the opening. A paper identity card sits off-center on desktop and below the artwork on mobile. Four season controls change image and UI accent.
+2. About note: portrait polaroid plus three source-grounded statements. The character scene and real portrait connect without pretending they are the same medium.
+3. Experience calendar: chronological records on a continuous binding rail.
+4. Tool memos: three overlapping desk-note surfaces, each using the same content but a distinct paper composition.
+5. Project shelf: repository marks become objects placed on broad project cards; information stays directly actionable.
+6. Record cards: education and previous work as two differently weighted notebook inserts.
+7. Contact postcard: one email action and three verified external destinations.
 
-1. **Hero**: establishes the identity with the existing moon as a single focal object. Desktop native-scroll runway moves the view from name to record.
-2. **About**: establishes working style through the Notion-source self-description. Asymmetric portrait and text, no card.
-3. **Experience**: makes the timeline scannable through date rail, role, and source-supported responsibilities. Entries are offset in rhythm rather than rendered as tiles.
-4. **Stack**: turns the source tech list into three discipline bands. This answers technical context without unsupported proficiency ratings.
-5. **Projects**: presents the actual linked repositories as isolated showcase bands. Each visual is an existing local project identifier, not a mock screen.
-6. **Education and earlier work**: closes the factual record with compact school and prior-work entries.
-7. **Contact**: offers the verified direct email, GitHub, Hugging Face, and Blog destinations.
+## 6. Animation Inventory
+- Season change: 220ms opacity and scale crossfade, plus semantic `aria-live` status.
+- Hero: one subtle scroll-linked background zoom on desktop only.
+- Entries: 300ms opacity/transform with varied axes by information type.
+- Experience binding: scroll-linked scaleY.
+- Project object: one-time settle and restrained fine-pointer tilt.
+- Reduced motion: all reveal transforms, parallax, particles, and crossfades resolve immediately.
 
-The layout family changes with every consecutive section: pinned image stage, asymmetric split, editorial timeline, typographic bands, product showcase, record split, then contact close.
+## 7. Research Log
+- Seasonal character portfolio search: visible room objects can carry personality, but primary destinations should remain explicit.
+- Animal Crossing scrapbook search: seasonal lighting plus scrapbook materiality supports character ownership; excessive badges and alerts create noise.
+- designmd, ui-layouts, 21st-dev, chrome-devtools MCP are unavailable in this environment. Existing Playwright screenshots provide the local baseline.
 
-## 6. Animation inventory
-
-- Load: hero children appear once with a short, staggered opacity/transform entrance.
-- Scroll story: desktop hero is the only pinned scene. Moon zoom and copy departure tell the transition from identity to record.
-- Experience: entries clip and translate into place once. The line progress gives positional context.
-- Stack: alternate strips translate in a small amount to distinguish disciplines.
-- Projects: real project marks settle from a smaller scale as each project is reached.
-- Interactive feedback: focused/hovered links underline or shift by a few pixels; press uses `scale(.98)`.
-- Reduced-motion and mobile fallback: everything is visible, vertical, and unpinned.
-
-## 7. MCP research log
-
-- `search_tool_bm25("21st-dev ui-layouts chrome-devtools designmd")`: unavailable in this environment. No result was fabricated.
-- `designmd("dark cinematic tech")`: unavailable, retry `designmd("cinematic")`: unavailable.
-- `ui-layouts("horizontal scroll")`: unavailable, retry `ui-layouts("editorial timeline")`: unavailable.
-- `21st-dev("particle field")`: unavailable, retry `21st-dev("scroll story")`: unavailable.
-- `chrome-devtools`: unavailable. Playwright was used instead for browser screenshots and will be used for validation.
-- `web_search`: Notion discovery query had no usable provider result. The user-provided public Notion page was rendered with Playwright and its page blocks were inspected directly.
-
-## 8. Reference study
-
-- Apple AirPods Pro 3: one large isolated object, concise copy, and a vertically recomposed mobile hero. Screenshot evidence in `artifacts/reference-study/`.
-- Apple MacBook Pro: dark visual field, image-led hero, and section pacing through scale and whitespace. Screenshot evidence in `artifacts/reference-study/`.
-- Applied principle: use the real moon, portrait, and project identifiers as isolated visual subjects. Avoid Apple content, commerce UI, copied artwork, and copied language.
-
-## 9. Risks and mitigations
-
-- **Source uncertainty**: database row queries on the Notion page were rate-limited. Award rows and uncaptured database projects are omitted.
-- **Fact drift**: every visible external claim must appear in `EVIDENCE.md`; dates and responsibilities are copied or safely condensed.
-- **Too much motion**: one dramatic pinned scene only. All other movement is small, one-time, transform/opacity based, and reduced-motion safe.
-- **Mobile readability**: all split layouts stack under 768px; desktop pinning is disabled under 900px or short heights.
-- **Performance**: local assets only, passive scroll listener, one animation frame per browser frame, geometry read before style writes.
-- **AI-slop risk**: no ungrounded slogans or metrics, no repeated cards, no template section order, and each section has a factual reading purpose.
+## 8. Risks & Mitigations
+- Portrait crop hides scene details: desktop uses cover; narrow screens recompose to an image panel above the copy.
+- Seasonal accents fail contrast: dark accent tokens are used for text and buttons; pale variants are decorative only.
+- Large PNG cost: only the active scene is rendered, remaining images are prefetched after load.
+- Persistent choice storage blocked: localStorage access is guarded; current month remains the fallback.
+- Motion causes discomfort: reduced-motion removes all nonessential motion.
+- Content generator overwrites markup: existing marker names and required class contracts remain.

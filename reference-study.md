@@ -1,26 +1,18 @@
 # Reference study
 
-## References inspected
+## Seasonal Studio
+- 계절 변화는 콘텐츠 구조를 바꾸기보다 조명, 배경, 주변 오브젝트의 분위기를 바꿀 때 이해가 빠르다.
+- 적용: 동일한 방 이미지와 동일한 정보 구조를 유지하고, 계절 선택에 따라 이미지와 강조색만 함께 바꾼다.
 
-1. Apple AirPods Pro 3
-   - URL: https://www.apple.com/airpods-pro/
-   - Screenshots: `artifacts/reference-study/airpods-pro-1440.png`, `artifacts/reference-study/airpods-pro-375.png`
-   - Observed: a single isolated product image dominates the first view. The first heading is short and the surrounding space is intentionally quiet. On mobile, image and headline become a vertical sequence rather than a compressed desktop composition.
+## Animal Crossing scrapbook patterns
+- 스크랩북, 우표, 메모, 사진 같은 익숙한 물성이 캐릭터 세계관과 많은 기록을 자연스럽게 연결한다.
+- 적용: 경력은 달력형 기록, 기술은 메모 묶음, 프로젝트는 책상 위 표본 카드, 연락은 엽서처럼 구성한다.
+- 피할 점: 알림 배지와 작은 장식이 과도해져 정보가 묻히는 방식.
 
-2. Apple MacBook Pro
-   - URL: https://www.apple.com/macbook-pro/
-   - Screenshots: `artifacts/reference-study/macbook-pro-1440.png`, `artifacts/reference-study/macbook-pro-375.png`
-   - Observed: a dark hero makes the hardware silhouette carry the scene. Type stays low in the viewport rather than competing with the visual. The mobile version preserves one focal object and reorders content for reading.
+## Existing stringju portfolio
+- 기존 버전의 강점은 실제 이력과 프로젝트를 큰 흐름으로 빠르게 읽을 수 있고, 외부 요청이 없으며, 키보드와 reduced motion 대응이 이미 있다는 점이다.
+- 유지: 검증된 정보, 로컬 자산, 콘텐츠 생성 마커, 의미 구조, 접근성 기준.
+- 교체: 우주와 달 중심의 어두운 제품 페이지 연출을 계절 방과 개인 기록장 연출로 전환한다.
 
-## Principles adopted
-
-- Treat the moon and profile photo as the opening visual, not as decoration behind a generic pitch.
-- Give each resume chapter one visual job: identity, work history, tools, projects, education, then contact.
-- Use large isolated visuals and concise copy. Do not reuse Apple copy, logos, photography, layouts, or interaction code.
-- Keep native vertical scrolling. A desktop-only sticky hero provides one narrative transition; mobile uses normal flow.
-- Recompose sections for narrow screens instead of shrinking the desktop layout.
-
-## Principles rejected
-
-- No commerce controls, pricing, purchase buttons, large navigation catalog, or borrowed Apple product language.
-- No repeated product-specification table. Resume facts need an editorial timeline and readable project bands instead.
+## Synthesis
+한 장면 안에서 자캐가 먼저 기억되고, 아래 기록장은 실무 정보를 또렷하게 전달해야 한다. 세계관 탐색을 강요하지 않고 계절 버튼과 기본 앵커 링크는 명시적으로 제공한다.

@@ -73,11 +73,12 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
   });
 }
 
-test('stylesheets load with the intended dark visual system', async ({ page }) => {
+test('stylesheets load with the intended seasonal visual system', async ({ page }) => {
   const cssResponses = [];
   page.on('response', (response) => { if (response.url().includes('.css')) cssResponses.push(response); });
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
+  await page.getByRole('button', { name: '봄', exact: true }).click();
   await page.evaluate(() => document.fonts.ready);
   for (const response of cssResponses) {
     expect(response.status()).toBe(200);
@@ -89,40 +90,51 @@ test('stylesheets load with the intended dark visual system', async ({ page }) =
     h1Size: getComputedStyle(document.querySelector('h1')).fontSize,
     h1Color: getComputedStyle(document.querySelector('h1')).color,
     fontFamily: getComputedStyle(document.body).fontFamily,
+    roomImage: getComputedStyle(document.querySelector('.season-room')).backgroundImage,
   }));
   expect(state.sheets.length).toBeGreaterThanOrEqual(2);
   expect(state.sheets.every((sheet) => sheet.rules > 0)).toBeTruthy();
-  expect(state.background).toBe('rgb(11, 11, 16)');
+  expect(state.background).toBe('rgb(246, 214, 222)');
   expect(parseFloat(state.h1Size)).toBeGreaterThanOrEqual(64);
-  expect(parseFloat(state.h1Size)).toBeLessThanOrEqual(80);
+  expect(parseFloat(state.h1Size)).toBeLessThanOrEqual(96);
   await expect(page.getByRole('navigation')).toHaveCount(0);
-  expect(state.h1Color).toBe('rgb(248, 250, 252)');
+  expect(state.h1Color).toBe('rgb(24, 24, 27)');
   expect(state.fontFamily).toContain('Noto Sans KR');
+  expect(state.roomImage).toContain('background/spring.png');
 });
 
-test('desktop hero uses native-scroll motion and returns to its origin', async ({ page }) => {
+test('season controls change the room, accent, and persist the choice', async ({ page }) => {
+  await page.goto('/');
+  for (const [label, key, image] of [
+    ['봄', 'spring', 'spring.png'],
+    ['여름', 'summer', 'summer.png'],
+    ['가을', 'fall', 'fall.png'],
+    ['겨울', 'winter', 'winter.png'],
+  ]) {
+    await page.getByRole('button', { name: label, exact: true }).click();
+    await expect(page.locator('body')).toHaveAttribute('data-season', key);
+    await expect(page.getByRole('button', { name: label, exact: true })).toHaveAttribute('aria-pressed', 'true');
+    expect(await page.locator('.season-room').evaluate((el) => getComputedStyle(el).backgroundImage)).toContain(image);
+    await expect(page.locator('.season-status')).toContainText(`${label}의 방`);
+  }
+  expect(await page.evaluate(() => localStorage.getItem('stringju-season'))).toBe('winter');
+  await page.reload();
+  await expect(page.locator('body')).toHaveAttribute('data-season', 'winter');
+});
+
+test('desktop room uses subtle native-scroll depth and returns to its origin', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
-  await page.evaluate(() => document.fonts.ready);
-  await expect(page.locator('.hero')).toHaveClass(/is-pinned/);
-  expect(await page.locator('.hero-stage').evaluate((el) => getComputedStyle(el).position)).toBe('sticky');
-  const atTop = await page.evaluate(() => ({
-    moon: document.querySelector('.moon').style.transform,
-    copy: document.querySelector('.hero-copy').style.opacity,
-  }));
-  const travel = await page.evaluate(() => document.querySelector('.hero').offsetHeight - document.querySelector('.hero-stage').offsetHeight);
-  await page.evaluate((y) => scrollTo(0, y), Math.round(travel * .62));
+  await page.waitForTimeout(120);
+  const atTop = await page.locator('.season-room').evaluate((el) => el.style.getPropertyValue('--room-scale'));
+  await page.evaluate(() => scrollTo(0, 520));
   await page.waitForTimeout(180);
-  const midway = await page.evaluate(() => ({
-    moon: document.querySelector('.moon').style.transform,
-    opacity: Number(document.querySelector('.hero-copy').style.opacity),
-  }));
-  expect(midway.moon).not.toBe(atTop.moon);
-  expect(await page.locator('.moon').evaluate((el) => getComputedStyle(el).transform)).not.toBe('none');
-  expect(midway.opacity).toBeLessThan(.9);
+  const midway = await page.locator('.season-room').evaluate((el) => el.style.getPropertyValue('--room-scale'));
+  expect(midway).not.toBe(atTop);
+  expect(Number(midway)).toBeGreaterThan(1);
   await page.evaluate(() => scrollTo(0, 0));
   await page.waitForTimeout(180);
-  expect(await page.locator('.moon').evaluate((el) => el.style.transform)).toBe(atTop.moon);
+  expect(await page.locator('.season-room').evaluate((el) => el.style.getPropertyValue('--room-scale'))).toBe(atTop);
 });
 
 test('timeline and project visual transforms respond to entry into the page', async ({ page }) => {
@@ -229,10 +241,6 @@ test('hero action works and all one-time reveals settle after a scroll pass', as
   await scrollThrough(page);
   await page.waitForTimeout(400);
   expect(await page.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => item.classList.contains('is-visible')))).toBeTruthy();
-  expect(await page.locator('.is-visible').evaluateAll((items) => items.every((item) => {
-    const transform = getComputedStyle(item).transform;
-    return transform === 'none' || new DOMMatrixReadOnly(transform).isIdentity;
-  }))).toBeTruthy();
 });
 
 test('an initial deep link lands on the requested chapter after hero setup', async ({ page }) => {
@@ -251,9 +259,9 @@ test('reduced motion and JavaScript-disabled contexts retain the complete static
   await page.goto('/#experience');
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator('#experience-title')).toBeInViewport();
-  await expect(page.locator('.hero')).not.toHaveClass(/is-pinned/);
-  expect(await page.locator('.moon').evaluate((el) => getComputedStyle(el).transform)).toBe('none');
+  expect(await page.locator('.season-room').evaluate((el) => getComputedStyle(el).transform)).toBe('none');
   expect(await page.locator('.hero-copy').evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
+  await expect(page.locator('.season-particles')).toBeHidden();
   expect(await page.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => getComputedStyle(item).transform === 'none'))).toBeTruthy();
 
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 375, height: 812 } });
@@ -264,14 +272,13 @@ test('reduced motion and JavaScript-disabled contexts retain the complete static
     await expect(staticPage.locator('.hero-name')).toHaveText('양현준');
     await expect(staticPage.locator('.experience-item')).toHaveCount(4);
     await expect(staticPage.locator('.project')).toHaveCount(3);
-    expect(await staticPage.locator('.hero-stage').evaluate((el) => getComputedStyle(el).position)).not.toBe('sticky');
-    expect(await staticPage.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => getComputedStyle(item).transform === 'none'))).toBeTruthy();
+    expect(await staticPage.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => !item.classList.contains('is-visible')))).toBeTruthy();
     await staticPage.keyboard.press('Tab');
     await expect(staticPage.locator('.skip-link')).toBeFocused();
     await staticPage.keyboard.press('Enter');
     await expect(staticPage.locator('main')).toBeFocused();
     await staticPage.keyboard.press('Tab');
-    await expect(staticPage.getByRole('link', { name: 'Nether 저장소 열기 (새 탭)', exact: true })).toBeFocused();
+    await expect(staticPage.locator('.chapter-strip a').first()).toBeFocused();
   } finally {
     await context.close();
   }
@@ -321,6 +328,7 @@ test('public project and contact links open their named destinations', async ({ 
 test('failed local images and blocked storage do not remove content', async ({ page }) => {
   await page.addInitScript(() => { Object.defineProperty(window, 'localStorage', { get() { throw new Error('Blocked'); } }); });
   await page.route('**/assets/images/**', (route) => route.abort());
+  await page.route('**/background/**', (route) => route.abort());
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('/');
   await expect(page.locator('h1')).toHaveText('stringju');
@@ -367,9 +375,9 @@ test('print keeps the resume readable without decorative imagery', async ({ page
   await page.goto('/');
   await page.emulateMedia({ media: 'print' });
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
-  await expect(page.locator('h1')).toHaveCSS('color', 'rgb(15, 23, 42)');
-  await expect(page.locator('.hero-summary')).toHaveCSS('color', 'rgb(15, 23, 42)');
-  await expect(page.locator('.moon-scene')).toBeHidden();
+  await expect(page.locator('h1')).toHaveCSS('color', 'rgb(24, 24, 27)');
+  await expect(page.locator('.hero-summary')).toHaveCSS('color', 'rgb(63, 63, 70)');
+  await expect(page.locator('.season-room')).toBeHidden();
   for (const card of await page.locator('.stack-row').all()) {
     await expect(card).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   }

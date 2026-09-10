@@ -3,70 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0B0B10">
+  <meta name="theme-color" content="#F6D6DE">
   <meta name="description" content="양현준, stringju. 백엔드와 인프라를 함께 공부하는 개발자의 경험과 프로젝트.">
   <meta property="og:title" content="stringju · 양현준">
-  <meta property="og:description" content="양현준의 경험, 기술, 프로젝트 기록.">
+  <meta property="og:description" content="양현준의 경험, 기술, 프로젝트를 담은 계절 기록장.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
-  <meta property="og:image" content="https://2tle.github.io/assets/images/profile.jpg">
+  <meta property="og:image" content="https://2tle.github.io/background/spring.png">
   <title>stringju · 양현준</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/fonts/fonts.css?v=0781db0d3ca8">
-  <link rel="stylesheet" href="./styles.css?v=b0d861870bb5">
-  <link rel="preload" href="./assets/images/moon.webp" as="image" fetchpriority="high">
-  <script src="./main.js?v=0710d35ecd3c" defer></script>
+  <link rel="stylesheet" href="./assets/fonts/fonts.css?v=5ea58a88702c">
+  <link rel="stylesheet" href="./styles.css?v=64cddc9f123d">
+  <link rel="preload" href="./background/spring.png" as="image" fetchpriority="high">
+  <script src="./main.js?v=cf566e9c16f0" defer></script>
 </head>
-<body>
+<body data-season="spring">
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
 
   <header class="hero" id="home" aria-labelledby="page-title" tabindex="-1">
-    <div class="hero-runway">
-      <div class="hero-stage">
-        <div class="hero-stars" aria-hidden="true"></div>
-        <div class="moon-scene" aria-hidden="true">
-          <img class="moon" src="./assets/images/moon.webp" alt="" width="1100" height="1100" fetchpriority="high">
-        </div>
-        <div class="hero-orbit" aria-hidden="true"></div>
-        <div class="hero-scrim" aria-hidden="true"></div>
-        <div class="hero-copy shell">
-          <p class="hero-name">양현준</p>
-          <h1 id="page-title">stringju</h1>
-          <p class="hero-summary">백엔드 개발과 인프라를 함께 공부합니다.</p>
-          <a class="hero-link" href="#about">기록 보기 <span aria-hidden="true">↓</span></a>
-        </div>
-        <div class="hero-caption" aria-hidden="true"><span>BACKEND · INFRASTRUCTURE</span><span><i class="hero-progress"></i>SCROLL TO EXPLORE</span></div>
-      </div>
+    <div class="season-room" role="img" aria-label="벚꽃이 핀 봄날, 음악을 들으며 강아지와 쉬고 있는 캐릭터의 방">
+      <div class="season-particles" aria-hidden="true"></div>
+      <div class="season-wash" aria-hidden="true"></div>
     </div>
+
+    <div class="hero-copy">
+      <p class="hero-name">양현준</p>
+      <h1 id="page-title">stringju</h1>
+      <p class="hero-summary">백엔드 개발과 인프라를 함께 공부합니다.</p>
+      <a class="hero-link" href="#about">기록 펼치기 <span aria-hidden="true">↓</span></a>
+      <p class="season-status" aria-live="polite"><span aria-hidden="true"></span><b>봄의 방</b></p>
+    </div>
+
+    <div class="season-switcher" role="group" aria-label="방의 계절 선택">
+      <button type="button" data-season-button="spring" aria-pressed="true"><span aria-hidden="true">●</span>봄</button>
+      <button type="button" data-season-button="summer" aria-pressed="false"><span aria-hidden="true">●</span>여름</button>
+      <button type="button" data-season-button="fall" aria-pressed="false"><span aria-hidden="true">●</span>가을</button>
+      <button type="button" data-season-button="winter" aria-pressed="false"><span aria-hidden="true">●</span>겨울</button>
+    </div>
+
+    <div class="hero-edge" aria-hidden="true"><span>SCROLL TO OPEN</span><i></i></div>
   </header>
 
   <main id="main" tabindex="-1">
-    <section class="about section shell" id="about" aria-labelledby="about-title">
-      <div class="about-portrait reveal-scale">
-        <img src="./assets/images/profile.jpg" alt="양현준의 프로필 사진" width="460" height="460" loading="lazy">
-      </div>
-      <div class="about-copy">
-        <p class="section-kicker">About me</p>
-        <h2 id="about-title" class="reveal-left">새로운 도전을<br><span class="accent-text">좋아합니다.</span></h2>
-        <div class="about-statements">
-          <p class="reveal-right">백엔드 개발과 함께 인프라도 공부합니다.</p>
-          <p class="reveal-right">협업의 맥락을 꼼꼼하게 챙깁니다.</p>
-          <p class="reveal-right">차분하게 주어진 일을 끝까지 진행합니다.</p>
-        </div>
-      </div>
-    </section>
+    <div class="notebook-shell">
+      <div class="notebook" aria-label="양현준의 포트폴리오 기록장">
+        <div class="binding" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
 
-    <section class="experience section" id="experience" aria-labelledby="experience-title">
-      <div class="shell experience-layout">
-        <header class="experience-intro">
-          <p class="section-kicker">Experience</p>
-          <h2 id="experience-title" class="reveal-left">함께 만든<br>경험들.</h2>
-          <p class="reveal-left">프로젝트, 교육, 그리고 팀 안에서 맡았던 역할입니다.</p>
-        </header>
-        <div class="experience-list-wrap">
-          <div class="experience-line" aria-hidden="true"><span></span></div>
-          <ol class="experience-list">
-            <!-- content:experience:start -->
+        <div class="chapter-strip" aria-label="기록장 바로가기">
+          <a href="#experience">경험</a>
+          <a href="#stack">도구</a>
+          <a href="#work">프로젝트</a>
+          <a href="#contact">연락</a>
+        </div>
+
+        <section class="about section" id="about" aria-labelledby="about-title">
+          <div class="about-portrait reveal-scale">
+            <div class="portrait-tape" aria-hidden="true"></div>
+            <img src="./assets/images/profile.jpg" alt="양현준의 프로필 사진" width="460" height="460" loading="lazy">
+            <p aria-hidden="true">양현준 · stringju</p>
+          </div>
+          <div class="about-copy">
+            <p class="chapter-no">OPENING NOTE</p>
+            <h2 id="about-title" class="reveal-left">새로운 도전을 좋아하고,<br><span class="accent-text">맡은 일은 끝까지.</span></h2>
+            <div class="about-statements">
+              <p class="reveal-right">백엔드 개발과 함께 인프라도 공부합니다.</p>
+              <p class="reveal-right">협업의 맥락을 꼼꼼하게 챙깁니다.</p>
+              <p class="reveal-right">차분하게 주어진 일을 끝까지 진행합니다.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="experience section" id="experience" aria-labelledby="experience-title">
+          <header class="section-heading">
+            <span class="chapter-index" aria-hidden="true">01</span>
+            <div>
+              <h2 id="experience-title" class="reveal-left">함께 만든 경험들</h2>
+              <p class="reveal-right">프로젝트, 교육, 그리고 팀 안에서 맡았던 역할입니다.</p>
+            </div>
+          </header>
+          <div class="experience-list-wrap">
+            <div class="experience-line" aria-hidden="true"><span></span></div>
+            <ol class="experience-list">
+              <!-- content:experience:start -->
             <li class="experience-item reveal-entry">
               <div class="experience-date"><time datetime="2025-04">2025.04</time> <span aria-hidden="true">·</span> <time datetime="2025-12">2025.12</time></div>
               <article>
@@ -100,19 +118,20 @@
               </article>
             </li>
             <!-- content:experience:end -->
-          </ol>
-        </div>
-      </div>
-    </section>
+            </ol>
+          </div>
+        </section>
 
-    <section class="stack section" id="stack" aria-labelledby="stack-title">
-      <div class="shell">
-        <header class="stack-head">
-          <div><p class="section-kicker">Built with</p><h2 id="stack-title" class="reveal-left">다뤄 온 도구들.</h2></div>
-          <p class="reveal-right">기술의 이름보다, 어디에 썼는지를 더 중요하게 생각합니다.</p>
-        </header>
-        <ul class="stack-list" aria-label="기술 목록">
-          <!-- content:skills:start -->
+        <section class="stack section" id="stack" aria-labelledby="stack-title">
+          <header class="section-heading stack-head">
+            <span class="chapter-index" aria-hidden="true">02</span>
+            <div>
+              <h2 id="stack-title" class="reveal-left">다뤄 온 도구들</h2>
+              <p class="reveal-right">기술의 이름보다, 어디에 썼는지를 더 중요하게 생각합니다.</p>
+            </div>
+          </header>
+          <ul class="stack-list" aria-label="기술 목록">
+            <!-- content:skills:start -->
             <li class="stack-row reveal-stack">
               <div class="stack-visual" aria-hidden="true"><span></span><span></span><span></span></div>
               <h3>Backend &amp; Data</h3>
@@ -129,17 +148,19 @@
               <p>JavaScript · TypeScript · Express.js · Python · Kotlin</p>
             </li>
             <!-- content:skills:end -->
-        </ul>
-      </div>
-    </section>
+          </ul>
+        </section>
 
-    <section class="work" id="work" aria-labelledby="work-title">
-      <header class="work-head shell">
-        <div><p class="section-kicker">Selected work</p><h2 id="work-title" class="reveal-left">프로젝트</h2></div>
-        <p class="reveal-right">직접 확인할 수 있는 기록입니다.</p>
-      </header>
-      <ul class="projects">
-        <!-- content:projects:start -->
+        <section class="work section" id="work" aria-labelledby="work-title">
+          <header class="section-heading work-head">
+            <span class="chapter-index" aria-hidden="true">03</span>
+            <div>
+              <h2 id="work-title" class="reveal-left">책상 위 프로젝트</h2>
+              <p class="reveal-right">직접 확인할 수 있는 작업 기록입니다.</p>
+            </div>
+          </header>
+          <ul class="projects">
+            <!-- content:projects:start -->
             <li class="project">
               <article class="project-shell">
                 <div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./assets/images/nether-logo.svg" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>
@@ -177,16 +198,19 @@
               </article>
             </li>
             <!-- content:projects:end -->
-      </ul>
-    </section>
+          </ul>
+        </section>
 
-    <section class="record section shell" id="journey" aria-labelledby="record-title">
-      <div class="education-record">
-        <header>
-          <h2 id="record-title" class="reveal-left">배움의 기록</h2>
-        </header>
-        <ol class="education-list">
-          <!-- content:education:start -->
+        <section class="record section" id="journey" aria-labelledby="record-title">
+          <header class="section-heading record-head">
+            <span class="chapter-index" aria-hidden="true">04</span>
+            <div><h2 id="record-title" class="reveal-left">배움과 이전 기록</h2></div>
+          </header>
+          <div class="record-grid">
+            <div class="education-record reveal-scale">
+              <h3>배움의 기록</h3>
+              <ol class="education-list">
+                <!-- content:education:start -->
             <li class="education-item reveal-entry">
               <div class="record-date"><time datetime="2024-03">2024.03</time></div>
               <div><h3>성균관대학교</h3><p>소프트웨어과</p></div>
@@ -196,14 +220,12 @@
               <div><h3>선린인터넷고등학교</h3><p>소프트웨어과 졸업</p></div>
             </li>
             <!-- content:education:end -->
-        </ol>
-      </div>
-      <div class="history-record">
-        <header>
-          <h3 class="reveal-right">이전의 작업</h3>
-        </header>
-        <ol class="history-list">
-          <!-- content:history:start -->
+              </ol>
+            </div>
+            <div class="history-record reveal-scale">
+              <h3>이전의 작업</h3>
+              <ol class="history-list">
+                <!-- content:history:start -->
             <li class="history-item reveal-entry">
               <div><h3>Team LogCat</h3><p>백엔드 개발</p></div>
               <div class="record-date"><time datetime="2022-12">2022.12</time> <span aria-hidden="true">·</span> <time datetime="2024-12">2024.12</time></div>
@@ -213,22 +235,30 @@
               <div class="record-date"><time datetime="2021-10">2021.10</time> <span aria-hidden="true">·</span> <time datetime="2022-12">2022.12</time></div>
             </li>
             <!-- content:history:end -->
-        </ol>
+              </ol>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   </main>
 
   <footer class="contact" id="contact" aria-labelledby="contact-title">
-    <div class="shell contact-inner">
-      <p class="section-kicker">Get in touch</p>
-      <h2 id="contact-title" class="reveal-left">연락</h2>
+    <div class="contact-card">
+      <div class="postcard-stamp" aria-hidden="true"><span>s</span></div>
+      <p class="chapter-no">마지막 페이지</p>
+      <h2 id="contact-title" class="reveal-left">함께 이야기해요.</h2>
+      <p class="contact-copy">궁금한 점이나 함께할 일이 있다면 메일을 보내주세요.</p>
       <a class="email-link reveal-scale" href="mailto:iam@2tle.io">iam@2tle.io<span class="email-arrow" aria-hidden="true">↗</span></a>
       <div class="contact-links reveal-right" aria-label="외부 연락처">
         <a href="https://github.com/2tle" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
         <a href="https://huggingface.co/2tle" target="_blank" rel="noopener noreferrer">Hugging Face <span aria-hidden="true">↗</span></a>
         <a href="https://stringju.tistory.com" target="_blank" rel="noopener noreferrer">Blog <span aria-hidden="true">↗</span></a>
       </div>
-      <div class="footer-bottom"><p class="footer-mark">stringju</p><a class="back-to-top" href="#home" aria-label="Back to top"><span aria-hidden="true">↑</span></a></div>
+      <div class="footer-bottom">
+        <p class="footer-mark">stringju · 계절의 기록</p>
+        <a class="back-to-top" href="#home" aria-label="Back to top"><span aria-hidden="true">↑</span></a>
+      </div>
     </div>
   </footer>
 </body>

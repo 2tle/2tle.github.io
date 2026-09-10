@@ -1,71 +1,97 @@
-# stringju visual system
+# DESIGN.md · stringju seasonal room
 
-## Direction
+## Brand
+- Name: stringju · 양현준
+- Art direction: 자캐가 쉬고 있는 계절 방에서 펼쳐 보는 개발 기록장.
+- Voice: 포근한, 차분한, 꼼꼼한.
+- Avoid: 유아용 장난감 같은 정보 위계, 검은 우주 배경, SaaS 카드 반복, 과한 유리 효과, 근거 없는 장식 문구.
 
-A Korean portfolio with the pacing and visual depth of a product introduction. The moon, real portrait, and repository identifiers carry the imagery. Titles stay compact, and there is no top navigation bar.
+## Color System
+Base source: colors.csv row 11 `Portfolio/Personal`.
+- Primary ink: #18181B
+- On primary: #FFFFFF
+- Secondary ink: #3F3F46
+- Accent base: #2563EB, reserved for forced fallback only
+- Background paper: #FAFAFA
+- Foreground: #09090B
+- Card: #FFFFFF
+- Card foreground: #09090B
+- Muted: #E8ECF0
+- Muted foreground: #64748B
+- Border: #E4E4E7
+- Destructive: #DC2626
+- On destructive: #FFFFFF
+- Ring: #18181B
 
-The factual record remains the priority: no invented outcomes, skill ratings, testimonials, or application screenshots. Visual richness comes from light, depth, spacing, and small interactions.
+User-asset seasonal exception:
+- Spring primary #A84E66, soft #F6D6DE, ink #6E4148, RGB 168 78 102
+- Summer primary #466B3B, soft #DDE8C8, ink #315239, RGB 70 107 59
+- Fall primary #B44C23, soft #F6D39B, ink #70361F, RGB 180 76 35
+- Winter primary #456789, soft #DCE8F4, ink #334C68, RGB 69 103 137
+- Warm paper shadow: rgba of active seasonal RGB only.
+- Rule: seasonal colors change together with the user-provided background. No component invents another accent.
 
-## Typography and layout
+## Typography
+Source: typography.csv row 23 `Korean Modern`.
+- Heading and body: Noto Sans KR, self-hosted variable font.
+- Display: 700, clamp(48px, 6.8vw, 96px), tracking -0.07em, leading 0.94.
+- H1: 700, clamp(42px, 5vw, 72px), tracking -0.065em, leading 1.0.
+- H2: 700, clamp(30px, 4vw, 52px), tracking -0.055em, leading 1.14.
+- H3: 650, 18 to 28px, tracking -0.035em, leading 1.3.
+- Body: 400 to 500, 16 to 18px, tracking -0.01em, leading 1.7.
+- Caption: 650, 12 to 13px, tracking 0.06em, leading 1.5.
+- Maximum body line: 62ch.
 
-- Self-hosted Noto Sans KR for headings and body; system sans fallbacks cover other glyphs.
-- Desktop identity: `clamp(3rem, 5.6vw, 5rem)`, maximum 80px.
-- Desktop section headings: `clamp(1.9rem, 3.2vw, 2.75rem)`, maximum 44px.
-- Project names: maximum 44px, with a smaller mobile scale.
-- Body and descriptions: 15–17px; dates 13px; short English category labels 11–12px.
-- Desktop content width: 1120px. Project showcases can extend to 1360px.
-- Side insets: 40px desktop, 28px tablet, 20px mobile.
-- Section spacing: `clamp(88px, 10vw, 144px)`.
-- Split sections and the three technology cards become a single column below 768px.
-- The experience introduction moves above its timeline below 1024px so tablet descriptions retain a comfortable line length.
+## Spacing and Grid
+- Base unit: 4px.
+- Scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 112, 144.
+- Main paper width: min(1180px, viewport minus 40px), mobile viewport minus 20px.
+- Reading width: 1080px.
+- Section padding: clamp(72px, 10vw, 136px).
+- Breakpoints: 640px, 768px, 1024px, 1280px.
 
-## Color and surfaces
+## Radius and Material
+- Main notebook: 32px desktop, 24px mobile.
+- Cards and images: 24px desktop, 18px mobile.
+- Buttons: 999px.
+- Small notes: 14px.
+- Borders: 1px solid seasonal ink at 14 to 20% opacity.
+- Shadow 1: 0 10px 30px rgba(active-season, .12).
+- Shadow 2: 0 28px 80px rgba(active-season, .20).
+- Material rule: one continuous paper canvas, sparse note overlays, no page-wide glass card system.
 
-- Page canvas: `#0B0B10`.
-- Main text: `#F8FAFC`; secondary text: `#94A3B8`.
-- Link and interaction accent: `#82B5FF`, with a dark foreground for selected text.
-- Fine dividers: `#1E293B`; surface edges: white at 10% opacity.
-- The experience rail sits on a softly lit charcoal panel.
-- Technology groups use blue, lavender, and teal highlights.
-- Project lighting follows each identifier: indigo for Nether, warm amber for Macmagotchi, teal for SurvirunAPI.
-- Surface radii: 24–32px. Contact and hero links use pill shapes; small directional controls are circular.
-- Repository logo artwork remains unchanged. The first two image frames have rounded corners.
+## Motion
+- Entrance: 300ms cubic-bezier(.22, 1, .36, 1), opacity/transform, 16 to 24px.
+- Exit: 180ms ease-in, opacity.
+- Hover: 160ms ease-out, transform or color.
+- Press: 100ms ease-out, scale(.98).
+- Stagger: 70ms.
+- Season change: 220ms ease-out.
+- Scroll: native only. No hijacking or pinned section.
+- Reduced motion: no transforms, transitions, particles, or scroll-linked effects.
 
-## Sections
+## Component Patterns
+- Hero: full-bleed seasonal room with an offset opaque paper identity card. Mobile becomes image above paper copy.
+- Season controls: four 44px controls, explicit labels, aria-pressed state.
+- About: real portrait polaroid paired with a large note.
+- Experience: continuous calendar binding, not separate cards.
+- Skills: three offset memos; vertical mobile stack.
+- Projects: broad desk-object showcases with one visual and one factual description.
+- Contact: postcard composition with a single email intent.
 
-1. **Opening:** a large local moon, thin orbit, sparse stars, short identity text, and one action into the record. The lower caption contains a small scroll progress line.
-2. **About:** real portrait beside three short statements. A restrained gradient accents the second heading line.
-3. **Experience:** chronological date rail with source-supported roles and responsibilities. All dots align with the rail after entry.
-4. **Tools:** three discipline cards, each with a CSS illustration made from translucent layers. No proficiency scores.
-5. **Projects:** separate lit showcases with the real project mark, category, description, tools, and repository link. Category and tools are optional fields in `content/projects.md`.
-6. **Records:** compact education and earlier-work lists.
-7. **Contact:** centered email, secondary destination pills, a quiet orbital background, and a keyboard-accessible return-to-top link.
+## Image Style
+- Hero sources: `background/spring.png`, `summer.png`, `fall.png`, `winter.png`, user-provided illustrations.
+- Hero crop: cover on desktop; dedicated upper image panel on mobile.
+- Profile: square photograph, no color filter, paper mat.
+- Project marks: existing local SVG assets, unchanged.
+- Decorative artwork uses CSS only for tape, punched holes, binding line, and small seasonal particles.
 
-## Motion and interaction
-
-- The desktop hero is the only pinned scene. Its native-scroll runway is 164svh on screens at least 900px wide and 650px high, provided its text fits.
-- Moon scale, orbit rotation, star displacement, and the caption line follow native scroll. No scroll interception.
-- Text entry transforms run once and resolve fully to the original layout. Initial offsets apply only to elements without `.is-visible`.
-- Technology cards enter vertically with a 60ms stagger. They never slide horizontally into adjacent cards.
-- Project icons settle from 86% to 100% scale. Progress is measured from the untransformed card to avoid feedback and drift.
-- On a fine hover-capable pointer, highlights follow the cursor and the project visual tilts by at most a few degrees. Technology layers separate slightly.
-- Pointer effects reset on leave, cancellation, window blur, a hidden document, or a change in motion/pointer preferences.
-- One requestAnimationFrame is scheduled in response to input; there is no continuous idle loop. Geometry is read before styles are written.
-- Touch input does not activate hover effects. Mobile uses normal vertical document flow.
-
-## Accessibility and fallbacks
-
-- All factual content and destinations work without JavaScript.
-- One H1, labelled sections, a skip link, and logical heading order.
-- Controls have at least a 44px target and a visible keyboard focus outline.
-- Return-to-top focuses the opening so the next Tab reaches its primary action.
-- Reduced motion removes pinning, transforms, and pointer light.
-- Forced-colors mode restores solid heading text and hides optional lighting layers.
-- Print removes decorative layers and uses white technology panels with dark text.
-- Existing photographs keep meaningful alt text; scene decoration is hidden from assistive technology.
-
-## Verification
-
-`npm test` covers source escaping, content generation, responsive layouts, motion stability, hover cleanup, touch and keyboard interaction, short landscape screens, 200% text, deep links, missing images, JavaScript-disabled browsing, reduced motion, high contrast, print, and axe WCAG A/AA checks.
-
-Screenshots for mobile, tablet, desktop, and landscape are written to the ignored `artifacts/final/` directory for visual review.
+## Accessibility
+- WCAG 2.2 AA target.
+- Interactive text uses dark seasonal primary or primary ink on light paper.
+- Visible 3px focus outline.
+- Minimum target 44×44px.
+- One H1 and logical landmarks.
+- Active season is conveyed by text, aria-pressed, and status, not color alone.
+- JavaScript-free fallback shows spring and all factual content.
+- Reduced-motion and forced-colors fallbacks are explicit.
