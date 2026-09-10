@@ -3,51 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#F6D6DE">
+  <meta name="theme-color" content="#f7f3ed">
   <meta name="description" content="양현준, stringju. 백엔드와 인프라를 함께 공부하는 개발자의 경험과 프로젝트.">
   <meta property="og:title" content="stringju · 양현준">
-  <meta property="og:description" content="양현준의 경험, 기술, 프로젝트를 담은 계절 기록장.">
+  <meta property="og:description" content="하나의 풍경으로 이어지는 양현준의 경험, 기술, 프로젝트 기록.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:image" content="https://2tle.github.io/background/spring.png">
   <title>stringju · 양현준</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/fonts/fonts.css?v=5ea58a88702c">
-  <link rel="stylesheet" href="./styles.css?v=64cddc9f123d">
+  <link rel="stylesheet" href="./assets/fonts/fonts.css?v=dac782bbb8dc">
+  <link rel="stylesheet" href="./styles.css?v=97b47d0b423a">
   <link rel="preload" href="./background/spring.png" as="image" fetchpriority="high">
-  <script src="./main.js?v=cf566e9c16f0" defer></script>
+  <script src="./main.js?v=a4ec929a95ce" defer></script>
 </head>
-<body data-season="spring">
+<body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <div class="landscape" aria-hidden="true">
+    <div class="landscape-images">
+      <img class="landscape-frame" src="./background/spring.png" alt="" width="1462" height="1076" fetchpriority="high">
+      <img class="landscape-frame" src="./background/summer.png" alt="" width="1442" height="1091" decoding="async">
+      <img class="landscape-frame" src="./background/fall.png" alt="" width="1443" height="1090" decoding="async">
+      <img class="landscape-frame" src="./background/winter.png" alt="" width="1444" height="1089" decoding="async">
+    </div>
+    <div class="landscape-veil"></div>
+  </div>
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
 
   <header class="hero" id="home" aria-labelledby="page-title" tabindex="-1">
-    <div class="season-room" role="img" aria-label="벚꽃이 핀 봄날, 음악을 들으며 강아지와 쉬고 있는 캐릭터의 방">
-      <div class="season-particles" aria-hidden="true"></div>
-      <div class="season-wash" aria-hidden="true"></div>
-    </div>
-
+    <p class="site-note" aria-hidden="true">STRINGJU <span>PERSONAL JOURNAL</span></p>
     <div class="hero-copy">
       <p class="hero-name">양현준</p>
       <h1 id="page-title">stringju</h1>
       <p class="hero-summary">백엔드 개발과 인프라를 함께 공부합니다.</p>
       <a class="hero-link" href="#about">기록 펼치기 <span aria-hidden="true">↓</span></a>
-      <p class="season-status" aria-live="polite"><span aria-hidden="true"></span><b>봄의 방</b></p>
     </div>
-
-    <div class="season-switcher" role="group" aria-label="방의 계절 선택">
-      <button type="button" data-season-button="spring" aria-pressed="true"><span aria-hidden="true">●</span>봄</button>
-      <button type="button" data-season-button="summer" aria-pressed="false"><span aria-hidden="true">●</span>여름</button>
-      <button type="button" data-season-button="fall" aria-pressed="false"><span aria-hidden="true">●</span>가을</button>
-      <button type="button" data-season-button="winter" aria-pressed="false"><span aria-hidden="true">●</span>겨울</button>
-    </div>
-
-    <div class="hero-edge" aria-hidden="true"><span>SCROLL TO OPEN</span><i></i></div>
+    <div class="hero-edge" aria-hidden="true"><i></i><span>천천히 내려가며 읽어주세요.</span></div>
   </header>
 
   <main id="main" tabindex="-1">
     <div class="notebook-shell">
-      <div class="notebook" aria-label="양현준의 포트폴리오 기록장">
-        <div class="binding" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="notebook" aria-label="양현준의 포트폴리오">
 
         <div class="chapter-strip" aria-label="기록장 바로가기">
           <a href="#experience">경험</a>
@@ -58,7 +54,6 @@
 
         <section class="about section" id="about" aria-labelledby="about-title">
           <div class="about-portrait reveal-scale">
-            <div class="portrait-tape" aria-hidden="true"></div>
             <img src="./assets/images/profile.jpg" alt="양현준의 프로필 사진" width="460" height="460" loading="lazy">
             <p aria-hidden="true">양현준 · stringju</p>
           </div>
@@ -245,7 +240,6 @@
 
   <footer class="contact" id="contact" aria-labelledby="contact-title">
     <div class="contact-card">
-      <div class="postcard-stamp" aria-hidden="true"><span>s</span></div>
       <p class="chapter-no">마지막 페이지</p>
       <h2 id="contact-title" class="reveal-left">함께 이야기해요.</h2>
       <p class="contact-copy">궁금한 점이나 함께할 일이 있다면 메일을 보내주세요.</p>
@@ -256,7 +250,7 @@
         <a href="https://stringju.tistory.com" target="_blank" rel="noopener noreferrer">Blog <span aria-hidden="true">↗</span></a>
       </div>
       <div class="footer-bottom">
-        <p class="footer-mark">stringju · 계절의 기록</p>
+        <p class="footer-mark">stringju · 계속 이어지는 기록</p>
         <a class="back-to-top" href="#home" aria-label="Back to top"><span aria-hidden="true">↑</span></a>
       </div>
     </div>

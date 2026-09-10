@@ -1,126 +1,29 @@
-// Progressive enhancement: season controls and motion are optional; the record stays complete without JavaScript.
+// All content is available before enhancement. The scenery follows native scrolling.
 document.documentElement.classList.add('js');
 
-const seasons = {
-  spring: {
-    label: '봄',
-    image: './background/spring.png',
-    theme: '#F6D6DE',
-    room: '벚꽃이 핀 봄날, 음악을 들으며 강아지와 쉬고 있는 캐릭터의 방',
-  },
-  summer: {
-    label: '여름',
-    image: './background/summer.png',
-    theme: '#DDE8C8',
-    room: '푸른 나무와 여름 하늘이 보이는 창가에서 강아지와 쉬고 있는 캐릭터의 방',
-  },
-  fall: {
-    label: '가을',
-    image: './background/fall.png',
-    theme: '#F6D39B',
-    room: '주황빛 단풍이 보이는 가을 창가에서 강아지와 쉬고 있는 캐릭터의 방',
-  },
-  winter: {
-    label: '겨울',
-    image: './background/winter.png',
-    theme: '#DCE8F4',
-    room: '눈 내리는 겨울 도시를 바라보며 강아지와 쉬고 있는 캐릭터의 방',
-  },
-};
-
-const seasonKeys = Object.keys(seasons);
-const month = new Date().getMonth();
-const calendarSeason = month >= 2 && month <= 4 ? 'spring' : month >= 5 && month <= 7 ? 'summer' : month >= 8 && month <= 10 ? 'fall' : 'winter';
-const hero = document.querySelector('.hero');
-const seasonRoom = document.querySelector('.season-room');
-const seasonStatus = document.querySelector('.season-status');
-const themeMeta = document.querySelector('meta[name="theme-color"]');
-const seasonButtons = [...document.querySelectorAll('[data-season-button]')];
-const particles = document.querySelector('.season-particles');
+const landscapeFrames = [...document.querySelectorAll('.landscape-frame')];
+const progressFill = document.querySelector('.reading-progress span');
 const experience = document.querySelector('.experience');
 const experienceFill = document.querySelector('.experience-line span');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-const desktopScene = matchMedia('(min-width: 768px)');
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 const projectScenes = [...document.querySelectorAll('.project')].map((element) => ({
   element,
   object: element.querySelector('.project-object'),
 }));
 const surfaces = [...document.querySelectorAll('.project, .stack-row')];
-let activeSeason = calendarSeason;
 let activeSurface;
 let frame = 0;
-let transitionTimer = 0;
 let pointer = { x: 0, y: 0 };
 
-try {
-  const saved = localStorage.getItem('stringju-season');
-  if (saved && seasons[saved]) activeSeason = saved;
-} catch {
-  // Storage may be unavailable in private or restricted contexts; the calendar fallback is enough.
+// Keep the previous scene visible until the incoming image has decoded successfully.
+const readyFrames = new Set([landscapeFrames[0]]);
+for (const image of landscapeFrames.slice(1)) {
+  image.decode().then(() => {
+    readyFrames.add(image);
+    schedule();
+  }).catch(() => { /* The preceding illustration remains the fallback. */ });
 }
-
-function buildParticles() {
-  if (!particles) return;
-  particles.replaceChildren();
-  for (let index = 0; index < 11; index += 1) {
-    const particle = document.createElement('i');
-    particle.style.setProperty('--x', `${7 + ((index * 31) % 88)}%`);
-    particle.style.setProperty('--size', `${5 + (index % 4) * 2}px`);
-    particle.style.setProperty('--duration', `${10 + (index % 5) * 2.4}s`);
-    particle.style.setProperty('--delay', `${-index * 1.7}s`);
-    particle.style.setProperty('--drift', `${(index % 2 ? 1 : -1) * (28 + index * 5)}px`);
-    particles.append(particle);
-  }
-}
-
-function applySeason(key, { persist = false, animate = false } = {}) {
-  if (!seasons[key]) return;
-  const changed = key !== activeSeason;
-  activeSeason = key;
-  if (animate && changed && !reducedMotion.matches) {
-    document.body.classList.add('season-changing');
-    clearTimeout(transitionTimer);
-    transitionTimer = window.setTimeout(() => document.body.classList.remove('season-changing'), 240);
-  }
-  document.body.dataset.season = key;
-  const season = seasons[key];
-  if (seasonRoom) seasonRoom.setAttribute('aria-label', season.room);
-  if (themeMeta) themeMeta.content = season.theme;
-  if (seasonStatus) seasonStatus.innerHTML = `<span aria-hidden="true"></span><b>${season.label}의 방</b>`;
-  for (const button of seasonButtons) {
-    button.setAttribute('aria-pressed', String(button.dataset.seasonButton === key));
-  }
-  if (persist) {
-    try { localStorage.setItem('stringju-season', key); } catch { /* Keep the selected season for this page view only. */ }
-  }
-}
-
-for (const button of seasonButtons) {
-  button.addEventListener('click', () => applySeason(button.dataset.seasonButton, { persist: true, animate: true }));
-  button.addEventListener('keydown', (event) => {
-    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
-    event.preventDefault();
-    const current = seasonKeys.indexOf(button.dataset.seasonButton);
-    const direction = event.key === 'ArrowRight' ? 1 : -1;
-    const next = seasonKeys[(current + direction + seasonKeys.length) % seasonKeys.length];
-    const nextButton = seasonButtons.find((item) => item.dataset.seasonButton === next);
-    nextButton?.focus();
-    applySeason(next, { persist: true, animate: true });
-  });
-}
-
-applySeason(activeSeason);
-buildParticles();
-
-addEventListener('load', () => {
-  for (const key of seasonKeys) {
-    if (key === activeSeason) continue;
-    const image = new Image();
-    image.decoding = 'async';
-    image.src = seasons[key].image;
-  }
-}, { once: true });
 
 const clamp = (value) => Math.min(1, Math.max(0, value));
 const smooth = (value) => {
@@ -138,8 +41,7 @@ function resetSurface() {
 }
 
 function resetMotion() {
-  hero?.style.removeProperty('--scroll-progress');
-  seasonRoom?.style.removeProperty('--room-scale');
+  landscapeFrames.forEach((image, index) => { image.style.opacity = index === 0 ? '1' : '0'; });
   if (experienceFill) experienceFill.style.transform = '';
   for (const { object } of projectScenes) {
     if (object) object.style.transform = '';
@@ -149,8 +51,7 @@ function resetMotion() {
 
 function readScrollState() {
   const viewport = innerHeight;
-  const heroBounds = hero?.getBoundingClientRect();
-  const heroProgress = heroBounds ? clamp(-heroBounds.top / Math.max(1, heroBounds.height)) : 0;
+  const pageProgress = clamp(scrollY / Math.max(1, document.documentElement.scrollHeight - viewport));
   const experienceBounds = experience?.getBoundingClientRect();
   const experienceProgress = experienceBounds
     ? smooth((viewport * .75 - experienceBounds.top) / Math.max(1, experienceBounds.height * .72))
@@ -168,19 +69,23 @@ function readScrollState() {
       y: clamp((pointer.y - bounds.top) / Math.max(1, bounds.height)),
     };
   }
-  return { heroProgress, experienceProgress, projects, light };
+  return { pageProgress, experienceProgress, projects, light };
 }
 
 function render() {
   frame = 0;
+  const state = readScrollState();
+  if (progressFill) progressFill.style.transform = `scaleX(${state.pageProgress.toFixed(5)})`;
   if (reducedMotion.matches) {
     resetMotion();
     return;
   }
-  const state = readScrollState();
-  hero?.style.setProperty('--scroll-progress', String(Math.max(.08, state.heroProgress)));
-  if (desktopScene.matches) seasonRoom?.style.setProperty('--room-scale', String(1 + state.heroProgress * .035));
-  else seasonRoom?.style.removeProperty('--room-scale');
+  // Opaque lower layers prevent the canvas flashing through during each dissolve.
+  landscapeFrames.forEach((image, index) => {
+    const opacity = index === 0 ? 1 : readyFrames.has(image)
+      ? smooth(state.pageProgress * 3 - (index - 1)) : 0;
+    image.style.opacity = opacity.toFixed(5);
+  });
   if (experienceFill) experienceFill.style.transform = `scaleY(${state.experienceProgress.toFixed(4)})`;
   for (const { object, progress } of state.projects) {
     if (!object) continue;
@@ -256,6 +161,8 @@ function settleInitialHash() {
 addEventListener('scroll', schedule, { passive: true });
 addEventListener('resize', schedule, { passive: true });
 addEventListener('pageshow', schedule);
+addEventListener('load', schedule, { once: true });
+new ResizeObserver(schedule).observe(document.body);
 addEventListener('blur', resetSurface);
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
@@ -271,9 +178,8 @@ document.addEventListener('focusin', (event) => {
 reducedMotion.addEventListener('change', () => {
   applyReveals();
   if (reducedMotion.matches) resetMotion();
-  else schedule();
+  schedule();
 });
-desktopScene.addEventListener('change', schedule);
 finePointer.addEventListener('change', resetSurface);
 
 applyReveals();

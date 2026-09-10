@@ -73,68 +73,54 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
   });
 }
 
-test('stylesheets load with the intended seasonal visual system', async ({ page }) => {
-  const cssResponses = [];
-  page.on('response', (response) => { if (response.url().includes('.css')) cssResponses.push(response); });
+test('one landscape remains behind every chapter with a consistent visual system', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
-  await page.getByRole('button', { name: '봄', exact: true }).click();
   await page.evaluate(() => document.fonts.ready);
-  for (const response of cssResponses) {
-    expect(response.status()).toBe(200);
-    expect(response.headers()['content-type']).toContain('text/css');
+  await expect(page.locator('[data-season-button]')).toHaveCount(0);
+  await expect(page.locator('.landscape-frame')).toHaveCount(4);
+  await expect(page.locator('.landscape')).toHaveCSS('position', 'fixed');
+  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(247, 243, 237)');
+  await expect(page.locator('.landscape-frame').first()).toHaveCSS('opacity', '1');
+  for (const id of ['about', 'experience', 'work', 'contact']) {
+    await page.locator('#' + id).scrollIntoViewIfNeeded();
+    const bounds = await page.locator('.landscape').boundingBox();
+    expect(bounds).toEqual({ x: 0, y: 0, width: 1440, height: 900 });
   }
-  const state = await page.evaluate(() => ({
-    sheets: [...document.styleSheets].map((sheet) => ({ href: sheet.href, rules: sheet.cssRules.length })),
-    background: getComputedStyle(document.documentElement).backgroundColor,
-    h1Size: getComputedStyle(document.querySelector('h1')).fontSize,
-    h1Color: getComputedStyle(document.querySelector('h1')).color,
-    fontFamily: getComputedStyle(document.body).fontFamily,
-    roomImage: getComputedStyle(document.querySelector('.season-room')).backgroundImage,
-  }));
-  expect(state.sheets.length).toBeGreaterThanOrEqual(2);
-  expect(state.sheets.every((sheet) => sheet.rules > 0)).toBeTruthy();
-  expect(state.background).toBe('rgb(246, 214, 222)');
-  expect(parseFloat(state.h1Size)).toBeGreaterThanOrEqual(64);
-  expect(parseFloat(state.h1Size)).toBeLessThanOrEqual(96);
-  await expect(page.getByRole('navigation')).toHaveCount(0);
-  expect(state.h1Color).toBe('rgb(24, 24, 27)');
-  expect(state.fontFamily).toContain('Noto Sans KR');
-  expect(state.roomImage).toContain('background/spring.png');
 });
 
-test('season controls change the room, accent, and persist the choice', async ({ page }) => {
+test('all four scenes dissolve continuously with scroll and reverse to the opening', async ({ page }) => {
   await page.goto('/');
-  for (const [label, key, image] of [
-    ['봄', 'spring', 'spring.png'],
-    ['여름', 'summer', 'summer.png'],
-    ['가을', 'fall', 'fall.png'],
-    ['겨울', 'winter', 'winter.png'],
+  await page.evaluate(async () => {
+    await Promise.all([...document.querySelectorAll('.landscape-frame')].map(image => image.decode()));
+    document.documentElement.style.scrollBehavior = 'auto';
+  });
+  const opacity = () => page.locator('.landscape-frame').evaluateAll(images => images.map(image => Number(getComputedStyle(image).opacity)));
+  for (const [position, expected] of [
+    [0, [1, 0, 0, 0]],
+    [1 / 6, [1, .5, 0, 0]],
+    [1 / 3, [1, 1, 0, 0]],
+    [1 / 2, [1, 1, .5, 0]],
+    [2 / 3, [1, 1, 1, 0]],
+    [5 / 6, [1, 1, 1, .5]],
+    [1, [1, 1, 1, 1]],
+    [0, [1, 0, 0, 0]],
   ]) {
-    await page.getByRole('button', { name: label, exact: true }).click();
-    await expect(page.locator('body')).toHaveAttribute('data-season', key);
-    await expect(page.getByRole('button', { name: label, exact: true })).toHaveAttribute('aria-pressed', 'true');
-    expect(await page.locator('.season-room').evaluate((el) => getComputedStyle(el).backgroundImage)).toContain(image);
-    await expect(page.locator('.season-status')).toContainText(`${label}의 방`);
+    await page.evaluate(p => scrollTo(0, p * (document.documentElement.scrollHeight - innerHeight)), position);
+    await expect.poll(async () => (await opacity()).every((value, index) => Math.abs(value - expected[index]) < .01)).toBe(true);
   }
-  expect(await page.evaluate(() => localStorage.getItem('stringju-season'))).toBe('winter');
-  await page.reload();
-  await expect(page.locator('body')).toHaveAttribute('data-season', 'winter');
 });
 
-test('desktop room uses subtle native-scroll depth and returns to its origin', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+test('an unavailable incoming scene keeps the preceding image visible', async ({ page }) => {
+  await page.route('**/background/summer.png', route => route.abort());
   await page.goto('/');
-  await page.waitForTimeout(120);
-  const atTop = await page.locator('.season-room').evaluate((el) => el.style.getPropertyValue('--room-scale'));
-  await page.evaluate(() => scrollTo(0, 520));
-  await page.waitForTimeout(180);
-  const midway = await page.locator('.season-room').evaluate((el) => el.style.getPropertyValue('--room-scale'));
-  expect(midway).not.toBe(atTop);
-  expect(Number(midway)).toBeGreaterThan(1);
-  await page.evaluate(() => scrollTo(0, 0));
-  await page.waitForTimeout(180);
-  expect(await page.locator('.season-room').evaluate((el) => el.style.getPropertyValue('--room-scale'))).toBe(atTop);
+  await page.evaluate(() => {
+    document.documentElement.style.scrollBehavior = 'auto';
+    scrollTo(0, (document.documentElement.scrollHeight - innerHeight) / 3);
+  });
+  await expect(page.locator('.landscape-frame').nth(0)).toHaveCSS('opacity', '1');
+  await expect(page.locator('.landscape-frame').nth(1)).toHaveCSS('opacity', '0');
+  await expect(page.locator('.experience-item')).toHaveCount(4);
 });
 
 test('timeline and project visual transforms respond to entry into the page', async ({ page }) => {
@@ -259,9 +245,9 @@ test('reduced motion and JavaScript-disabled contexts retain the complete static
   await page.goto('/#experience');
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator('#experience-title')).toBeInViewport();
-  expect(await page.locator('.season-room').evaluate((el) => getComputedStyle(el).transform)).toBe('none');
+  await expect(page.locator('.landscape-frame').nth(0)).toHaveCSS('opacity', '1');
+  await expect(page.locator('.landscape-frame').nth(1)).toHaveCSS('opacity', '0');
   expect(await page.locator('.hero-copy').evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
-  await expect(page.locator('.season-particles')).toBeHidden();
   expect(await page.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => getComputedStyle(item).transform === 'none'))).toBeTruthy();
 
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 375, height: 812 } });
@@ -377,7 +363,7 @@ test('print keeps the resume readable without decorative imagery', async ({ page
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   await expect(page.locator('h1')).toHaveCSS('color', 'rgb(24, 24, 27)');
   await expect(page.locator('.hero-summary')).toHaveCSS('color', 'rgb(63, 63, 70)');
-  await expect(page.locator('.season-room')).toBeHidden();
+  await expect(page.locator('.landscape')).toBeHidden();
   for (const card of await page.locator('.stack-row').all()) {
     await expect(card).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   }
