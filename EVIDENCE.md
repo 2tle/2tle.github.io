@@ -12,6 +12,7 @@
 | Macmagotchi 공개 저장소와 설명 | 사용자 제공 저장소 및 기존 사이트 | high | 저장된 프로젝트명, 설명, 기술만 사용 | Projects |
 | SurvirunAPI 공개 저장소와 설명 | 사용자 제공 저장소 및 기존 사이트 | high | 저장된 프로젝트명, 설명, 기술만 사용 | Projects |
 | 계절 배경 속 인물은 사용자의 자캐 같은 존재 | 현재 사용자 메시지 | high | 캐릭터 세계관과 계절 방으로 표현 | Art direction |
-| 사용자 수, 성과 수치, 수상, 인증 | missing | 0 | MUST NOT USE | 없음 |
+| 2017~2022 수상 기록 6건 | 사용자 제공 저장소의 `.old_donotuse/index.html` | high | 저장된 날짜, 대회명, 결과만 사용 | Awards |
+| 사용자 수, 성과 수치, 인증 | missing | 0 | MUST NOT USE | 없음 |
 | 기술 숙련도, 경력 연차 | missing | 0 | MUST NOT USE | 없음 |
 | 추천사와 고객사 | missing | 0 | MUST NOT USE | 없음 |

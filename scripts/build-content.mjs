@@ -108,6 +108,17 @@ function renderEducation(entry, index) {
             </li>`;
 }
 
+function renderAward(entry, index) {
+  const file = 'content/awards.md';
+  const position = index + 1;
+  const { meta: fields } = entry;
+  requireFields(entry, file, position, ['date', 'title', 'result']);
+  return `<li class="award-item reveal-entry">
+              <div class="award-date"><time datetime="${datetime(fields.date)}">${escapeHtml(fields.date)}</time></div>
+              <div class="award-copy"><h3>${escapeHtml(fields.title)}</h3><p>${escapeHtml(fields.result)}</p></div>
+            </li>`;
+}
+
 function replaceBlock(html, marker, items) {
   const pattern = new RegExp(`<!-- content:${marker}:start -->[\\s\\S]*?<!-- content:${marker}:end -->`);
   if (!pattern.test(html)) throw new Error(`index.html: missing content:${marker} markers`);
@@ -115,23 +126,25 @@ function replaceBlock(html, marker, items) {
 }
 
 export async function syncContent() {
-  const files = ['experience', 'projects', 'education'];
-  const [experienceMarkdown, projectsMarkdown, educationMarkdown, html] = await Promise.all([
+  const files = ['experience', 'projects', 'education', 'awards'];
+  const [experienceMarkdown, projectsMarkdown, educationMarkdown, awardsMarkdown, html] = await Promise.all([
     ...files.map((file) => readFile(resolve(root, 'content', `${file}.md`), 'utf8')),
     readFile(resolve(root, 'index.html'), 'utf8'),
   ]);
   const experience = parseBlocks(experienceMarkdown, 'content/experience.md');
   const projects = parseBlocks(projectsMarkdown, 'content/projects.md');
   const education = parseBlocks(educationMarkdown, 'content/education.md');
+  const awards = parseBlocks(awardsMarkdown, 'content/awards.md');
   let next = replaceBlock(html, 'experience', experience.map(renderExperience));
   next = replaceBlock(next, 'projects', projects.map(renderProject));
   next = replaceBlock(next, 'education', education.map(renderEducation));
+  next = replaceBlock(next, 'awards', awards.map(renderAward));
   const changed = next !== html;
   if (changed) await writeFile(resolve(root, 'index.html'), next);
-  return { experience: experience.length, projects: projects.length, education: education.length, changed };
+  return { experience: experience.length, projects: projects.length, education: education.length, awards: awards.length, changed };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const result = await syncContent();
-  console.log(`Content synced: ${result.experience} experience, ${result.projects} projects, ${result.education} education records${result.changed ? '' : ' (unchanged)'}`);
+  console.log(`Content synced: ${result.experience} experience, ${result.projects} projects, ${result.education} education, ${result.awards} awards${result.changed ? '' : ' (unchanged)'}`);
 }

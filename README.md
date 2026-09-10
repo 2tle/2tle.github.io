@@ -43,7 +43,7 @@ Pretendard 가변 폰트는 `assets/fonts/PretendardVariable.woff2`에 로컬로
 - `EVIDENCE.md`: 표시 가능한 외부 사실과 허용 문구
 - `PRODUCT.md`, `DESIGN.md`, `PLAN.md`, `reference-study.md`: 콘텐츠, 시각 시스템, 구현 방향, 참고 연구 기록
 
-공개 Notion 데이터베이스의 상세 수상 및 프로젝트 행은 조회 시 Cloudflare 제한으로 읽지 못했습니다. 그래서 상세를 추측하지 않고 페이지 블록에서 확인한 경험, 학력, 연락처와 기존 검증 프로젝트만 표시합니다.
+공개 Notion 데이터베이스의 상세 행은 조회 시 Cloudflare 제한으로 읽지 못했습니다. 그래서 상세를 추측하지 않고 페이지 블록에서 확인한 경험·학력·연락처, 기존 검증 프로젝트, 저장소의 이전 포트폴리오에서 확인한 수상 기록만 표시합니다.
 
 ## 검증
 

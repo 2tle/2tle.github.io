@@ -29,7 +29,7 @@ test('content sync is idempotent and the built page matches source', async () =>
     expect(await readFile(join(root, 'index.html'), 'utf8')).toBe(before);
     expect(await readFile('dist/index.html', 'utf8')).toBe(await readFile('index.html', 'utf8'));
     expect(before).toMatch(/<script src="\.\/main\.js\?v=[0-9a-f]+" defer><\/script>/);
-    for (const marker of ['experience', 'projects', 'education']) {
+    for (const marker of ['experience', 'projects', 'education', 'awards']) {
       expect(before).toContain(`<!-- content:${marker}:start -->`);
       expect(before).toContain(`<!-- content:${marker}:end -->`);
     }
@@ -38,16 +38,16 @@ test('content sync is idempotent and the built page matches source', async () =>
 
 test('source content renders the verified resume chapters', async () => {
   const html = await readFile('index.html', 'utf8');
-  for (const text of ['주식회사 커리어노트', '한봄고등학교', '시스템컨설턴트그룹', '마이다스아이티', 'Hugging Face', 'Introducing']) {
+  for (const text of ['주식회사 커리어노트', '한봄고등학교', '시스템컨설턴트그룹', '마이다스아이티', '디지털콘텐츠개발대회', 'Hugging Face', 'Introducing', 'Awards']) {
     expect(html).toContain(text);
   }
   expect((html.match(/class="experience-item/g) || []).length).toBe(4);
   expect((html.match(/class="project"/g) || []).length).toBe(3);
   expect((html.match(/class="education-item/g) || []).length).toBe(2);
-  expect(html).not.toContain('주요 수상 실적');
+  expect((html.match(/class="award-item/g) || []).length).toBe(6);
 });
 
-for (const marker of ['experience', 'projects', 'education']) {
+for (const marker of ['experience', 'projects', 'education', 'awards']) {
   test(`missing ${marker} marker fails without rewriting the page`, async () => {
     await fixture(async (root, sync) => {
       const path = join(root, 'index.html');
@@ -88,6 +88,13 @@ for (const [header, body, error] of [
     });
   });
 }
+
+test('award entries require a date, title, and result', async () => {
+  await fixture(async (root, sync) => {
+    await writeFile(join(root, 'content/awards.md'), '---\ndate: 2025.01.01\ntitle: Test Award\n---\n');
+    await expect(sync()).rejects.toThrow('missing "result"');
+  });
+});
 
 test('experience entries require a dated organization, role, and detail', async () => {
   await fixture(async (root, sync) => {

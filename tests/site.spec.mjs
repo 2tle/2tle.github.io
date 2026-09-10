@@ -33,6 +33,7 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
     await expect(page.locator('.experience-item')).toHaveCount(4);
     await expect(page.locator('.project')).toHaveCount(3);
     await expect(page.locator('.education-item')).toHaveCount(2);
+    await expect(page.locator('.award-item')).toHaveCount(6);
     await expect(page.getByText('주식회사 커리어노트', { exact: true })).toBeAttached();
     await expect(page.getByRole('link', { name: 'Hugging Face', exact: true })).toBeAttached();
 
@@ -63,7 +64,7 @@ for (const width of [320, 375, 640, 768, 1024, 1440]) {
       await mkdir('artifacts/final', { recursive: true });
       await page.screenshot({ path: `artifacts/final/${width}-full.png`, fullPage: true });
       await writeFile(`artifacts/final/${width}-metrics.json`, JSON.stringify({ width, ...metrics }, null, 2));
-      for (const id of ['home', 'introducing', 'experience', 'work', 'education', 'contact']) {
+      for (const id of ['home', 'introducing', 'experience', 'work', 'education', 'awards', 'contact']) {
         await page.locator(`#${id}`).scrollIntoViewIfNeeded();
         await page.waitForTimeout(250);
         await page.screenshot({ path: `artifacts/final/${width}-${id}.png` });
@@ -82,7 +83,7 @@ test('seasonal room scenes are used as each chapter background', async ({ page }
   await expect(page.locator('.landscape-frame')).toHaveCount(4);
   await expect(page.locator('.landscape-frame').first()).toHaveAttribute('src', './background/spring2.png');
   await expect(page.locator('.landscape')).toBeHidden();
-  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(246, 216, 216)');
+  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(246, 216, 220)');
   await expect(page.locator('.landscape-frame').first()).toHaveCSS('opacity', '1');
   expect(await page.locator('.hero').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('spring2.png');
   expect(await page.locator('#experience').evaluate(el => getComputedStyle(el).backgroundImage)).toContain('summer.png');
@@ -122,6 +123,71 @@ test('an unavailable incoming scene keeps the preceding image visible', async ({
   await expect(page.locator('.landscape-frame').nth(0)).toHaveCSS('opacity', '1');
   await expect(page.locator('.landscape-frame').nth(1)).toHaveCSS('opacity', '0');
   await expect(page.locator('.experience-item')).toHaveCount(4);
+});
+
+test('chapter headings and project icons stay inside their seasonal surfaces', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  await page.evaluate(() => document.fonts.ready);
+  const checks = await page.evaluate(() => {
+    const insideSurface = (sectionSelector, childSelector) => {
+      const section = document.querySelector(sectionSelector);
+      const child = section.querySelector(childSelector);
+      const sectionBounds = section.getBoundingClientRect();
+      const childBounds = child.getBoundingClientRect();
+      const surfaceTop = sectionBounds.top + Number.parseFloat(getComputedStyle(section, '::before').top);
+      return childBounds.top >= surfaceTop - 1;
+    };
+    return {
+      experienceHeading: insideSurface('#experience', 'h2'),
+      workHeading: insideSurface('#work', 'h2'),
+      projectIcons: [...document.querySelectorAll('.project-object')].every((icon) => {
+        const work = document.querySelector('#work');
+        const workBounds = work.getBoundingClientRect();
+        const surfaceTop = workBounds.top + Number.parseFloat(getComputedStyle(work, '::before').top);
+        return icon.getBoundingClientRect().top >= surfaceTop - 1;
+      }),
+    };
+  });
+  expect(checks).toEqual({ experienceHeading: true, workHeading: true, projectIcons: true });
+});
+
+test('sparse education and awards records occupy a full desktop row with consistent rules', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const widths = await page.locator('#education').evaluate((section) => {
+    const heading = section.querySelector('.record-head').getBoundingClientRect();
+    const education = section.querySelector('.education-list');
+    const awardList = section.querySelector('.awards-list');
+    [...awardList.querySelectorAll('.award-item')].slice(3).forEach((item) => item.remove());
+    const list = education.getBoundingClientRect();
+    const awards = awardList.getBoundingClientRect();
+    const educationItems = [...education.querySelectorAll('.education-item')].map((item) => item.getBoundingClientRect().width);
+    const awardItems = [...awardList.querySelectorAll('.award-item')].map((item) => item.getBoundingClientRect().width);
+    return { heading: heading.width, list: list.width, awards: awards.width, educationItems, awardItems };
+  });
+  expect(Math.abs(widths.heading - widths.list)).toBeLessThan(1);
+  expect(widths.educationItems.every((width) => Math.abs(width - widths.list) < 1)).toBe(true);
+  expect(widths.awardItems.every((width) => Math.abs(width - widths.awards) < 1)).toBe(true);
+});
+
+test('mobile uses the animated, person-centered seasonal canvas', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  await page.evaluate(async () => {
+    await Promise.all([...document.querySelectorAll('.landscape-frame')].map((image) => image.decode()));
+    document.documentElement.style.scrollBehavior = 'auto';
+  });
+  await expect(page.locator('.landscape')).toBeVisible();
+  await expect(page.locator('.landscape-frame').first()).toHaveCSS('object-position', '50% 50%');
+  expect(await page.locator('.hero').evaluate((hero) => getComputedStyle(hero).backgroundImage)).not.toContain('spring2.png');
+  await page.evaluate(() => scrollTo(0, (document.documentElement.scrollHeight - innerHeight) / 2));
+  await expect.poll(async () => {
+    const opacity = await page.locator('.landscape-frame').evaluateAll((images) => images.map((image) => Number(getComputedStyle(image).opacity)));
+    return opacity.every((value, index) => Math.abs(value - [1, 1, .5, 0][index]) < .01);
+  }).toBe(true);
+  await page.locator('.project').first().scrollIntoViewIfNeeded();
+  await expect.poll(() => page.locator('.project-object').first().evaluate((object) => object.style.transform)).toContain('scale(');
 });
 
 test('timeline and project visual transforms respond to entry into the page', async ({ page }) => {
@@ -207,6 +273,23 @@ test('back to top restores a useful keyboard starting point', async ({ page }) =
   await expect(page.locator('.project-link').first()).toBeFocused();
 });
 
+for (const [width, height] of [[375, 812], [1440, 900]]) {
+  test(`${width}px: hero identity is centered on both viewport axes`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    await page.goto('/');
+    await page.evaluate(() => document.fonts.ready);
+    const centerOffset = await page.locator('h1').evaluate((heading) => {
+      const bounds = heading.getBoundingClientRect();
+      return {
+        x: bounds.left + bounds.width / 2 - innerWidth / 2,
+        y: bounds.top + bounds.height / 2 - innerHeight / 2,
+      };
+    });
+    expect(Math.abs(centerOffset.x)).toBeLessThan(1);
+    expect(Math.abs(centerOffset.y)).toBeLessThan(1);
+  });
+}
+
 test('a short landscape viewport keeps the opening in normal document flow', async ({ page }) => {
   await page.setViewportSize({ width: 844, height: 390 });
   await page.goto('/');
@@ -276,7 +359,9 @@ test('identity, sourced resume content, metadata, and destinations stay correct'
   for (const sourceText of ['커리어노트', '한봄고등학교', '시스템컨설턴트그룹', '마이다스아이티']) {
     expect(text).toContain(sourceText);
   }
-  expect(text).not.toContain('주요 수상 실적');
+  for (const award of ['2021 디지털콘텐츠개발대회', '교과우수상', '2021 교내 해커톤', '2021 모바일콘텐츠개발대회', '2021 프로그래밍경시대회', '과학의날 행사 프로그래밍부문']) {
+    expect(text).toContain(award);
+  }
   await expect(page.getByRole('link', { name: 'iam@2tle.io', exact: true })).toHaveAttribute('href', 'mailto:iam@2tle.io');
   await expect(page.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('href', 'https://github.com/2tle');
   await expect(page.getByRole('link', { name: 'Hugging Face', exact: true })).toHaveAttribute('href', 'https://huggingface.co/2tle');
