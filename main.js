@@ -108,6 +108,7 @@ function schedule() {
 const revealItems = [...document.querySelectorAll('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale')];
 let revealObserver;
 const show = (element) => element.classList.add('is-visible');
+const hide = (element) => element.classList.remove('is-visible');
 
 function applyReveals() {
   revealObserver?.disconnect();
@@ -118,15 +119,10 @@ function applyReveals() {
   }
   revealObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      show(entry.target);
-      revealObserver.unobserve(entry.target);
+      (entry.isIntersecting ? show : hide)(entry.target);
     }
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
-  for (const element of revealItems) {
-    if (element.getBoundingClientRect().top < innerHeight * .94) show(element);
-    else revealObserver.observe(element);
-  }
+  }, { rootMargin: '-8% 0px -12% 0px', threshold: 0 });
+  revealItems.forEach((element) => revealObserver.observe(element));
 }
 
 for (const surface of surfaces) {

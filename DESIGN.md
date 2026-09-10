@@ -49,8 +49,9 @@
 
 ## Motion and interaction
 
-- Timing: hover 180ms; reveals 400–600ms with `cubic-bezier(.22, 1, .36, 1)`.
+- Timing: hover 180ms; text reveals use 420–680ms with the Apple-like `cubic-bezier(.16, 1, .3, 1)`. The identity entrance is 700ms.
 - Native document scrolling only. No scroll hijacking or pinned scenes.
+- Section titles use a restrained vertical reveal with clip, blur release, and opacity. Record items use a smaller rise-and-focus transition with 80ms stagger steps. They reset only after fully leaving the viewport, then replay on re-entry from either scroll direction.
 - Project marks may translate/scale on entry and tilt slightly under a fine pointer.
 - Text links increase arrow gap on hover and move down 1px on active press.
 - Reduced motion removes transforms, transitions, and reveal dependencies.

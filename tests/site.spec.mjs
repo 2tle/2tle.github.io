@@ -301,12 +301,17 @@ test('a short landscape viewport keeps the opening in normal document flow', asy
   await page.screenshot({ path: 'artifacts/final/844-landscape.png', animations: 'disabled' });
 });
 
-test('all one-time reveals settle after a scroll pass', async ({ page }) => {
+test('scroll text reveals replay when content leaves and re-enters the viewport', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
-  await scrollThrough(page);
-  await page.waitForTimeout(400);
-  expect(await page.locator('.reveal-left, .reveal-right, .reveal-entry, .reveal-stack, .reveal-project, .reveal-scale').evaluateAll((items) => items.every((item) => item.classList.contains('is-visible')))).toBeTruthy();
+  const projectCopy = page.locator('.project-info').first();
+  await projectCopy.scrollIntoViewIfNeeded();
+  await expect(projectCopy).toHaveClass(/is-visible/);
+  await page.evaluate(() => scrollTo(0, 0));
+  await expect.poll(() => projectCopy.evaluate((item) => item.classList.contains('is-visible'))).toBe(false);
+  await projectCopy.scrollIntoViewIfNeeded();
+  await expect(projectCopy).toHaveClass(/is-visible/);
+  expect(await projectCopy.evaluate((item) => getComputedStyle(item).transitionProperty)).toContain('filter');
 });
 
 test('an initial deep link lands on the requested chapter after hero setup', async ({ page }) => {
