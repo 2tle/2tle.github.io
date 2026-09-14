@@ -60,14 +60,18 @@ function renderExperience(entry, index) {
   const { meta: fields, lines } = entry;
   requireFields(entry, file, position, ['date', 'org', 'role']);
   if (!lines.length) throw new Error(`${file} block ${position}: missing source detail`);
+  if (fields.link && !/^https:\/\//i.test(fields.link)) throw new Error(`${file} block ${position}: link must use HTTPS`);
   const orgDetail = fields.orgdetail ? `<span>${escapeHtml(fields.orgdetail)}</span>` : '';
+  const linkIcon = '<span class="experience-link-icon" aria-hidden="true">↗</span>';
+  const content = `<p class="experience-org">${escapeHtml(fields.org)}${orgDetail}</p>
+                <h3>${escapeHtml(fields.role)}${fields.link ? linkIcon : ''}</h3>
+                ${sourceLines(lines)}`;
+  const article = fields.link
+    ? `<a class="experience-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.org)} 자세히 보기 (새 탭)"><article>${content}</article></a>`
+    : `<article>${content}</article>`;
   return `<li class="experience-item reveal-entry">
               <div class="experience-date">${period(fields.date, fields.dateend)}</div>
-              <article>
-                <p class="experience-org">${escapeHtml(fields.org)}${orgDetail}</p>
-                <h3>${escapeHtml(fields.role)}</h3>
-                ${sourceLines(lines)}
-              </article>
+              ${article}
             </li>`;
 }
 
@@ -113,10 +117,25 @@ function renderAward(entry, index) {
   const position = index + 1;
   const { meta: fields } = entry;
   requireFields(entry, file, position, ['date', 'title', 'result']);
+  if (fields.link && !/^https:\/\//i.test(fields.link)) throw new Error(`${file} block ${position}: link must use HTTPS`);
+  const linkIcon = '<span class="award-link-icon" aria-hidden="true">↗</span>';
+  const content = `<div class="award-copy"><h3>${escapeHtml(fields.title)}${fields.link ? linkIcon : ''}</h3><p>${escapeHtml(fields.result)}</p></div>`;
+  const item = fields.link
+    ? `<a class="award-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.title)} 자세히 보기 (새 탭)">${content}</a>`
+    : content;
   return `<li class="award-item reveal-entry">
               <div class="award-date"><time datetime="${datetime(fields.date)}">${escapeHtml(fields.date)}</time></div>
-              <div class="award-copy"><h3>${escapeHtml(fields.title)}</h3><p>${escapeHtml(fields.result)}</p></div>
+              ${item}
             </li>`;
+}
+
+function renderIntroducing(entry) {
+  const file = 'content/introducing.md';
+  const { meta: fields, lines } = entry;
+  requireFields(entry, file, 1, ['name', 'handle']);
+  if (!lines.length) throw new Error(`${file}: missing introduction body`);
+  return `<p class="introduction-name">${escapeHtml(fields.name)} <span>${escapeHtml(fields.handle)}</span></p>
+            <p>${escapeHtml(lines.join(' '))}</p>`;
 }
 
 function replaceBlock(html, marker, items) {
@@ -127,24 +146,28 @@ function replaceBlock(html, marker, items) {
 
 export async function syncContent() {
   const files = ['experience', 'projects', 'education', 'awards'];
-  const [experienceMarkdown, projectsMarkdown, educationMarkdown, awardsMarkdown, html] = await Promise.all([
+  const [experienceMarkdown, projectsMarkdown, educationMarkdown, awardsMarkdown, introducingMarkdown, html] = await Promise.all([
     ...files.map((file) => readFile(resolve(root, 'content', `${file}.md`), 'utf8')),
+    readFile(resolve(root, 'content', 'introducing.md'), 'utf8'),
     readFile(resolve(root, 'index.html'), 'utf8'),
   ]);
   const experience = parseBlocks(experienceMarkdown, 'content/experience.md');
   const projects = parseBlocks(projectsMarkdown, 'content/projects.md');
   const education = parseBlocks(educationMarkdown, 'content/education.md');
   const awards = parseBlocks(awardsMarkdown, 'content/awards.md');
-  let next = replaceBlock(html, 'experience', experience.map(renderExperience));
+  const introducing = parseBlocks(introducingMarkdown, 'content/introducing.md');
+  if (introducing.length !== 1) throw new Error('content/introducing.md: expected exactly one block');
+  let next = replaceBlock(html, 'introducing', [renderIntroducing(introducing[0])]);
+  next = replaceBlock(next, 'experience', experience.map(renderExperience));
   next = replaceBlock(next, 'projects', projects.map(renderProject));
   next = replaceBlock(next, 'education', education.map(renderEducation));
   next = replaceBlock(next, 'awards', awards.map(renderAward));
   const changed = next !== html;
   if (changed) await writeFile(resolve(root, 'index.html'), next);
-  return { experience: experience.length, projects: projects.length, education: education.length, awards: awards.length, changed };
+  return { introducing: introducing.length, experience: experience.length, projects: projects.length, education: education.length, awards: awards.length, changed };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const result = await syncContent();
-  console.log(`Content synced: ${result.experience} experience, ${result.projects} projects, ${result.education} education, ${result.awards} awards${result.changed ? '' : ' (unchanged)'}`);
+  console.log(`Content synced: ${result.introducing} introducing, ${result.experience} experience, ${result.projects} projects, ${result.education} education, ${result.awards} awards${result.changed ? '' : ' (unchanged)'}`);
 }

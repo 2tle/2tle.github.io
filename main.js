@@ -26,6 +26,20 @@ for (const image of landscapeFrames.slice(1)) {
 }
 
 const clamp = (value) => Math.min(1, Math.max(0, value));
+const seasonColors = [
+  [153, 63, 88], // spring pink
+  [63, 105, 61], // summer green
+  [153, 59, 28], // autumn vermilion
+  [56, 105, 143], // winter sky blue
+];
+const interpolateColor = (progress) => {
+  const position = clamp(progress) * (seasonColors.length - 1);
+  const start = Math.floor(position);
+  const end = Math.min(seasonColors.length - 1, start + 1);
+  const amount = smooth(position - start);
+  const color = seasonColors[start].map((channel, index) => Math.round(channel + (seasonColors[end][index] - channel) * amount));
+  return `rgb(${color.join(' ')})`;
+};
 const smooth = (value) => {
   const t = clamp(value);
   return t * t * (3 - 2 * t);
@@ -75,7 +89,10 @@ function readScrollState() {
 function render() {
   frame = 0;
   const state = readScrollState();
-  if (progressFill) progressFill.style.transform = `scaleX(${state.pageProgress.toFixed(5)})`;
+  if (progressFill) {
+    progressFill.style.transform = `scaleX(${state.pageProgress.toFixed(5)})`;
+    progressFill.style.backgroundColor = interpolateColor(state.pageProgress);
+  }
   if (reducedMotion.matches) {
     resetMotion();
     return;
