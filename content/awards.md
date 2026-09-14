@@ -1,35 +1,17 @@
 ---
-date: 2022.01.05
-title: 2021 디지털콘텐츠개발대회
-result: 대상
+date: 2026.08.26
+title: ICT AWARD KOREA
+result: 대학부 동상
 ---
 
 ---
-date: 2021.08.12
-title: 교과우수상
-result: 영어 · 사회 · 컴시일 · 정보통신
+date: 2022.11.04
+title: KOSA-MIDAS Young Talent Challenge
+result: 마이다스아이티 대표이사상(2등)
 ---
 
 ---
-date: 2021.07.19
-title: 2021 교내 해커톤
-result: 동상
----
-
----
-date: 2021.07.19
-title: 2021 모바일콘텐츠개발대회
-result: 동상
----
-
----
-date: 2021.07.15
-title: 2021 프로그래밍경시대회
-result: 동상
----
-
----
-date: 2017.06.01
-title: 과학의날 행사 프로그래밍부문
-result: 우수
+date: 2022.07.20
+title: 제 18회 한밭대학교 주니어 창업경진대회
+result: 대전충남지방기업청장상
 ---

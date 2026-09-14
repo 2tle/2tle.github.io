@@ -19,7 +19,7 @@ AWS 기초 및 관련 문제 풀이
 
 ---
 date: 2024.04
-dateEnd: 2026.02
+dateEnd: 2026.12
 org: 성균관대학교 시스템컨설턴트그룹
 role: 학생단체 개발자 · Backend
 ---
