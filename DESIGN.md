@@ -40,7 +40,7 @@
 - Every chapter begins with roughly half a viewport of scenery, then meets a solid seasonal surface with a subtle color-matched edge. Section titles sit fully inside that surface rather than straddling its boundary.
 - Shared content width: up to 1200px with responsive page edges.
 - Introducing: open text block with one closing rule.
-- Experiences: two-column timeline on desktop, one connected reading column on mobile. Every entry uses the same local line-and-dot treatment.
+- Experiences: one chronological reading column on desktop and mobile, with a continuous local line-and-dot treatment. The latest record appears first.
 - Projects: one continuous autumn surface contains every project. Alternating two-column rows are separated by restrained rules on desktop; mobile stacks each reduced-size icon and copy without crossing the surface boundary.
 - Education: one full-width heading rule, then a reading column with matching top and item rules. When there are three records or fewer, it uses the full content width; otherwise it is capped at 720px. No one-off bordered card.
 - Awards: the same winter record surface continues beneath Education. Six sourced records use a balanced two-column list on desktop and one column on mobile, with equal-width row rules. When three records or fewer are present, the list automatically becomes full-width single-column rows.
