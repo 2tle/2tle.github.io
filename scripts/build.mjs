@@ -23,7 +23,11 @@ const assets = [...html.matchAll(/(?:src|href)="(\.\/[^"#]+)"/g)].map((match) =>
 for (const asset of assets) await stat(resolve(root, asset));
 await rm(resolve(root, 'dist'), { recursive: true, force: true });
 await mkdir(resolve(root, 'dist'), { recursive: true });
-for (const file of ['index.html', 'styles.css', 'main.js', 'assets', 'background', '.nojekyll']) {
+for (const file of ['index.html', 'styles.css', 'main.js', 'assets', '.nojekyll']) {
   await cp(resolve(root, file), resolve(root, 'dist', file), { recursive: true });
+}
+await mkdir(resolve(root, 'dist', 'background'), { recursive: true });
+for (const file of ['spring2.webp', 'summer.webp', 'fall.webp', 'winter.webp']) {
+  await cp(resolve(root, 'background', file), resolve(root, 'dist', 'background', file));
 }
 console.log(`Build passed: ${assets.length} local references checked. Static site written to dist/.`);
