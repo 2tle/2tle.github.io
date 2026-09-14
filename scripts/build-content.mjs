@@ -85,7 +85,11 @@ function renderProject(project, index) {
   if (fields.image && (!/^assets\/images\/[\w/-]+\.(?:svg|webp|png|jpg)$/i.test(fields.image) || fields.image.includes('..'))) {
     throw new Error(`${file} block ${position}: image ${fields.image} must be a local assets/images file`);
   }
-  const visual = fields.image ? `<div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./${escapeHtml(fields.image)}" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>` : '';
+  if (fields.imagescale && (!/^(?:0(?:\.\d+)?|1(?:\.0+)?)$/.test(fields.imagescale) || Number(fields.imagescale) === 0)) {
+    throw new Error(`${file} block ${position}: imageScale must be a number greater than 0 and no more than 1`);
+  }
+  const imageScale = fields.imagescale ? ` style="--project-image-scale:${escapeHtml(fields.imagescale)}"` : '';
+  const visual = fields.image ? `<div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object"${imageScale} src="./${escapeHtml(fields.image)}" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>` : '';
   const projectTools = fields.tools ? `<p class="project-tools">${escapeHtml(fields.tools)}</p>` : '';
   return `<li class="project">
               <article class="project-shell">
