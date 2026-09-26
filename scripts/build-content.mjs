@@ -1,102 +1,161 @@
 // Generates the source-grounded portfolio sections from content/*.md.
 // Run `npm run sync:content` after editing markdown; `npm run build` does this automatically.
-import { readFile, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { readFile, writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
-const root = resolve(import.meta.dirname, '..');
-const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+const root = resolve(import.meta.dirname, "..");
+const escapeHtml = (value) =>
+	String(value).replace(
+		/[&<>"']/g,
+		(char) =>
+			({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+				char
+			],
+	);
 
 // Blocks are fenced with `---` lines. Header fields sit above the closing fence;
 // every non-empty line after it is a separate source detail.
 function parseBlocks(markdown, file) {
-  const lines = markdown.split(/\r?\n/);
-  if (lines[0]?.trim() === '---') lines.shift();
-  const blocks = [];
-  while (lines.length) {
-    const meta = {};
-    while (lines.length && lines[0].trim() !== '---') {
-      const line = lines.shift();
-      if (line.trim() === '') continue;
-      const match = line.match(/^([A-Za-z][\w-]*):\s*(.*)$/);
-      if (!match) throw new Error(`${file}: expected "key: value" inside a fenced header, got "${line}"`);
-      meta[match[1].toLowerCase()] = match[2].trim();
-    }
-    if (!lines.length) throw new Error(`${file}: unterminated header (missing closing "---")`);
-    lines.shift();
-    const bodyLines = [];
-    while (lines.length && lines[0].trim() !== '---') {
-      const line = lines.shift().trim();
-      if (line) bodyLines.push(line);
-    }
-    if (lines.length) lines.shift();
-    if (Object.keys(meta).length || bodyLines.length) blocks.push({ meta, lines: bodyLines });
-  }
-  return blocks;
+	const lines = markdown.split(/\r?\n/);
+	if (lines[0]?.trim() === "---") lines.shift();
+	const blocks = [];
+	while (lines.length) {
+		const meta = {};
+		while (lines.length && lines[0].trim() !== "---") {
+			const line = lines.shift();
+			if (line.trim() === "") continue;
+			const match = line.match(/^([A-Za-z][\w-]*):\s*(.*)$/);
+			if (!match)
+				throw new Error(
+					`${file}: expected "key: value" inside a fenced header, got "${line}"`,
+				);
+			const key = match[1].toLowerCase();
+			const value = match[2].trim();
+			meta[key] =
+				key === "link" ? value.replace(/^<(https:\/\/[^>]+)>$/i, "$1") : value;
+		}
+		if (!lines.length)
+			throw new Error(`${file}: unterminated header (missing closing "---")`);
+		lines.shift();
+		const bodyLines = [];
+		while (lines.length && lines[0].trim() !== "---") {
+			const line = lines.shift().trim();
+			if (line) bodyLines.push(line);
+		}
+		if (lines.length) lines.shift();
+		if (Object.keys(meta).length || bodyLines.length)
+			blocks.push({ meta, lines: bodyLines });
+	}
+	return blocks;
 }
 
 function requireFields(block, file, position, fields) {
-  for (const field of fields) {
-    if (!block.meta[field]) throw new Error(`${file} block ${position}: missing "${field}"`);
-  }
+	for (const field of fields) {
+		if (!block.meta[field])
+			throw new Error(`${file} block ${position}: missing "${field}"`);
+	}
 }
 
 function datetime(value) {
-  return escapeHtml(String(value).replaceAll('.', '-'));
+	return escapeHtml(String(value).replaceAll(".", "-"));
 }
 
 function period(date, dateEnd) {
-  const end = dateEnd ? ` <span aria-hidden="true">·</span> <time datetime="${datetime(dateEnd)}">${escapeHtml(dateEnd)}</time>` : '';
-  return `<time datetime="${datetime(date)}">${escapeHtml(date)}</time>${end}`;
+	const end = dateEnd
+		? ` <span aria-hidden="true">·</span> <time datetime="${datetime(dateEnd)}">${escapeHtml(dateEnd)}</time>`
+		: "";
+	return `<time datetime="${datetime(date)}">${escapeHtml(date)}</time>${end}`;
 }
 
-function sourceLines(lines) {
-  return `<ul>${lines.map((line) => `<li>${escapeHtml(line)}</li>`).join('')}</ul>`;
+function sourceLines(lines, file, position) {
+	return `<ul>${lines
+		.map((line) => {
+			const link = line.match(/^\[([^\]]+)\]\((https:\/\/[^\s)]+)\)$/i);
+			if (!link) {
+				if (line.startsWith("["))
+					throw new Error(
+						`${file} block ${position}: detail link must be [text](https://url)`,
+					);
+				return `<li>${escapeHtml(line)}</li>`;
+			}
+			if (!URL.canParse(link[2])) {
+				throw new Error(
+					`${file} block ${position}: detail link must use HTTPS`,
+				);
+			}
+			return `<li><a class="experience-detail-link" href="${escapeHtml(link[2])}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(link[1])} (새 탭)">${escapeHtml(link[1])} <span aria-hidden="true">↗</span></a></li>`;
+		})
+		.join("")}</ul>`;
 }
 
 function renderExperience(entry, index) {
-  const file = 'content/experience.md';
-  const position = index + 1;
-  const { meta: fields, lines } = entry;
-  requireFields(entry, file, position, ['date', 'org', 'role']);
-  if (!lines.length) throw new Error(`${file} block ${position}: missing source detail`);
-  if (fields.link && !/^https:\/\//i.test(fields.link)) throw new Error(`${file} block ${position}: link must use HTTPS`);
-  const orgDetail = fields.orgdetail ? `<span>${escapeHtml(fields.orgdetail)}</span>` : '';
-  const linkIcon = '<span class="experience-link-icon" aria-hidden="true">↗</span>';
-  const content = `<p class="experience-org">${escapeHtml(fields.org)}${orgDetail}</p>
-                <h3>${escapeHtml(fields.role)}${fields.link ? linkIcon : ''}</h3>
-                ${sourceLines(lines)}`;
-  const article = fields.link
-    ? `<a class="experience-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.org)} 자세히 보기 (새 탭)"><article>${content}</article></a>`
-    : `<article>${content}</article>`;
-  return `<li class="experience-item reveal-entry">
+	const file = "content/experience.md";
+	const position = index + 1;
+	const { meta: fields, lines } = entry;
+	requireFields(entry, file, position, ["date", "org", "role"]);
+	if (!lines.length)
+		throw new Error(`${file} block ${position}: missing source detail`);
+	if (fields.link && !/^https:\/\//i.test(fields.link))
+		throw new Error(`${file} block ${position}: link must use HTTPS`);
+	const orgDetail = fields.orgdetail
+		? `<span>${escapeHtml(fields.orgdetail)}</span>`
+		: "";
+	const linkIcon =
+		'<span class="experience-link-icon" aria-hidden="true">↗</span>';
+	const heading = fields.link
+		? `<a class="experience-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.org)} 자세히 보기 (새 탭)">${escapeHtml(fields.role)}${linkIcon}</a>`
+		: escapeHtml(fields.role);
+	return `<li class="experience-item reveal-entry">
               <div class="experience-date">${period(fields.date, fields.dateend)}</div>
-              ${article}
+              <article><p class="experience-org">${escapeHtml(fields.org)}${orgDetail}</p>
+                <h3>${heading}</h3>
+                ${sourceLines(lines, file, position)}</article>
             </li>`;
 }
 
 function renderProject(project, index) {
-  const file = 'content/projects.md';
-  const position = index + 1;
-  const { meta: fields, lines } = project;
-  requireFields(project, file, position, ['name', 'link']);
-  if (!lines.length) throw new Error(`${file} block ${position}: missing description body`);
-  if (!/^https:\/\//i.test(fields.link)) throw new Error(`${file} block ${position}: link must use HTTPS`);
-  if (fields.image && (!/^assets\/images\/[\w/-]+\.(?:svg|webp|png|jpg)$/i.test(fields.image) || fields.image.includes('..'))) {
-    throw new Error(`${file} block ${position}: image ${fields.image} must be a local assets/images file`);
-  }
-  if (fields.imagescale && (!/^(?:0(?:\.\d+)?|1(?:\.0+)?)$/.test(fields.imagescale) || Number(fields.imagescale) === 0)) {
-    throw new Error(`${file} block ${position}: imageScale must be a number greater than 0 and no more than 1`);
-  }
-  const imageScale = fields.imagescale ? ` style="--project-image-scale:${escapeHtml(fields.imagescale)}"` : '';
-  const visual = fields.image ? `<div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object"${imageScale} src="./${escapeHtml(fields.image)}" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>` : '';
-  const projectTools = fields.tools ? `<p class="project-tools">${escapeHtml(fields.tools)}</p>` : '';
-  return `<li class="project">
+	const file = "content/projects.md";
+	const position = index + 1;
+	const { meta: fields, lines } = project;
+	requireFields(project, file, position, ["name", "link"]);
+	if (!lines.length)
+		throw new Error(`${file} block ${position}: missing description body`);
+	if (!/^https:\/\//i.test(fields.link))
+		throw new Error(`${file} block ${position}: link must use HTTPS`);
+	if (
+		fields.image &&
+		(!/^assets\/images\/[\w/-]+\.(?:svg|webp|png|jpg)$/i.test(fields.image) ||
+			fields.image.includes(".."))
+	) {
+		throw new Error(
+			`${file} block ${position}: image ${fields.image} must be a local assets/images file`,
+		);
+	}
+	if (
+		fields.imagescale &&
+		(!/^(?:0(?:\.\d+)?|1(?:\.0+)?)$/.test(fields.imagescale) ||
+			Number(fields.imagescale) === 0)
+	) {
+		throw new Error(
+			`${file} block ${position}: imageScale must be a number greater than 0 and no more than 1`,
+		);
+	}
+	const imageScale = fields.imagescale
+		? ` style="--project-image-scale:${escapeHtml(fields.imagescale)}"`
+		: "";
+	const visual = fields.image
+		? `<div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object"${imageScale} src="./${escapeHtml(fields.image)}" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>`
+		: "";
+	const projectTools = fields.tools
+		? `<p class="project-tools">${escapeHtml(fields.tools)}</p>`
+		: "";
+	return `<li class="project">
               <article class="project-shell">
                 ${visual}
                 <div class="project-info reveal-project">
                   <h3>${escapeHtml(fields.name)}</h3>
-                  <p>${escapeHtml(lines.join(' '))}</p>
+                  <p>${escapeHtml(lines.join(" "))}</p>
                   ${projectTools}
                   <a class="project-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.name)} 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
                 </div>
@@ -105,73 +164,109 @@ function renderProject(project, index) {
 }
 
 function renderEducation(entry, index) {
-  const file = 'content/education.md';
-  const position = index + 1;
-  const { meta: fields, lines } = entry;
-  requireFields(entry, file, position, ['date', 'org']);
-  if (!lines.length) throw new Error(`${file} block ${position}: missing detail body`);
-  return `<li class="education-item reveal-entry">
+	const file = "content/education.md";
+	const position = index + 1;
+	const { meta: fields, lines } = entry;
+	requireFields(entry, file, position, ["date", "org"]);
+	if (!lines.length)
+		throw new Error(`${file} block ${position}: missing detail body`);
+	return `<li class="education-item reveal-entry">
               <div class="record-date">${period(fields.date, fields.dateend)}</div>
-              <div><h3>${escapeHtml(fields.org)}</h3><p>${escapeHtml(lines.join(' '))}</p></div>
+              <div><h3>${escapeHtml(fields.org)}</h3><p>${escapeHtml(lines.join(" "))}</p></div>
             </li>`;
 }
 
 function renderAward(entry, index) {
-  const file = 'content/awards.md';
-  const position = index + 1;
-  const { meta: fields } = entry;
-  requireFields(entry, file, position, ['date', 'title', 'result']);
-  if (fields.link && !/^https:\/\//i.test(fields.link)) throw new Error(`${file} block ${position}: link must use HTTPS`);
-  const linkIcon = '<span class="award-link-icon" aria-hidden="true">↗</span>';
-  const content = `<div class="award-copy"><h3>${escapeHtml(fields.title)}${fields.link ? linkIcon : ''}</h3><p>${escapeHtml(fields.result)}</p></div>`;
-  const item = fields.link
-    ? `<a class="award-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.title)} 자세히 보기 (새 탭)">${content}</a>`
-    : content;
-  return `<li class="award-item reveal-entry">
+	const file = "content/awards.md";
+	const position = index + 1;
+	const { meta: fields } = entry;
+	requireFields(entry, file, position, ["date", "title", "result"]);
+	if (fields.link && !/^https:\/\//i.test(fields.link))
+		throw new Error(`${file} block ${position}: link must use HTTPS`);
+	const linkIcon = '<span class="award-link-icon" aria-hidden="true">↗</span>';
+	const content = `<div class="award-copy"><h3>${escapeHtml(fields.title)}${fields.link ? linkIcon : ""}</h3><p>${escapeHtml(fields.result)}</p></div>`;
+	const item = fields.link
+		? `<a class="award-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.title)} 자세히 보기 (새 탭)">${content}</a>`
+		: content;
+	return `<li class="award-item reveal-entry">
               <div class="award-date"><time datetime="${datetime(fields.date)}">${escapeHtml(fields.date)}</time></div>
               ${item}
             </li>`;
 }
 
 function renderIntroducing(entry) {
-  const file = 'content/introducing.md';
-  const { meta: fields, lines } = entry;
-  requireFields(entry, file, 1, ['name', 'handle']);
-  if (!lines.length) throw new Error(`${file}: missing introduction body`);
-  return `<p class="introduction-name">${escapeHtml(fields.name)} <span>${escapeHtml(fields.handle)}</span></p>
-            <p>${escapeHtml(lines.join(' '))}</p>`;
+	const file = "content/introducing.md";
+	const { meta: fields, lines } = entry;
+	requireFields(entry, file, 1, ["name", "handle"]);
+	if (!lines.length) throw new Error(`${file}: missing introduction body`);
+	return `<p class="introduction-name">${escapeHtml(fields.name)} <span>${escapeHtml(fields.handle)}</span></p>
+            <p>${escapeHtml(lines.join(" "))}</p>`;
 }
 
 function replaceBlock(html, marker, items) {
-  const pattern = new RegExp(`<!-- content:${marker}:start -->[\\s\\S]*?<!-- content:${marker}:end -->`);
-  if (!pattern.test(html)) throw new Error(`index.html: missing content:${marker} markers`);
-  return html.replace(pattern, () => `<!-- content:${marker}:start -->\n            ${items.join('\n            ')}\n            <!-- content:${marker}:end -->`);
+	const pattern = new RegExp(
+		`<!-- content:${marker}:start -->[\\s\\S]*?<!-- content:${marker}:end -->`,
+	);
+	if (!pattern.test(html))
+		throw new Error(`index.html: missing content:${marker} markers`);
+	return html.replace(
+		pattern,
+		() =>
+			`<!-- content:${marker}:start -->\n            ${items.join("\n            ")}\n            <!-- content:${marker}:end -->`,
+	);
 }
 
 export async function syncContent() {
-  const files = ['experience', 'projects', 'education', 'awards'];
-  const [experienceMarkdown, projectsMarkdown, educationMarkdown, awardsMarkdown, introducingMarkdown, html] = await Promise.all([
-    ...files.map((file) => readFile(resolve(root, 'content', `${file}.md`), 'utf8')),
-    readFile(resolve(root, 'content', 'introducing.md'), 'utf8'),
-    readFile(resolve(root, 'index.html'), 'utf8'),
-  ]);
-  const experience = parseBlocks(experienceMarkdown, 'content/experience.md');
-  const projects = parseBlocks(projectsMarkdown, 'content/projects.md');
-  const education = parseBlocks(educationMarkdown, 'content/education.md');
-  const awards = parseBlocks(awardsMarkdown, 'content/awards.md');
-  const introducing = parseBlocks(introducingMarkdown, 'content/introducing.md');
-  if (introducing.length !== 1) throw new Error('content/introducing.md: expected exactly one block');
-  let next = replaceBlock(html, 'introducing', [renderIntroducing(introducing[0])]);
-  next = replaceBlock(next, 'experience', experience.map(renderExperience));
-  next = replaceBlock(next, 'projects', projects.map(renderProject));
-  next = replaceBlock(next, 'education', education.map(renderEducation));
-  next = replaceBlock(next, 'awards', awards.map(renderAward));
-  const changed = next !== html;
-  if (changed) await writeFile(resolve(root, 'index.html'), next);
-  return { introducing: introducing.length, experience: experience.length, projects: projects.length, education: education.length, awards: awards.length, changed };
+	const files = ["experience", "projects", "education", "awards"];
+	const [
+		experienceMarkdown,
+		projectsMarkdown,
+		educationMarkdown,
+		awardsMarkdown,
+		introducingMarkdown,
+		html,
+	] = await Promise.all([
+		...files.map((file) =>
+			readFile(resolve(root, "content", `${file}.md`), "utf8"),
+		),
+		readFile(resolve(root, "content", "introducing.md"), "utf8"),
+		readFile(resolve(root, "index.html"), "utf8"),
+	]);
+	const experience = parseBlocks(experienceMarkdown, "content/experience.md");
+	const projects = parseBlocks(projectsMarkdown, "content/projects.md");
+	const education = parseBlocks(educationMarkdown, "content/education.md");
+	const awards = parseBlocks(awardsMarkdown, "content/awards.md");
+	const introducing = parseBlocks(
+		introducingMarkdown,
+		"content/introducing.md",
+	);
+	if (introducing.length !== 1)
+		throw new Error("content/introducing.md: expected exactly one block");
+	let next = replaceBlock(html, "introducing", [
+		renderIntroducing(introducing[0]),
+	]);
+	next = replaceBlock(next, "experience", experience.map(renderExperience));
+	next = replaceBlock(next, "projects", projects.map(renderProject));
+	next = replaceBlock(next, "education", education.map(renderEducation));
+	next = replaceBlock(next, "awards", awards.map(renderAward));
+	const changed = next !== html;
+	if (changed) await writeFile(resolve(root, "index.html"), next);
+	return {
+		introducing: introducing.length,
+		experience: experience.length,
+		projects: projects.length,
+		education: education.length,
+		awards: awards.length,
+		changed,
+	};
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const result = await syncContent();
-  console.log(`Content synced: ${result.introducing} introducing, ${result.experience} experience, ${result.projects} projects, ${result.education} education, ${result.awards} awards${result.changed ? '' : ' (unchanged)'}`);
+if (
+	process.argv[1] &&
+	import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+	const result = await syncContent();
+	console.log(
+		`Content synced: ${result.introducing} introducing, ${result.experience} experience, ${result.projects} projects, ${result.education} education, ${result.awards} awards${result.changed ? "" : " (unchanged)"}`,
+	);
 }

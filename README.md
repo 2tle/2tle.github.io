@@ -22,7 +22,7 @@ npm test
 - `content/education.md`: 학업 기록
 - `content/timeline.md`: 이전 작업 기록
 
-각 블록은 `---` 헤더와 본문 줄로 구성합니다. 프로젝트 링크는 HTTPS여야 하고 이미지는 `assets/images/` 아래의 로컬 파일만 허용합니다. 콘텐츠 생성기와 검증은 `scripts/build-content.mjs` 및 `tests/content.spec.mjs`에 있습니다.
+각 블록은 `---` 헤더와 본문 줄로 구성합니다. 경험의 각 세부 항목은 `내용` 또는 `[내용](https://example.com)` 형식으로 작성하면 개별 링크가 됩니다. 프로젝트 링크는 HTTPS여야 하고 이미지는 `assets/images/` 아래의 로컬 파일만 허용합니다. 콘텐츠 생성기와 검증은 `scripts/build-content.mjs` 및 `tests/content.spec.mjs`에 있습니다.
 
 Pretendard 가변 폰트는 `assets/fonts/PretendardVariable.woff2`에 로컬로 포함되어 있습니다.
 
