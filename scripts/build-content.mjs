@@ -1,6 +1,16 @@
 // Generates the source-grounded portfolio sections from content/*.md.
 // Run `npm run sync:content` after editing markdown; `npm run build` does this automatically.
-import { readFile, writeFile } from "node:fs/promises";
+import {
+	mkdir,
+	readdir,
+	readFile,
+	rm,
+	stat,
+	writeFile,
+} from "node:fs/promises";
+import { marked } from "marked";
+import { validateProjectMarkdown, validateProjectHtml } from "./validate-project-format.mjs";
+import sanitizeHtml from "sanitize-html";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -114,53 +124,156 @@ function renderExperience(entry, index) {
             </li>`;
 }
 
-function renderProject(project, index) {
-	const file = "content/projects.md";
-	const position = index + 1;
-	const { meta: fields, lines } = project;
-	requireFields(project, file, position, ["name", "link"]);
-	if (!lines.length)
-		throw new Error(`${file} block ${position}: missing description body`);
-	if (!/^https:\/\//i.test(fields.link))
-		throw new Error(`${file} block ${position}: link must use HTTPS`);
-	if (
-		fields.image &&
-		(!/^assets\/images\/[\w/-]+\.(?:svg|webp|png|jpg)$/i.test(fields.image) ||
-			fields.image.includes(".."))
-	) {
-		throw new Error(
-			`${file} block ${position}: image ${fields.image} must be a local assets/images file`,
-		);
-	}
-	if (
-		fields.imagescale &&
-		(!/^(?:0(?:\.\d+)?|1(?:\.0+)?)$/.test(fields.imagescale) ||
-			Number(fields.imagescale) === 0)
-	) {
-		throw new Error(
-			`${file} block ${position}: imageScale must be a number greater than 0 and no more than 1`,
-		);
-	}
-	const imageScale = fields.imagescale
+async function readProjects() {
+	const directory = resolve(root, "content/projects");
+	const entries = await readdir(directory).catch((error) => {
+		if (error.code !== "ENOENT") throw error;
+		return [];
+	});
+	const files = entries.filter((file) => file.endsWith(".md"));
+	const projects = await Promise.all(
+		files.map(async (file) => {
+			const slug = file.slice(0, -3);
+			if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug))
+				throw new Error(
+					`${file}: filename must use lowercase letters, numbers and hyphens`,
+				);
+			const markdown = await readFile(resolve(directory, file), "utf8");
+			const match = markdown.match(
+				/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)([\s\S]*)$/,
+			);
+			if (!match) throw new Error(`${file}: missing fenced metadata header`);
+			const entry = parseBlocks(`---\n${match[1]}\n---\n`, file)[0] ?? {
+				meta: {},
+			};
+			requireFields(entry, file, 1, ["name", "summary", "link"]);
+			const fields = entry.meta;
+			if (!match[2].trim()) throw new Error(`${file}: missing Markdown body`);
+			if (!/^https:\/\//i.test(fields.link) || !URL.canParse(fields.link))
+				throw new Error(`${file}: link must use HTTPS`);
+			if (fields.image) {
+				if (
+					!/^assets\/images\/[\w/-]+\.(?:svg|webp|png|jpg)$/i.test(
+						fields.image,
+					) ||
+					fields.image.includes("..")
+				)
+					throw new Error(`${file}: image must be a local assets/images file`);
+				await stat(resolve(root, fields.image));
+			}
+			if (
+				fields.imagescale &&
+				(!/^(?:0(?:\.\d+)?|1(?:\.0+)?)$/.test(fields.imagescale) ||
+					Number(fields.imagescale) === 0)
+			)
+				throw new Error(
+					`${file}: imageScale must be greater than 0 and no more than 1`,
+				);
+			if (fields.hidelink && !["true", "false"].includes(fields.hidelink))
+				throw new Error(`${file}: hideLink must be true or false`);
+			if (fields.imagelayout && fields.imagelayout !== "wide")
+				throw new Error(`${file}: imageLayout must be wide`);
+			if (fields.order && !/^\d+$/.test(fields.order))
+				throw new Error(`${file}: order must be a non-negative integer`);
+			const structure = validateProjectMarkdown(match[2], file);
+			// ponytail: a standard parser plus sanitizer, not a home-grown Markdown dialect.
+			const body = sanitizeHtml(marked.parse(match[2]), {
+				allowedTags: [...sanitizeHtml.defaults.allowedTags, "img"],
+				allowedAttributes: {
+					...sanitizeHtml.defaults.allowedAttributes,
+					img: ["src", "alt", "title", "width", "height", "loading", "decoding"],
+					code: ["class"],
+				},
+				allowedSchemes: ["https", "mailto"],
+				allowProtocolRelative: false,
+			});
+			validateProjectHtml(body, structure, file);
+			return { slug, fields, body };
+		}),
+	);
+	return projects.sort(
+		(a, b) =>
+			Number(a.fields.order ?? 100) - Number(b.fields.order ?? 100) ||
+			a.slug.localeCompare(b.slug, "en"),
+	);
+}
+
+function projectImage(fields, prefix, className) {
+	if (!fields.image) return "";
+	const scale = fields.imagescale
 		? ` style="--project-image-scale:${escapeHtml(fields.imagescale)}"`
 		: "";
-	const visual = fields.image
-		? `<div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object"${imageScale} src="./${escapeHtml(fields.image)}" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>`
-		: "";
-	const projectTools = fields.tools
-		? `<p class="project-tools">${escapeHtml(fields.tools)}</p>`
-		: "";
+	return `<img class="${className}${fields.imagelayout === "wide" ? " project-image-wide" : ""}"${scale} src="${prefix}${escapeHtml(fields.image)}" alt="" width="420" height="420" loading="lazy">`;
+}
+
+function renderProjectPeriods(fields) {
+	const entries = [
+		["개발 기간", fields.developmentperiod],
+		["운영 기간", fields.operationperiod],
+	].filter(([, value]) => value);
+	if (!entries.length) return "";
+	return `<dl class="project-periods">${entries.map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl>`;
+}
+
+function renderProject({ slug, fields }, index) {
+	const periods = renderProjectPeriods(fields);
 	return `<li class="project">
-              <article class="project-shell">
-                ${visual}
-                <div class="project-info reveal-project">
-                  <h3>${escapeHtml(fields.name)}</h3>
-                  <p>${escapeHtml(lines.join(" "))}</p>
-                  ${projectTools}
-                  <a class="project-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(fields.name)} 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
+              <article><a class="project-card" href="./projects/${slug}.html" aria-label="${escapeHtml(fields.name)} 프로젝트 보기">
+                <div class="project-visual" aria-hidden="true"><span class="project-number">${String(index + 1).padStart(2, "0")}</span>${projectImage(fields, "./", "project-object")}</div>
+                <div class="project-info">
+                  ${fields.category ? `<p class="project-category">${escapeHtml(fields.category)}</p>` : ""}
+                  <h3>${escapeHtml(fields.name)}<span aria-hidden="true">↗</span></h3>
+                  <p class="project-summary">${escapeHtml(fields.summary)}</p>
+                  ${fields.tools ? `<p class="project-tools">${escapeHtml(fields.tools)}</p>` : ""}${periods ? `
+                  ${periods}` : ""}
                 </div>
-              </article>
+              </a></article>
             </li>`;
+}
+
+function renderProjectPage({ fields, body }, html) {
+	const periods = renderProjectPeriods(fields);
+	const title = `${escapeHtml(fields.name)} · stringju`;
+	const head = html
+		.match(/<head>[\s\S]*?<\/head>/)[0]
+		.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${title}</title>`)
+		.replace(
+			/(<meta (?:name="description"|property="og:description") content=")[^"]*("\s*\/>)/g,
+			(_, start, end) => `${start}${escapeHtml(fields.summary)}${end}`,
+		)
+		.replace(
+			/(<meta property="og:title" content=")[^"]*("\s*\/>)/,
+			(_, start, end) => `${start}${title}${end}`,
+		)
+		.replace(/\s*<link rel="preload"[^>]*>/g, "")
+		.replaceAll('href="./', 'href="../');
+	return `<!doctype html>
+<html lang="ko">
+${head}
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <header class="site-header detail-header container">
+    <a class="wordmark" href="../index.html" aria-label="stringju 처음으로">stringju<span aria-hidden="true">.</span></a>
+    <a class="back-link" href="../index.html#work"><span aria-hidden="true">←</span> 프로젝트 목록</a>
+  </header>
+  <main class="detail-main" id="main" tabindex="-1">
+    <header class="detail-intro">
+      ${fields.category ? `<p class="project-category">${escapeHtml(fields.category)}</p>` : ""}
+      <h1>${escapeHtml(fields.name)}</h1>
+      <p class="project-summary">${escapeHtml(fields.summary)}</p>
+${periods ? `      ${periods}
+` : ""}      <div class="detail-meta">
+        ${fields.tools ? `<p class="project-tools">${escapeHtml(fields.tools)}</p>` : ""}
+        ${fields.hidelink === "true" ? "" : `<a class="repository-link" href="${escapeHtml(fields.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(fields.linklabel || "저장소 보기")} <span aria-hidden="true">↗</span></a>`}
+      </div>
+    </header>
+    ${fields.image ? `<div class="detail-visual" aria-hidden="true">${projectImage(fields, "../", "detail-object")}</div>` : ""}
+    <article class="markdown-body" aria-label="프로젝트 상세">${body}</article>
+    <div class="detail-bottom"><a class="back-link" href="../index.html#work"><span aria-hidden="true">←</span> 프로젝트 목록</a></div>
+  </main>
+</body>
+</html>
+`;
 }
 
 function renderEducation(entry, index) {
@@ -217,10 +330,9 @@ function replaceBlock(html, marker, items) {
 }
 
 export async function syncContent() {
-	const files = ["experience", "projects", "education", "awards"];
+	const files = ["experience", "education", "awards"];
 	const [
 		experienceMarkdown,
-		projectsMarkdown,
 		educationMarkdown,
 		awardsMarkdown,
 		introducingMarkdown,
@@ -233,7 +345,7 @@ export async function syncContent() {
 		readFile(resolve(root, "index.html"), "utf8"),
 	]);
 	const experience = parseBlocks(experienceMarkdown, "content/experience.md");
-	const projects = parseBlocks(projectsMarkdown, "content/projects.md");
+	const projects = await readProjects();
 	const education = parseBlocks(educationMarkdown, "content/education.md");
 	const awards = parseBlocks(awardsMarkdown, "content/awards.md");
 	const introducing = parseBlocks(
@@ -246,11 +358,41 @@ export async function syncContent() {
 		renderIntroducing(introducing[0]),
 	]);
 	next = replaceBlock(next, "experience", experience.map(renderExperience));
-	next = replaceBlock(next, "projects", projects.map(renderProject));
+	next = replaceBlock(
+		next,
+		"projects",
+		projects.length
+			? projects.map(renderProject)
+			: ['<li class="project-empty">공개할 프로젝트를 준비하고 있습니다.</li>'],
+	);
 	next = replaceBlock(next, "education", education.map(renderEducation));
 	next = replaceBlock(next, "awards", awards.map(renderAward));
-	const changed = next !== html;
+	let changed = next !== html;
 	if (changed) await writeFile(resolve(root, "index.html"), next);
+	const output = resolve(root, "projects");
+	await mkdir(output, { recursive: true });
+	const pages = new Set();
+	for (const project of projects) {
+		const filename = `${project.slug}.html`;
+		pages.add(filename);
+		const path = resolve(output, filename);
+		const page = renderProjectPage(project, next);
+		const previous = await readFile(path, "utf8").catch((error) => {
+			if (error.code !== "ENOENT") throw error;
+			return "";
+		});
+		if (page !== previous) {
+			await writeFile(path, page);
+			changed = true;
+		}
+	}
+	// Only generated HTML is removed; source Markdown and assets are never touched.
+	for (const filename of await readdir(output)) {
+		if (filename.endsWith(".html") && !pages.has(filename)) {
+			await rm(resolve(output, filename));
+			changed = true;
+		}
+	}
 	return {
 		introducing: introducing.length,
 		experience: experience.length,

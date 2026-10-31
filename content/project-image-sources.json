@@ -1,0 +1,86 @@
+[
+  {
+    "blockId": "14218740-dc6a-808f-bb4a-fdd4f956dfb8",
+    "project": "s-top",
+    "context": "",
+    "file": "assets/images/projects/s-top/identity.png",
+    "bytes": 48262
+  },
+  {
+    "blockId": "14a18740-dc6a-80ee-99d6-cf4e610c8d7e",
+    "project": "dolpin",
+    "context": "",
+    "file": "assets/images/projects/dolpin/cover.webp",
+    "bytes": 26742
+  },
+  {
+    "blockId": "14a18740-dc6a-806b-985d-ef4d50473bea",
+    "project": "dolpin",
+    "context": "프로젝트 개요",
+    "file": "assets/images/projects/dolpin/architecture.png",
+    "bytes": 163366
+  },
+  {
+    "blockId": "14a18740-dc6a-80f8-bff0-fac8a409732c",
+    "project": "dolpin",
+    "context": "서버의 응답속도가 느리고, 자주 Timeout이 발생한다",
+    "file": "assets/images/projects/dolpin/response-before.png",
+    "bytes": 11094
+  },
+  {
+    "blockId": "14a18740-dc6a-8096-a131-eb80fc1e888a",
+    "project": "dolpin",
+    "context": "서버의 응답속도가 느리고, 자주 Timeout이 발생한다",
+    "file": "assets/images/projects/dolpin/response-after.png",
+    "bytes": 10672
+  },
+  {
+    "blockId": "14b18740-dc6a-80ec-a38c-fe1b89243f53",
+    "project": "dolpin",
+    "context": "메인 함수에서 크롬 웹드라이버를 생성하고 개별 크롤러에 인자로 전달해 사용하도록 변경함",
+    "file": "assets/images/projects/dolpin/browser-reference.png",
+    "bytes": 373442
+  },
+  {
+    "blockId": "14b18740-dc6a-804c-9f4c-f8ae95b1f87e",
+    "project": "dolpin",
+    "context": "개발자가 매번 수동으로 배포해야 하고, 배포 위치가 파편화 되어 있다.",
+    "file": "assets/images/projects/dolpin/github-actions.png",
+    "bytes": 97323
+  },
+  {
+    "blockId": "14b18740-dc6a-800b-b14e-f30b125f9a50",
+    "project": "dolpin",
+    "context": "개발자가 매번 수동으로 배포해야 하고, 배포 위치가 파편화 되어 있다.",
+    "file": "assets/images/projects/dolpin/circleci.png",
+    "bytes": 128473
+  },
+  {
+    "blockId": "25111890-fa01-44e5-9519-53a457a1070b",
+    "project": "dolpin",
+    "context": "아티클 크롤링 현황을 알 수 없다.",
+    "file": "assets/images/projects/dolpin/slack-channel.png",
+    "bytes": 36071
+  },
+  {
+    "blockId": "6822f377-4ab4-4c05-bce4-cb1e95068093",
+    "project": "dolpin",
+    "context": "아티클 크롤링 현황을 알 수 없다.",
+    "file": "assets/images/projects/dolpin/slack-bot.png",
+    "bytes": 31699
+  },
+  {
+    "blockId": "5b235cfd-9633-435f-93ca-2baf2fd5936f",
+    "project": "dolpin",
+    "context": "아티클 크롤링 현황을 알 수 없다.",
+    "file": "assets/images/projects/dolpin/slack-start.png",
+    "bytes": 14080
+  },
+  {
+    "blockId": "5ece34c2-0a4f-4b49-ad48-32415789a14a",
+    "project": "dolpin",
+    "context": "아티클 크롤링 현황을 알 수 없다.",
+    "file": "assets/images/projects/dolpin/slack-error.png",
+    "bytes": 34084
+  }
+]

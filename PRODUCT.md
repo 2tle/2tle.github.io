@@ -2,50 +2,38 @@
 
 ## What it is
 
-양현준(stringju)의 경험, 기술, 프로젝트를 보여주는 한국어 개인 포트폴리오다.
+양현준(stringju)의 공개 프로젝트를 중심으로 경험과 연락처를 보여주는 한국어 포트폴리오 전시 사이트.
 
 ## Target audience
 
-채용 담당자, 엔지니어링 협업자, 함께 일할 개발자를 찾는 사람. 짧은 시간 안에 기술 방향, 경험, 공개 프로젝트, 연락 방법을 확인해야 한다.
-
-## Primary job-to-be-done
-
-방문자가 양현준이 누구인지, 어떤 일을 했는지, 무엇을 다뤘는지, 어디로 연락할지 빠르게 파악하게 한다.
+채용 담당자와 개발 협업자. 작업물을 먼저 둘러보고, 상세 구현과 공개 저장소를 확인한다.
 
 ## Brand voice
 
-포근한, 차분한, 꼼꼼한.
+차분한, 명료한, 개인적인.
 
-## Key messages
+## User-provided requirements
 
-- 백엔드 개발과 인프라 학습이 핵심 기술 방향이다.
-- 제품 개발, 백엔드, Android, 강의, 학생단체 경험이 있다.
-- 실제 공개 프로젝트와 연락처로 바로 이동할 수 있다.
+- Source: user: 사이트 전체를 포트폴리오 전시용으로 리팩토링한다.
+- Source: user: 각 프로젝트를 Markdown으로 관리하고 동적으로 추가할 수 있게 한다.
+- Source: user: 현재 디자인은 유지하고, 에이전트가 추가한 장식성 문구만 제거한다.
+- Source: user: 사용자가 작성한 자기소개·이력은 줄이거나 다시 쓰지 않는다. 자기소개는 프로젝트 아래에 원문 그대로 유지한다.
+- Source: existing brief: 사계절 일러스트와 자캐는 사이트의 개인적인 정체성이다.
 
-## Visual concept
+## Working assumptions
 
-- Source: user: `background/simple/`의 네 계절 일러스트를 배경으로 바꾸고 그에 맞게 사이트를 다시 디자인한다.
-- Source: user: 이미지 속 인물은 본인의 자캐와 같은 존재다.
-- 봄, 여름, 가을, 겨울의 자캐와 강아지가 페이지 뒤편에서 바뀌며, 이력은 밝은 계절색의 읽기 면에 놓인다.
-- Source: user: 사진이 보조가 아니라 화면의 중심이 되는 디자인을 원한다. 첫 화면과 챕터마다 크게 펼쳐진 그림을 먼저 보여준 다음 이력을 읽게 한다.
+- 동적 추가는 GitHub Pages에 맞춰 빌드 시 Markdown 디렉터리를 자동 탐색하는 방식이다. 별도 CMS나 서버는 두지 않는다.
+- 프로젝트 파일 하나가 갤러리 항목과 상세 페이지 하나가 된다.
+- 프로젝트 갤러리 → 소개 → 경험 → 학력·수상 → 연락처 순으로 읽는다.
+- 사계절 그림은 유지하되 화면 단위의 빈 스크롤 구간과 고정 배경 효과는 제거한다.
+- 상단 내비게이션은 고정하지 않고 모바일에서도 바로 사용할 수 있다.
 
-## User-provided facts
+## Content and constraints
 
-- Source: user-provided public Notion resume: 양현준은 새로운 도전, 백엔드 개발, 인프라 학습, 협업, 꼼꼼한 진행을 중요하게 말한다.
-- Source: user-provided public Notion resume: CareerNote, 한봄고등학교, 성균관대학교 시스템컨설턴트그룹, MIDAS IT, 학력과 연락처 정보가 있다.
-- Source: user-provided repository: Nether, Macmagotchi, SurvirunAPI 공개 프로젝트와 저장소 링크가 있다.
-- Source: user-provided repository history: 2017~2022 수상 기록 6건이 이전 포트폴리오에 저장되어 있다.
-
-## Missing facts
-
-- 정량적 프로젝트 성과: [NEEDS INPUT]
-- 기술 숙련도와 경력 연차: [NEEDS INPUT]
-- 현재 재직 또는 재학 상태: [NEEDS INPUT]
-
-## Constraints
-
-- GitHub Pages에서 정적 HTML, CSS, JavaScript와 로컬 자산만으로 동작한다.
-- 상단 고정 내비게이션 없이 구성한다.
-- 외부 요청 없이 모든 이미지와 글꼴이 로컬에서 로드되어야 한다.
-- WCAG 2.2 AA, 44px 터치 타깃, 키보드 접근, reduced motion, JavaScript 없는 읽기를 지원한다.
-- 빌드는 별도 승인 없이 진행한다.
+- 사실은 기존 content/ 파일을 유지한다. 성과 수치, 프로젝트 상태, 기여 범위는 추측하지 않는다.
+- content/projects/*.md의 파일명은 주소, 메타데이터는 전시 정보, 본문은 상세 설명이다.
+- 누락된 사례 분석은 꾸며 쓰지 않고 현재 확인 가능한 설명만 싣는다.
+- 정적 HTML/CSS, 로컬 이미지와 Pretendard. 런타임 외부 요청 없음.
+- Markdown 파싱과 HTML 정리는 빌드에서만 수행한다.
+- 키보드 탐색, 44px 터치 영역, reduced motion, JavaScript 없는 읽기와 인쇄 지원.
+- 배포·커밋·푸시는 별도 요청 시 수행한다.

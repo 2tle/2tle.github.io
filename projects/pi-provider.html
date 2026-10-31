@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="양현준, stringju. 백엔드와 인프라부터 데스크톱 앱까지, 직접 만들고 운영한 프로젝트를 소개합니다."
+    />
+    <meta property="og:title" content="pi-provider-manager · stringju" />
+    <meta
+      property="og:description"
+      content="직접 만들고 운영한 프로젝트와 그 기록. 양현준의 포트폴리오."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta
+      property="og:image"
+      content="https://2tle.github.io/background/simple/spring.webp"
+    />
+    <title>pi-provider-manager · stringju</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/fonts/fonts.css?v=3551792a89d5" />
+    <link rel="stylesheet" href="../styles.css?v=0ad4e21e5bff" />
+    <link
+      rel="preload"
+      href="../background/simple/spring.webp"
+      as="image"
+      fetchpriority="high"
+    />
+  </head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <header class="site-header detail-header container">
+    <a class="wordmark" href="../index.html" aria-label="stringju 처음으로">stringju<span aria-hidden="true">.</span></a>
+    <a class="back-link" href="../index.html#work"><span aria-hidden="true">←</span> 프로젝트 목록</a>
+  </header>
+  <main class="detail-main" id="main" tabindex="-1">
+    <header class="detail-intro">
+      <p class="project-category">개발 도구</p>
+      <h1>pi-provider-manager</h1>
+      <p class="project-summary">Pi Agent에서 OpenAI-Compatible Provider를 쉽게 관리할 수 있는 Pi Extension</p>
+      <dl class="project-periods"><div><dt>개발 기간</dt><dd>2026.08</dd></div></dl>
+      <div class="detail-meta">
+        <p class="project-tools">TypeScript, Pi Agent</p>
+        <a class="repository-link" href="https://github.com/2tle/pi-provider" target="_blank" rel="noopener noreferrer">저장소 보기 <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+    <div class="detail-visual" aria-hidden="true"><img class="detail-object" src="../assets/images/api-mark.svg" alt="" width="420" height="420" loading="lazy"></div>
+    <article class="markdown-body" aria-label="프로젝트 상세"><h2>프로젝트 소개</h2>
+<p>Pi Agent에서 OpenAI-Compatible Provider를 쉽게 관리할 수 있는 Pi Extension입니다.</p>
+<h2>개발 동기</h2>
+<p>기존에 Pi Agent에서 로컬 LLM이나 사설 게이트웨이를 이용하려면 직접 models.json을 수정해야 하는 불편함이 있었습니다.
+또한 해당 게이트웨이에서 사용 가능한 모델 카탈로그가 업데이트되어도 에이전트에 바로 반영되지 않는 불편함이 있었습니다.</p>
+<h2>주요 기능</h2>
+<ul>
+<li>Provider 추가, 조회, 수정, 삭제</li>
+<li>Provider별 모델 목록 새로고침</li>
+<li>모델별 컨텍스트 크기와 최대 출력 토큰 수 설정</li>
+<li>Provider 설정과 API 키를 별도 파일에 저장</li>
+</ul>
+<h2>장점</h2>
+<p>기존처럼 직접 json 파일을 수정하지 않고 에이전트 TUI 내부에서 쉽게 Provider를 관리할 수 있게 되었습니다.
+모델 카탈로그 업데이트나 API 키 업데이트의 경우에도 에이전트 TUI 에서 바로 업데이트 할 수 있습니다.</p>
+<h2>설치</h2>
+<pre><code class="language-sh">pi install npm:@2tle/pi-provider-manager
+</code></pre>
+<h2>관련 링크</h2>
+<ul>
+<li><a href="https://github.com/2tle/pi-provider">GitHub 저장소</a></li>
+<li><a href="https://www.npmjs.com/package/@2tle/pi-provider-manager">npm 패키지</a></li>
+</ul>
+</article>
+    <div class="detail-bottom"><a class="back-link" href="../index.html#work"><span aria-hidden="true">←</span> 프로젝트 목록</a></div>
+  </main>
+</body>
+</html>

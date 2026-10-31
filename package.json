@@ -4,15 +4,23 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node scripts/serve.mjs",
+    "dev": "npm run build && node scripts/serve.mjs",
     "sync:content": "node scripts/build-content.mjs",
     "build": "node scripts/build.mjs",
     "preview": "node scripts/serve.mjs dist",
     "test": "npm run build && playwright test",
-    "refresh:profile": "node scripts/refresh-profile.mjs"
+    "refresh:profile": "node scripts/refresh-profile.mjs",
+    "test:format": "node --test scripts/__tests__/project-format.test.mjs",
+    "test:content": "playwright test --config=playwright.content.config.mjs",
+    "check": "npm run build && npm run test:format && npm run test:content"
   },
   "devDependencies": {
-    "@playwright/test": "^1.58.2",
-    "@axe-core/playwright": "^4.11.1"
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.58.2"
+  },
+  "dependencies": {
+    "htmlparser2": "^12.0.0",
+    "marked": "^18.1.2",
+    "sanitize-html": "^2.18.1"
   }
 }

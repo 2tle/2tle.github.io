@@ -6,12 +6,12 @@
     <meta name="theme-color" content="#ffffff" />
     <meta
       name="description"
-      content="양현준, stringju. 백엔드와 인프라를 함께 공부하는 개발자의 경험과 프로젝트."
+      content="양현준, stringju. 백엔드와 인프라부터 데스크톱 앱까지, 직접 만들고 운영한 프로젝트를 소개합니다."
     />
     <meta property="og:title" content="stringju · 양현준" />
     <meta
       property="og:description"
-      content="네 계절의 작은 그림과 함께 읽는 양현준의 경험과 프로젝트."
+      content="직접 만들고 운영한 프로젝트와 그 기록. 양현준의 포트폴리오."
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ko_KR" />
@@ -22,106 +22,150 @@
     <title>stringju · 양현준</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./assets/fonts/fonts.css?v=3551792a89d5" />
-    <link rel="stylesheet" href="./styles.css?v=9a6abeea0026" />
+    <link rel="stylesheet" href="./styles.css?v=0ad4e21e5bff" />
     <link
       rel="preload"
       href="./background/simple/spring.webp"
       as="image"
       fetchpriority="high"
     />
-    <script src="./main.js?v=0d535a37813f" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>
-    <div class="landscape" aria-hidden="true">
-      <div class="landscape-images">
+    <main id="main" tabindex="-1">
+      <section class="hero container" id="home" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <h1 id="page-title">stringju<span>.</span></h1>
+          <p class="hero-description">
+            백엔드와 인프라를 공부하고,<br />직접 만들고 운영합니다.
+          </p>
+          <a class="button" href="#work"
+            >프로젝트 보기 <span aria-hidden="true">↓</span></a
+          >
+        </div>
         <img
-          class="landscape-frame"
+          class="hero-art"
           src="./background/simple/spring.webp"
           alt=""
           width="1254"
           height="1254"
           fetchpriority="high"
         />
-        <img
-          class="landscape-frame"
-          src="./background/simple/summer.webp"
-          alt=""
-          width="1254"
-          height="1254"
-          decoding="async"
-        />
-        <img
-          class="landscape-frame"
-          src="./background/simple/fall.webp"
-          alt=""
-          width="1254"
-          height="1254"
-          decoding="async"
-        />
-        <img
-          class="landscape-frame"
-          src="./background/simple/winter.webp"
-          alt=""
-          width="1254"
-          height="1254"
-          decoding="async"
-        />
-      </div>
-      <div class="landscape-veil"></div>
-    </div>
-    <div class="reading-progress" aria-hidden="true"><span></span></div>
+      </section>
 
-    <header class="hero" id="home" aria-labelledby="page-title" tabindex="-1">
-      <div class="hero-copy hero-entrance">
-        <p class="hero-label">양현준의 포트폴리오</p>
-        <h1 id="page-title">stringju</h1>
-        <p class="hero-description">
-          백엔드와 인프라를 공부하고, 직접 만들고 운영합니다.
-        </p>
-        <a class="hero-link" href="#introducing"
-          >이야기 읽기 <span aria-hidden="true">↓</span></a
-        >
-      </div>
-    </header>
+      <section
+        class="work section container"
+        id="work"
+        aria-labelledby="work-title"
+      >
+        <header class="section-heading">
+          <h2 id="work-title">
+            프로젝트<span class="heading-dot" aria-hidden="true">.</span>
+          </h2>
+        </header>
+        <ul class="projects">
+          <!-- content:projects:start -->
+            <li class="project">
+              <article><a class="project-card" href="./projects/exhibition-backend.html" aria-label="전시회 백엔드 프로젝트 보기">
+                <div class="project-visual" aria-hidden="true"><span class="project-number">01</span><img class="project-object" src="./assets/images/exhibition.svg" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-info">
+                  <p class="project-category">백엔드</p>
+                  <h3>전시회 백엔드<span aria-hidden="true">↗</span></h3>
+                  <p class="project-summary">멀티테넌시를 지원하는 통합 온라인 전시회 백엔드입니다.</p>
+                  <p class="project-tools">Java, Spring Boot, MySQL, MinIO</p>
+                  <dl class="project-periods"><div><dt>개발 기간</dt><dd>2026.01 ~</dd></div></dl>
+                </div>
+              </a></article>
+            </li>
+            <li class="project">
+              <article><a class="project-card" href="./projects/kubernetes.html" aria-label="Kubernetes One Repo 프로젝트 보기">
+                <div class="project-visual" aria-hidden="true"><span class="project-number">02</span><img class="project-object" src="./assets/images/kubernetes.svg" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-info">
+                  <p class="project-category">인프라</p>
+                  <h3>Kubernetes One Repo<span aria-hidden="true">↗</span></h3>
+                  <p class="project-summary">GitOps 플랫폼의 초기 구조를 구성하고, 공통 모니터링과 로그 수집, 접근 제어를 확장했습니다.</p>
+                  <p class="project-tools">Kubernetes, Argo CD, Prometheus, Grafana, Loki, Alloy</p>
+                  <dl class="project-periods"><div><dt>개발 기간</dt><dd>2026.06 ~</dd></div></dl>
+                </div>
+              </a></article>
+            </li>
+            <li class="project">
+              <article><a class="project-card" href="./projects/pi-provider.html" aria-label="pi-provider-manager 프로젝트 보기">
+                <div class="project-visual" aria-hidden="true"><span class="project-number">03</span><img class="project-object" src="./assets/images/api-mark.svg" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-info">
+                  <p class="project-category">개발 도구</p>
+                  <h3>pi-provider-manager<span aria-hidden="true">↗</span></h3>
+                  <p class="project-summary">Pi Agent에서 OpenAI-Compatible Provider를 쉽게 관리할 수 있는 Pi Extension</p>
+                  <p class="project-tools">TypeScript, Pi Agent</p>
+                  <dl class="project-periods"><div><dt>개발 기간</dt><dd>2026.08</dd></div></dl>
+                </div>
+              </a></article>
+            </li>
+            <li class="project">
+              <article><a class="project-card" href="./projects/s-top.html" aria-label="S-TOP 프로젝트 보기">
+                <div class="project-visual" aria-hidden="true"><span class="project-number">04</span><img class="project-object project-image-wide" src="./assets/images/projects/s-top/identity.png" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-info">
+                  <p class="project-category">백엔드</p>
+                  <h3>S-TOP<span aria-hidden="true">↗</span></h3>
+                  <p class="project-summary">성균관대학교 Cyber S-TOP 사이트의 백엔드 개발을 담당했습니다.</p>
+                  <p class="project-tools">Java, Spring Boot, MySQL</p>
+                  <dl class="project-periods"><div><dt>개발 기간</dt><dd>2024</dd></div></dl>
+                </div>
+              </a></article>
+            </li>
+            <li class="project">
+              <article><a class="project-card" href="./projects/dolpin.html" aria-label="돌핀 (dolpin) 프로젝트 보기">
+                <div class="project-visual" aria-hidden="true"><span class="project-number">05</span><img class="project-object project-image-wide" src="./assets/images/projects/dolpin/cover.webp" alt="" width="420" height="420" loading="lazy"></div>
+                <div class="project-info">
+                  <p class="project-category">백엔드</p>
+                  <h3>돌핀 (dolpin)<span aria-hidden="true">↗</span></h3>
+                  <p class="project-summary">개발자를 위한 아티클 큐레이션 서비스입니다. 백엔드와 크롤러 개발을 담당했습니다.</p>
+                  <p class="project-tools">TypeScript, Express, MongoDB, Python, Docker</p>
+                  <dl class="project-periods"><div><dt>개발 기간</dt><dd>2023 ~ 2024</dd></div></dl>
+                </div>
+              </a></article>
+            </li>
+            <!-- content:projects:end -->
+        </ul>
+      </section>
 
-    <main id="main" tabindex="-1">
-      <div class="notebook-shell">
-        <div class="notebook" aria-label="양현준의 포트폴리오">
-          <section
-            class="introducing section"
-            id="introducing"
-            aria-labelledby="introducing-title"
-          >
-            <header class="section-heading">
-              <div>
-                <h2 id="introducing-title" class="reveal-left">Introducing</h2>
-              </div>
-            </header>
-            <div class="introduction reveal-scale">
+      <section
+        class="about-band"
+        id="introducing"
+        aria-labelledby="introducing-title"
+      >
+        <div class="about-layout container section">
+          <div class="about-art">
+            <img
+              src="./background/simple/summer.webp"
+              alt=""
+              width="1254"
+              height="1254"
+              loading="lazy"
+            />
+          </div>
+          <div class="about-copy">
+            <h2 id="introducing-title">소개</h2>
+            <div class="introduction">
               <!-- content:introducing:start -->
             <p class="introduction-name">양현준 <span>stringju</span></p>
             <p>백엔드와 인프라 분야에 관심이 많습니다. 온프레미스 쿠버네티스 환경을 직접 운영하며 실제 서비스를 운영하고 개선하는 경험을 쌓고 있습니다. AI와 함께 새로운 기술을 직접 적용해보며 문제를 해결하는 것을 좋아합니다. 현재 성균관대학교 소프트웨어학과에 재학중이며, 산업기능요원으로 근무할 수 있는 기회를 찾고 있습니다.</p>
             <!-- content:introducing:end -->
             </div>
-          </section>
+          </div>
+        </div>
+      </section>
 
-          <section
-            class="experience section"
-            id="experience"
-            aria-labelledby="experience-title"
-          >
-            <header class="section-heading">
-              <div>
-                <h2 id="experience-title" class="reveal-left">Experiences</h2>
-              </div>
-            </header>
-            <div class="experience-list-wrap">
-              <div class="experience-line" aria-hidden="true">
-                <span></span>
-              </div>
-              <ol class="experience-list">
-                <!-- content:experience:start -->
+      <section
+        class="experience section container"
+        id="experience"
+        aria-labelledby="experience-title"
+      >
+        <header class="section-heading">
+          <h2 id="experience-title">경험</h2>
+        </header>
+        <ol class="experience-list">
+          <!-- content:experience:start -->
             <li class="experience-item reveal-entry">
               <div class="experience-date"><time datetime="2025-04">2025.04</time> <span aria-hidden="true">·</span> <time datetime="2025-12">2025.12</time></div>
               <article><p class="experience-org">성균관대학교 산학협력 프로젝트<span>주식회사 커리어노트</span></p>
@@ -147,115 +191,38 @@
                 <ul><li>모바일 HR 서비스 개발 과제 진행</li></ul></article>
             </li>
             <!-- content:experience:end -->
-              </ol>
-            </div>
-          </section>
+        </ol>
+      </section>
 
-          <section class="work section" id="work" aria-labelledby="work-title">
-            <header class="section-heading work-head">
-              <div>
-                <h2 id="work-title" class="reveal-left">Projects</h2>
-              </div>
-            </header>
-            <ul class="projects">
-              <!-- content:projects:start -->
-            <li class="project">
-              <article class="project-shell">
-                <div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./assets/images/api-mark.svg" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>
-                <div class="project-info reveal-project">
-                  <h3>pi-provider-manager</h3>
-                  <p>Pi Agent에서 OpenAI-Compatible Provider를 쉽게 관리할 수 있는 Extension</p>
-                  <p class="project-tools">TypeScript</p>
-                  <a class="project-link" href="https://github.com/2tle/pi-provider" target="_blank" rel="noopener noreferrer" aria-label="pi-provider-manager 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
-                </div>
-              </article>
-            </li>
-            <li class="project">
-              <article class="project-shell">
-                <div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./assets/images/kubernetes.svg" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>
-                <div class="project-info reveal-project">
-                  <h3>Kubernetes</h3>
-                  <p>단일 쿠버네티스의 전체 상태를 관리하는 GitOps 저장소 Talos Linux 설치부터 애플리케이션 배포까지 클러스터 운영 전반을 코드로 관리</p>
-                  <p class="project-tools">Shell · TypeScript</p>
-                  <a class="project-link" href="https://github.com/SystemConsultantGroup/kubernetes" target="_blank" rel="noopener noreferrer" aria-label="Kubernetes 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
-                </div>
-              </article>
-            </li>
-            <li class="project">
-              <article class="project-shell">
-                <div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./assets/images/api-mark.svg" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>
-                <div class="project-info reveal-project">
-                  <h3>Exhibition BE</h3>
-                  <p>멀티테넌시를 지원하는 통합 온라인 전시회 백엔드</p>
-                  <p class="project-tools">Java · Spring</p>
-                  <a class="project-link" href="https://github.com/SystemConsultantGroup/exhibition-backend" target="_blank" rel="noopener noreferrer" aria-label="Exhibition BE 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
-                </div>
-              </article>
-            </li>
-            <li class="project">
-              <article class="project-shell">
-                <div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" style="--project-image-scale:0.72" src="./assets/images/macmagotchi-logo.svg" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>
-                <div class="project-info reveal-project">
-                  <h3>Macmagotchi</h3>
-                  <p>SwiftUI와 AppKit으로 만든 macOS 메뉴 막대 반려동물</p>
-                  <p class="project-tools">SwiftUI · AppKit</p>
-                  <a class="project-link" href="https://github.com/2tle/macmagotchi" target="_blank" rel="noopener noreferrer" aria-label="Macmagotchi 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
-                </div>
-              </article>
-            </li>
-            <li class="project">
-              <article class="project-shell">
-                <div class="project-visual" aria-hidden="true"><div class="project-halo"></div><img class="project-object" src="./assets/images/nether-logo.svg" alt="" width="420" height="420" loading="lazy"><div class="project-plinth"></div></div>
-                <div class="project-info reveal-project">
-                  <h3>Nether</h3>
-                  <p>Rust와 Iced로 시작한 데스크톱 터미널 구현</p>
-                  <p class="project-tools">Rust · Iced</p>
-                  <a class="project-link" href="https://github.com/2tle/Nether" target="_blank" rel="noopener noreferrer" aria-label="Nether 저장소 열기 (새 탭)">저장소 보기 <span aria-hidden="true">↗</span></a>
-                </div>
-              </article>
-            </li>
-            <!-- content:projects:end -->
-            </ul>
-          </section>
-
-          <section
-            class="record section"
-            id="education"
-            aria-labelledby="record-title"
-          >
-            <header class="section-heading record-head">
-              <div>
-                <h2 id="record-title" class="reveal-left">Education</h2>
-              </div>
-            </header>
-            <div class="record-grid">
-              <div class="education-record reveal-scale">
-                <ol class="education-list">
-                  <!-- content:education:start -->
+      <div class="records-band">
+        <div class="records-layout container section">
+          <section id="education" aria-labelledby="education-title">
+            <h2 id="education-title">학력</h2>
+            <ol class="education-list">
+              <!-- content:education:start -->
             <li class="education-item reveal-entry">
               <div class="record-date"><time datetime="2024-03">2024.03</time></div>
-              <div><h3>성균관대학교</h3><p>소프트웨어학과 재학</p></div>
+              <div><h3>성균관대학교</h3><p>소프트웨어학과 재학 4.42/4.5</p></div>
             </li>
             <li class="education-item reveal-entry">
               <div class="record-date"><time datetime="2021-03">2021.03</time> <span aria-hidden="true">·</span> <time datetime="2024-02">2024.02</time></div>
               <div><h3>선린인터넷고등학교</h3><p>소프트웨어과 졸업</p></div>
             </li>
             <!-- content:education:end -->
-                </ol>
-              </div>
-            </div>
-
-            <section
-              class="awards-group"
-              id="awards"
-              aria-labelledby="awards-title"
-            >
-              <header class="section-heading awards-head">
-                <div><h2 id="awards-title" class="reveal-left">Awards</h2></div>
-              </header>
-              <div class="awards-record">
-                <ol class="awards-list">
-                  <!-- content:awards:start -->
+            </ol>
+            <img
+              class="record-art"
+              src="./background/simple/fall.webp"
+              alt=""
+              width="1254"
+              height="1254"
+              loading="lazy"
+            />
+          </section>
+          <section id="awards" aria-labelledby="awards-title">
+            <h2 id="awards-title">수상</h2>
+            <ol class="awards-list">
+              <!-- content:awards:start -->
             <li class="award-item reveal-entry">
               <div class="award-date"><time datetime="2026-08-26">2026.08.26</time></div>
               <div class="award-copy"><h3>ICT AWARD KOREA</h3><p>대학부 동상</p></div>
@@ -269,20 +236,23 @@
               <a class="award-link" href="https://www.ccnnews.co.kr/news/articleView.html?idxno=280597" target="_blank" rel="noopener noreferrer" aria-label="제 18회 한밭대학교 주니어 창업경진대회 자세히 보기 (새 탭)"><div class="award-copy"><h3>제 18회 한밭대학교 주니어 창업경진대회<span class="award-link-icon" aria-hidden="true">↗</span></h3><p>대전충남지방기업청장상</p></div></a>
             </li>
             <!-- content:awards:end -->
-                </ol>
-              </div>
-            </section>
+            </ol>
           </section>
         </div>
       </div>
     </main>
 
-    <footer class="contact" id="contact" aria-label="연락처">
-      <div class="contact-card">
-        <a class="email-link reveal-scale" href="mailto:iam@2tle.io"
-          >iam@2tle.io<span class="email-arrow" aria-hidden="true">↗</span></a
+    <footer
+      class="contact container section"
+      id="contact"
+      aria-labelledby="contact-title"
+    >
+      <div class="contact-copy">
+        <h2 id="contact-title">연락처</h2>
+        <a class="email-link" href="mailto:iam@2tle.io"
+          >iam@2tle.io <span aria-hidden="true">↗</span></a
         >
-        <div class="contact-links reveal-right" aria-label="외부 연락처">
+        <div class="contact-links" aria-label="외부 연락처">
           <a
             href="https://github.com/2tle"
             target="_blank"
@@ -302,12 +272,15 @@
             >Blog <span aria-hidden="true">↗</span></a
           >
         </div>
-        <div class="footer-bottom">
-          <a class="back-to-top" href="#home" aria-label="Back to top"
-            ><span aria-hidden="true">↑</span></a
-          >
-        </div>
       </div>
+      <img
+        class="contact-art"
+        src="./background/simple/winter.webp"
+        alt=""
+        width="1254"
+        height="1254"
+        loading="lazy"
+      />
     </footer>
   </body>
 </html>
