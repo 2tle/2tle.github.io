@@ -12,6 +12,13 @@ order: 20
 
 성균관대학교 시스템컨설턴트그룹의 온프레미스 쿠버네티스 클러스터를 관리하는 저장소입니다. Talos Linux와 Argo CD를 사용해 플랫폼 구성과 애플리케이션 배포 상태를 Git으로 관리합니다.
 
+## 아키텍처
+
+<figure>
+  <img src="../assets/images/k8sonerepo.png" alt="Kubernetes One Repo 아키텍처 구조도" width="4370" height="3110" loading="lazy" decoding="async">
+  <figcaption>Kubernetes One Repo 아키텍처</figcaption>
+</figure>
+
 ## 작업 방향
 
 플랫폼 구성 요소의 설치와 변경을 Git에서 관리하는 초기 구조를 만들었습니다. 이후 클러스터의 메트릭과 애플리케이션 로그를 모으고, 서비스들이 함께 사용할 수 있는 접근 제어와 설정 검증을 추가했습니다.
