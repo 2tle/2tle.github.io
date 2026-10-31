@@ -19,8 +19,8 @@ order: 10
 ## 서비스 구조
 
 <figure>
-  <img src="../assets/images/projects/exhibition-backend/architecture.png" alt="공개 전시 사이트와 관리자 서버가 Spring Boot API를 사용하고, 백엔드가 MySQL에 데이터와 파일 정보를, MinIO에 이미지와 영상을 저장하는 구조" width="1586" height="992" loading="lazy" decoding="async">
-  <figcaption>전시 사이트, 관리자 서버, 공통 백엔드와 저장소의 요청 흐름</figcaption>
+  <img src="../assets/images/projects/exhibition-backend/architecture.png" alt="전시회 A와 B의 사용자가 공통 Ingress와 프런트엔드·백엔드를 이용하고, MySQL·MinIO 및 GitHub Actions·Docker Hub로 연결되는 통합 전시회 아키텍처" width="2898" height="1580" loading="lazy" decoding="async">
+  <figcaption>통합 전시회 사이트의 서비스 구성과 이미지 배포 흐름</figcaption>
 </figure>
 
 Spring Boot에서 요청을 받고, 전시, 카테고리, 회차, 작품, 분류, 게시판, 미디어별로 Controller와 Service를 나눴습니다. 전시 데이터와 파일 정보는 MySQL에 저장하고, 이미지와 영상 파일은 MinIO에 저장합니다.

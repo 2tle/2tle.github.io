@@ -122,11 +122,14 @@ test("a figure moved out of its item fails even when list and image counts match
 test("exhibition architecture is a local PNG with matching dimensions and a caption", async () => {
  const png = await readFile(resolve(root, "assets/images/projects/exhibition-backend/architecture.png"));
  assert.deepEqual([...png.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
- assert.equal(png.readUInt32BE(16), 1586);
- assert.equal(png.readUInt32BE(20), 992);
+ assert.ok(png.readUInt32BE(16) > 0);
+ assert.ok(png.readUInt32BE(20) > 0);
  const html = await readFile(resolve(root, "projects/exhibition-backend.html"), "utf8");
  const figures = all(parseDocument(html), "figure");
  assert.equal(figures.length, 1);
- assert.ok(all(figures[0], "img")[0].attribs.src.endsWith("exhibition-backend/architecture.png"));
+ const image = all(figures[0], "img")[0];
+ assert.ok(image.attribs.src.endsWith("exhibition-backend/architecture.png"));
+ assert.equal(Number(image.attribs.width), png.readUInt32BE(16));
+ assert.equal(Number(image.attribs.height), png.readUInt32BE(20));
  assert.equal(all(figures[0], "figcaption").length, 1);
 });
