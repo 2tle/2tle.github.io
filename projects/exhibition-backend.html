@@ -49,9 +49,12 @@
     </header>
     <div class="detail-visual" aria-hidden="true"><img class="detail-object" src="../assets/images/exhibition.svg" alt="" width="420" height="420" loading="lazy"></div>
     <article class="markdown-body" aria-label="프로젝트 상세"><h2>프로젝트 소개</h2>
-<p>여러 전시 사이트에서 함께 사용하는 백엔드입니다. 성균관대학교 시스템컨설턴트그룹에서 진행했고, 백엔드 구조와 API, 관리자 기능, 파일 처리 전반을 개발했습니다.</p>
+<p>멀티테넌시를 지원하는 온라인 전시회 사이트의 백엔드입니다.
+성균관대학교 시스템컨설턴트그룹에서 개발한 프로젝트로, 전반적인 프로젝트 진행과 백엔드 개발을 담당했습니다.</p>
 <h2>개발 동기</h2>
-<p>졸업 전시나 학과별 전시처럼 운영 주체와 도메인이 달라도 작품, 카테고리, 이미지와 영상을 관리하는 기능은 공통으로 필요했습니다. 이 기능들을 하나의 백엔드에서 제공하고, 각 전시의 데이터와 관리자 권한을 나누는 구조로 만들었습니다.</p>
+<p>기존에는 학생들의 작품을 전시하는 사이트 3개를 따로 관리하고 있었습니다.</p>
+<p>처음 하나의 전시 사이트를 완성한 뒤, 다른 종류의 전시 사이트 개설 요청이 들어오면서 기존 코드를 fork해 사용했습니다. 목적과 기능은 물론 코드도 거의 같았지만, 소스코드는 세 벌을 따로 관리해야 했습니다.</p>
+<p>개발한 지 오래된 사이트라 UI와 UX가 불편하다는 의견도 있었습니다. 유지보수 부담을 줄이고 사용성도 개선하기 위해, 멀티테넌시를 지원하는 통합 전시회 사이트를 만들기로 했습니다.</p>
 <h2>서비스 구조</h2>
 <figure>
   <img src="../assets/images/projects/exhibition-backend/architecture.png" alt="전시회 A와 B의 사용자가 공통 Ingress와 프런트엔드·백엔드를 이용하고, MySQL·MinIO 및 GitHub Actions·Docker Hub로 연결되는 통합 전시회 아키텍처" width="2898" height="1580" loading="lazy" decoding="async" />
