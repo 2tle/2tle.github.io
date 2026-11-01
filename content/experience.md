@@ -7,7 +7,7 @@ role: 프롬프트 엔지니어링 · 백엔드 개발
 link: https://s-top.cs.skku.edu/projects/706
 ---
 이력서·채용공고 첨삭 기능 개발
-하계집중근무 진행 · 2025.06 ~ 2025.08
+하계집중근무 진행 (2025.06 ~ 2025.08)
 
 ---
 
@@ -24,7 +24,7 @@ AWS 기초 및 관련 문제 풀이
 date: 2024.04
 dateEnd: 2026.12
 org: 성균관대학교 시스템컨설턴트그룹
-role: 백엔드 · 인프라 엔지니어
+role: 백엔드, 인프라 엔지니어
 link: https://scg.skku.ac.kr/members/142
 ---
 
@@ -37,8 +37,8 @@ link: https://scg.skku.ac.kr/members/142
 
 date: 2023.02.06
 dateEnd: 2023.02.24
-org: 마이다스아이티
-role: 겨울방학 인턴십 · Android 개발
+org: 마이다스인(마이다스아이티)
+role: 겨울방학 인턴십, Android 개발
 ---
 
 모바일 HR 서비스 개발 과제 진행
