@@ -11,9 +11,28 @@ npm ci
 npm run dev       # 빌드 후 http://127.0.0.1:4173
 npm run build     # Markdown 자동 탐색, 목록·상세 페이지 생성, dist/ 출력
 npm run preview   # dist/ 미리보기
+npm run gen-pdf   # 최신 경험·프로젝트를 A4 PDF로 출력
 npm run check    # 필수 검수: 빌드 + 서식 + 콘텐츠 검사 (브라우저 실행 없음)
 npm test         # 화면 테스트 포함. 사용자 허용 시에만 실행
 ```
+
+## 기업 제출용 PDF
+
+```sh
+npx playwright install chromium  # 최초 1회 (Linux: npx playwright install --with-deps chromium)
+npm run gen-pdf
+# 출력: artifacts/pdf/portfolio.pdf
+
+npm run gen-pdf -- artifacts/pdf/양현준-포트폴리오.pdf  # 출력 경로 지정
+```
+
+- 먼저 사이트를 빌드한 뒤, 검증된 HTML에서 이름·연락처·경험과 모든 프로젝트를 가져옵니다. 웹사이트 디자인과 Markdown 원본은 변경하지 않습니다.
+- 첫 장은 이름·연락처·경험·프로젝트 목차, 이후는 프로젝트별 새 페이지로 구성합니다. 프로젝트 순서는 웹사이트와 동일한 `order` 순서입니다. 경험이 길어지면 자연스럽게 다음 장으로 이어집니다.
+- 원문을 자동 요약하지 않습니다. 개발·운영 기간, 기술, 상세 본문, 번호 목록, 코드, 이미지와 캡션을 유지합니다. 자기소개 본문·학력·수상·계절 장식은 PDF에 포함하지 않습니다.
+- 기존 팔레트와 로컬 Pretendard를 사용하는 A4 전용 디자인입니다. 클릭 가능한 목차·외부 링크, 페이지 번호, PDF 북마크와 텍스트 선택을 지원합니다.
+- 외부 네트워크 요청 없이 로컬 이미지와 글꼴 로딩을 기다린 뒤 인쇄합니다. 이미지나 글꼴 로딩에 실패하면 생성을 중단하고 기존 PDF는 유지합니다. 생성 과정은 Chromium의 PDF 인쇄이며, 화면 테스트·뷰포트 검사·사이트 스크린샷은 실행하지 않습니다.
+- 함께 생성되는 같은 이름의 `.html`은 인쇄용 중간 파일입니다. 기업에는 **`.pdf` 파일 하나만** 제출하면 됩니다. `artifacts/`는 Git과 사이트 배포에서 제외됩니다.
+- 문서 스타일은 `scripts/portfolio-pdf.css`에서 조정합니다. `npm run test:pdf`는 브라우저 없이 원문·목록·코드·figure·이미지 경로 보존을 검사하며, `npm run check`에도 포함됩니다.
 
 ## 프로젝트 추가
 
@@ -89,6 +108,7 @@ GitHub Pages에서 저장소 루트를 배포한다면 빌드 후 갱신된 `ind
 
 - `npm run build`: Markdown과 생성 HTML의 번호 목록, 중첩 구조, 코드 내용, figure 위치를 검사합니다. 오류가 있으면 생성을 중단합니다.
 - `npm run test:format`: 서식 회귀 검사와 실제 5개 상세 페이지의 구조·로컬 이미지·dist 일치를 확인합니다.
+- `npm run test:pdf`: 인쇄용 HTML의 콘텐츠·구조·로컬 자산 보존을 검사합니다. 브라우저는 실행하지 않습니다.
 - `npm run test:content`: 브라우저나 웹 서버 없이 파일 기반 콘텐츠 테스트만 실행합니다.
 - 번호 목록의 하위 목록과 코드·이미지는 해당 번호 항목의 본문 열에 맞춰 들여씁니다. 번호는 1, 2, 3 순서로 직접 기재합니다.
 - 코드 블록은 여닫는 fence를 사용하고, figure는 이미지와 캡션을 한 쌍으로 둡니다.

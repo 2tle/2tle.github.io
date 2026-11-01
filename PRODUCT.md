@@ -19,6 +19,7 @@
 - Source: user: 현재 디자인은 유지하고, 에이전트가 추가한 장식성 문구만 제거한다.
 - Source: user: 사용자가 작성한 자기소개·이력은 줄이거나 다시 쓰지 않는다. 자기소개는 프로젝트 아래에 원문 그대로 유지한다.
 - Source: existing brief: 사계절 일러스트와 자캐는 사이트의 개인적인 정체성이다.
+- Source: user: 현재 웹사이트 형태와 디자인을 유지하면서 `npm run gen-pdf`와 같은 명령으로 experience와 project를 기업 제출용 PDF로 생성한다. PDF에도 유려한 디자인을 포함한다.
 
 ## Working assumptions
 

@@ -8,11 +8,13 @@
     "sync:content": "node scripts/build-content.mjs",
     "build": "node scripts/build.mjs",
     "preview": "node scripts/serve.mjs dist",
+    "gen-pdf": "npm run build && node scripts/gen-pdf.mjs",
     "test": "npm run build && playwright test",
     "refresh:profile": "node scripts/refresh-profile.mjs",
     "test:format": "node --test scripts/__tests__/project-format.test.mjs",
+    "test:pdf": "node --test scripts/__tests__/gen-pdf.test.mjs",
     "test:content": "playwright test --config=playwright.content.config.mjs",
-    "check": "npm run build && npm run test:format && npm run test:content"
+    "check": "npm run build && npm run test:format && npm run test:pdf && npm run test:content"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
