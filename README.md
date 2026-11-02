@@ -32,6 +32,7 @@ npm run gen-pdf -- artifacts/pdf/양현준-포트폴리오.pdf  # 출력 경로 
 - 기존 팔레트와 로컬 Pretendard를 사용하는 A4 전용 디자인입니다. 클릭 가능한 목차·외부 링크, 페이지 번호, PDF 북마크와 텍스트 선택을 지원합니다.
 - 외부 네트워크 요청 없이 로컬 이미지와 글꼴 로딩을 기다린 뒤 인쇄합니다. 이미지나 글꼴 로딩에 실패하면 생성을 중단하고 기존 PDF는 유지합니다. 생성 과정은 Chromium의 PDF 인쇄이며, 화면 테스트·뷰포트 검사·사이트 스크린샷은 실행하지 않습니다.
 - 함께 생성되는 같은 이름의 `.html`은 인쇄용 중간 파일입니다. 기업에는 **`.pdf` 파일 하나만** 제출하면 됩니다. `artifacts/`는 Git과 사이트 배포에서 제외됩니다.
+- 사이트 하단의 `PDF 포트폴리오 보기` 버튼은 Git에 포함된 `assets/portfolio.pdf`를 엽니다. PDF를 갱신한 뒤 `cp artifacts/pdf/portfolio.pdf assets/portfolio.pdf`로 배포본을 교체하고 커밋합니다.
 - 문서 스타일은 `scripts/portfolio-pdf.css`에서 조정합니다. `npm run test:pdf`는 브라우저 없이 원문·목록·코드·figure·이미지 경로 보존을 검사하며, `npm run check`에도 포함됩니다.
 
 ## 프로젝트 추가

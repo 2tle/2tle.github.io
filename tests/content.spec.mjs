@@ -78,6 +78,12 @@ test("sync is idempotent and the build includes every discovered detail page", a
 		expect(await readFile(join(root, "dist/CNAME"), "utf8")).toBe(
 			await readFile("CNAME", "utf8"),
 		);
+		const html = await readFile(join(root, "dist/index.html"), "utf8");
+		expect(html.slice(html.indexOf("<footer"))).toContain('href="./assets/portfolio.pdf"');
+		expect(html).toContain("PDF 포트폴리오 보기");
+		const pdf = await readFile(join(root, "dist/assets/portfolio.pdf"));
+		expect(pdf.subarray(0, 5).toString()).toBe("%PDF-");
+		expect(pdf).toEqual(await readFile("assets/portfolio.pdf"));
 	});
 });
 
