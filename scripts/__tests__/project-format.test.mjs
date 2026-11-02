@@ -151,8 +151,8 @@ test("every real project and its dist copy pass structural and local-asset check
 		}
 		figures += result.figures;
 	}
-	assert.equal(images, 17); // Five covers, ten Notion figures and two architecture diagrams.
-	assert.equal(figures, 12);
+	assert.equal(images, 10); // Five covers, two other diagrams and three dolpin figures.
+	assert.equal(figures, 5);
 });
 test("S-TOP implementation choices and development steps are two intact 1–2 lists", async () => {
 	const source = bodyOf(
@@ -175,20 +175,21 @@ test("S-TOP implementation choices and development steps are two intact 1–2 li
 		),
 	);
 });
-test("dolpin keeps code in crawler step 1, the figure in step 2 and five nested deployment steps", async () => {
+test("dolpin keeps only its architecture and API before/after evidence", async () => {
 	const source = bodyOf(
 		await readFile(resolve(root, "content/projects/dolpin.md"), "utf8"),
 	);
-	assert.deepEqual(validateProjectMarkdown(source).orderedLists, [
-		{ start: 1, count: 2, depth: 0 },
-		{ start: 1, count: 2, depth: 0 },
-		{ start: 1, count: 5, depth: 1 },
-	]);
-	const lists = all(parseDocument(marked.parse(source)), "ol");
-	const steps = children(lists[1]);
-	assert.equal(all(steps[0], "pre").length, 1);
-	assert.equal(all(steps[1], "figure").length, 1);
-	assert.equal(lists[2].parent.name, "li");
+	const doc = parseDocument(marked.parse(source));
+	assert.deepEqual(
+		all(doc, "img").map((image) => image.attribs.src),
+		["architecture.png", "response-before.png", "response-after.png"].map(
+			(file) => `../assets/images/projects/dolpin/${file}`,
+		),
+	);
+	assert.equal(all(doc, "figure").length, 3);
+	assert.equal(all(doc, "pre").length, 0);
+	assert.equal(all(doc, "ol").length, 0);
+	assert.equal(all(doc, "a").length, 0);
 });
 
 test("increasing markers do not hide a list split by an outside code block", () => {
